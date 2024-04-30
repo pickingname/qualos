@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const response = await axios.get(
-  "https://api.p2pquake.net/v2/jma/quake?limit=1&order=-1&quake_type=ScaleAndDestination"
-);
+  "https://pickingname.github.io/testjson/p2pquake_v2_jma_scaleanddestination.json"
+); // ORIGINAL https://api.p2pquake.net/v2/jma/quake?limit=1&order=-1&quake_type=ScaleAndDestination
 
 console.log(response.data);
 
@@ -22,12 +22,11 @@ var epicenter = L.icon({
 console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
 
 var map = L.map("map", { zoomControl: false }).setView(
-  [latitude, longitude],
-  8
+  [latitude, longitude], 8
 );
 
-L.marker([latitude, longitude], {icon: epicenter}).addTo(map);
+L.marker([latitude, longitude], { icon: epicenter }).addTo(map);
 
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'", {
   maxZoom: 19,
 }).addTo(map);
