@@ -4,9 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #1d1d1f;
+}
+
 #map {
-  width: 1000px;
-  height: 900px;
+  width: 50%;
+  height: 70%;
   pointer-events:none;
 }
 
