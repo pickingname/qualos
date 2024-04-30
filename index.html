@@ -19,11 +19,26 @@
       crossorigin=""
     ></script>
     <!-- END OF LEAFLET IMPORT -->
-    <script src="https://unpkg.com/leaflet-providers@latest/leaflet-providers.js"></script>
   </head>
   <body class="">
-    <div class="flex items-center justify-center h-screen">
-      <div class="outfit mx-auto text-center" id="map"></div>
+    <div>
+      <h1 class="text-center text-2xl font-outfit text-white pt-3">recent list</h1>
+      <div>
+        <div class="justify-center hidden lg:flex md:flex sm:flex text-white pb-5">
+          <div class='mx-20 mt-5 px-5 py-5 font-outfit rounded-md border-neutral-700 border-sm border w-[500px] relative'>
+            <p class="text-3xl w-[250px] text-balance">title</p>
+            <br />
+
+            <p class='text-xl'>time</p>
+            <p class='text-xl'>mag</p>
+            <p class='text-xl'>depth</p>
+            <div class="absolute top-0 right-0 flex flex-col justify-center text-xl pr-5 pt-5 h-full intensity-text nah" >6-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center h-screen">
+      <div class="font-outfit mx-auto text-center rounded-lg border border-neutral-800 border-md" id="map"></div>
     </div>
 
     <script src="src/index.js" type="module"></script>
