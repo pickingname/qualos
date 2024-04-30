@@ -14,6 +14,9 @@ const latitude = _a.earthquake.hypocenter.latitude;
 const longitude = _a.earthquake.hypocenter.longitude;
 const mag = _a.earthquake.hypocenter.magnitude;
 const maxScale = _a.earthquake.maxScale;
+const time = _a.earthquake.time;
+const depth = _a && _a.earthquake.hypocenter.depth === -1 ? 'unknown' : (_a.earthquake.hypocenter.depth === 0 ? 'Very shallow' : `${_a.earthquake.hypocenter.depth}km`);
+const where = _a.earthquake.hypocenter.name;
 
 const _intensity = (maxScale) => {
   switch (maxScale) {
@@ -42,13 +45,19 @@ const _intensity = (maxScale) => {
 
 const intensity = _intensity(maxScale);
 
+
+document.getElementById('intensity').textContent = intensity;
+document.getElementById('magnitude').textContent = `Magnitude: ${mag}`;
+document.getElementById('time').textContent = `Time: ${time}`;
+document.getElementById('depth').textContent = `Depth: ${depth}`;
+document.getElementById('where').textContent = `${where}`;
+
 var epicenter = L.icon({
   iconUrl: "/src/icons/epicenter.png",
 
   iconSize: [30, 30],
 });
 
-console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
 
 var map = L.map("map", {
   zoomControl: false,
