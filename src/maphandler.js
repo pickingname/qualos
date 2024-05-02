@@ -22,51 +22,51 @@ const findStationCoordinates = (compareData, stationName) => {
 };
 
 (async () => {
-  const response = await axios.get(p2p);
-  const data = response.data[0];
-
-  const comparisonData = await fetchComparisonData();
-
-  const map = L.map("map", {
-    zoomControl: false,
-    attributionControl: false,
-  }).setView(
-    [data.earthquake.hypocenter.latitude, data.earthquake.hypocenter.longitude],
-    8
-  );
-
-  L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
-    {
-      maxZoom: 19,
-    }
-  ).addTo(map);
-
-  const epicenterIcon = L.icon({
-    iconUrl: "/src/icons/epicenter.png",
-    iconSize: [30, 30],
-    zIndex: 1000123,
-  });
-
-  L.marker(
-    [data.earthquake.hypocenter.latitude, data.earthquake.hypocenter.longitude],
-    { icon: epicenterIcon }
-  ).addTo(map);
-
-  data.points.forEach((point) => {
-    const stationCoordinates = findStationCoordinates(
-      comparisonData,
-      point.addr
-    );
-    if (stationCoordinates) {
-      const stationIcon = L.icon({
-        iconUrl: `/src/icons/intensities/${point.scale}.png`,
-        iconSize: [20, 20],
-      });
-
-      L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-        icon: stationIcon,
-      }).addTo(map);
-    }
-  });
-})();
+    const response = await axios.get(p2p);
+    const data = response.data[0];
+  
+    const comparisonData = await fetchComparisonData();
+  
+    const map = L.map("map", {
+      zoomControl: false,
+      attributionControl: false,
+    });
+  
+    const epicenterIcon = L.icon({
+      iconUrl: "/src/icons/epicenter.png",
+      iconSize: [30, 30],
+    });
+  
+    const markersGroup = L.featureGroup().addTo(map);
+  
+    L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
+      {
+        maxZoom: 24,
+      }
+    ).addTo(map);
+  
+    L.marker(
+      [data.earthquake.hypocenter.latitude, data.earthquake.hypocenter.longitude],
+      { icon: epicenterIcon }
+    ).addTo(markersGroup);
+  
+    data.points.forEach((point) => {
+      const stationCoordinates = findStationCoordinates(
+        comparisonData,
+        point.addr
+      );
+      if (stationCoordinates) {
+        const stationIcon = L.icon({
+          iconUrl: `/src/icons/intensities/${point.scale}.png`,
+          iconSize: [20, 20],
+        });
+  
+        L.marker([stationCoordinates.lat, stationCoordinates.lng], {
+          icon: stationIcon,
+        }).addTo(markersGroup);
+      }
+    });
+  
+    map.fitBounds(markersGroup.getBounds().pad(0.0));
+  })();
