@@ -1,7 +1,7 @@
 import axios from "axios";
 import Papa from "papaparse";
 
-let p2p = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1";
+let p2p = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
 
 const fetchComparisonData = async () => {
   try {
