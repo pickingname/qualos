@@ -1,4 +1,5 @@
 import axios from "axios";
+import Papa from "papaparse";
 
 let norm = 'https://api.p2pquake.net/v2/jma/quake?limit=1&order=-1&quake_type=ScaleAndDestination';
 let dev = 'https://pickingname.github.io/testjson/p2pquake_v2_jma_scaleanddestination.json';
@@ -74,23 +75,4 @@ const findEnglishName = (compareData, japaneseName) => {
   document.getElementById("time").textContent = `Time: ${time}`;
   document.getElementById("depth").textContent = `Depth: ${depth}`;
   document.getElementById("where").textContent = `${englishName}`;
-
-  var epicenter = L.icon({
-    iconUrl: "/src/icons/epicenter.png",
-    iconSize: [30, 30],
-  });
-
-  var map = L.map("map", {
-    zoomControl: false,
-    attributionControl: false,
-  }).setView([latitude, longitude], 8); // ウラジミール自身は削除しても問題ないと言っている。https://groups.google.com/d/msg/leaflet-js/fA6M7fbchOs/JTNVhqdc7JcJ、しかし、残すか、何らかの形でリーフレットを認めるべきだと思われる。
-
-  L.marker([latitude, longitude], { icon: epicenter }).addTo(map);
-
-  L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'",
-    {
-      maxZoom: 19,
-    }
-  ).addTo(map);
 })();
