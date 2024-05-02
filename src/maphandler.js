@@ -5,7 +5,7 @@ let p2p = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offse
 
 const fetchComparisonData = async () => {
   try {
-    const response = await axios.get("/src/compare_points.csv");
+    const response = await axios.get("https://pickingname.github.io/basemap/compare_points.csv");
     const parsedData = Papa.parse(response.data, { header: true }).data;
     return parsedData;
   } catch (error) {
@@ -33,7 +33,7 @@ const findStationCoordinates = (compareData, stationName) => {
     });
   
     const epicenterIcon = L.icon({
-      iconUrl: "/src/icons/epicenter.png",
+      iconUrl: "https://pickingname.github.io/basemap/icons/epicenter.png",
       iconSize: [30, 30],
     });
   
@@ -58,7 +58,7 @@ const findStationCoordinates = (compareData, stationName) => {
       );
       if (stationCoordinates) {
         const stationIcon = L.icon({
-          iconUrl: `/src/icons/intensities/${point.scale}.png`,
+          iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
           iconSize: [20, 20],
         });
   

@@ -8,7 +8,7 @@ let p2p = 'https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offse
 
 const fetchComparisonData = async () => {
   try {
-    const response = await axios.get("/src/compare.json");
+    const response = await axios.get("https://pickingname.github.io/basemap/compare.json");
     return response.data;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
