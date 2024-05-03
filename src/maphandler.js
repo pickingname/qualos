@@ -30,6 +30,14 @@ const findStationCoordinates = (compareData, stationName) => {
     const map = L.map("map", {
       zoomControl: false,
       attributionControl: false,
+      keyboard: false,
+      dragging: false,
+      zoomControl: false,
+      boxZoom: false,
+      doubleClickZoom: false,
+      scrollWheelZoom: false,
+      tap: false,
+      touchZoom: false,
     });
   
     const epicenterIcon = L.icon({
