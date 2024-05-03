@@ -7,11 +7,6 @@
 body {
   /*background-color: #1d1d1f; */
   background-color: #000000;
-  pointer-events:none;
-}
-
-#map {
-  pointer-events:none;
 }
 
 .font-outfit {
