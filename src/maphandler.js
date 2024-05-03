@@ -68,6 +68,6 @@ const findStationCoordinates = (compareData, stationName) => {
       }
     });
   
-    map.fitBounds(markersGroup.getBounds().pad(0.3));
+    map.fitBounds(markersGroup.getBounds().pad(3));
   })();
 
