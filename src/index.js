@@ -3,11 +3,12 @@ import Papa from "papaparse";
 
 let norm = 'https://api.p2pquake.net/v2/jma/quake?limit=1&order=-1&quake_type=ScaleAndDestination';
 let dev = 'https://pickingname.github.io/testjson/p2pquake_v2_jma_scaleanddestination.json';
-let p2p = 'https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1'
+
+let p2p = 'https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0';
 
 const fetchComparisonData = async () => {
   try {
-    const response = await axios.get("/src/compare.json");
+    const response = await axios.get("https://pickingname.github.io/basemap/compare.json");
     return response.data;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
