@@ -28,6 +28,7 @@ const findStationCoordinates = (compareData, stationName) => {
     const comparisonData = await fetchComparisonData();
   
     const map = L.map("map", {
+      maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
@@ -76,6 +77,6 @@ const findStationCoordinates = (compareData, stationName) => {
       }
     });
   
-    map.fitBounds(markersGroup.getBounds().pad(3));
+    map.fitBounds(markersGroup.getBounds().pad(0.1)); // set the padding right here
   })();
 
