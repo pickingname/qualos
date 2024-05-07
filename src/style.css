@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.footertext {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
 body {
   /*background-color: #1d1d1f; */
   background-color: #000000;
