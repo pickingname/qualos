@@ -1,5 +1,4 @@
 import axios from "axios";
-import Papa from "papaparse";
 
 let norm = 'https://api.p2pquake.net/v2/jma/quake?limit=1&order=-1&quake_type=ScaleAndDestination';
 let dev = 'https://pickingname.github.io/testjson/p2pquake_v2_jma_scaleanddestination.json';
