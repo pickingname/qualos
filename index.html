@@ -26,7 +26,7 @@
         <div class="map" id="map"></div>
       </div>
       <div class="info-container font-outfit">
-        <div class="justify-center text-white pb-5">
+        <div class="justify-center dark:text-white text-black pb-5">
           <div
             class="px-5 py-5 font-outfit rounded-md border-neutral-700 border-sm border relative backdrop-blur-sm"
             style="padding-right: 7.25rem !important"
@@ -45,7 +45,7 @@
           </div>
         </div>
         <p
-          class="text-neutral-400 block sm:hidden text-balance text-center text-xs"
+          class="dark:text-neutral-400 text-black  block sm:hidden text-balance text-center text-xs"
         >
           This website is best viewed on a larger screen; try decreasing the
           zoom level on your browser.
@@ -54,7 +54,7 @@
     </div>
     <div class="bottom-right px-5 py-5">
       <div
-        class="text-white font-outfit border border-stone-600 px-3 py-3 rounded-md">
+        class="dark:text-white text-black font-outfit border border-stone-600 px-3 py-3 rounded-md">
         <div id="location1">
           <p class="text-center">Int.</p>
           <div class="pt-2 centeredimage">
@@ -71,9 +71,9 @@
         </div>
       </div>
     </div>
-    <div class="top-right px-5 py-5">
+    <div class="top-right px-5 py-5 md:block sm:hidden hidden">
       <div
-        class="text-white border border-stone-600 px-3 py-3 rounded-md w-32 text-center">
+        class="dark:text-white text-black border border-stone-600 px-3 py-3 rounded-md w-32 text-center">
         <p id="rightnow" class="text-xl font-mono">
           a
         </p>
@@ -82,6 +82,7 @@
     </div>
 
     <script src="src/index.js" type="module"></script>
+    <script src="src/listhandler.js" type="module"></script>
     <script src="src/maphandler.js" type="module"></script>
     <script src="src/timehandler.js" type="module"></script>
   </body>

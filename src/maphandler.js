@@ -1,6 +1,18 @@
 import axios from "axios";
 import Papa from "papaparse";
 
+let theme = 'light'; // Default theme
+
+// Check the color scheme preference
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  theme = 'dark';
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+  theme = event.matches ? "dark" : "light";
+  location.reload()
+});
+
 let p2p = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
 
 const fetchComparisonData = async () => {
@@ -49,7 +61,7 @@ const findStationCoordinates = (compareData, stationName) => {
     const markersGroup = L.featureGroup().addTo(map);
   
     L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+      `https://{s}.basemaps.cartocdn.com/${theme}_all/{z}/{x}/{y}{r}.png`,
       {
         maxZoom: 24,
       }
@@ -78,5 +90,4 @@ const findStationCoordinates = (compareData, stationName) => {
     });
   
     map.fitBounds(markersGroup.getBounds().pad(0.1)); // set the padding right here
-  })();
-
+})();
