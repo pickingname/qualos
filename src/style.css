@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.centeredimage img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
 .imagethatisalignedtotheright {
   display: block;
   margin-left: auto;
