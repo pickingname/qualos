@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.bottom-right {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1001;
+}
+
+
 body {
   /*background-color: #1d1d1f; */
   background-color: #000000;
