@@ -4,6 +4,32 @@
 @tailwind components;
 @tailwind utilities;
 
+.centeredimage img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.imagethatisalignedtotheright {
+  display: block;
+  margin-left: auto;
+}
+
+.bottom-right {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1002;
+}
+
+.top-right {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1001;
+}
+
+
 body {
   /*background-color: #1d1d1f; */
   background-color: #000000;
