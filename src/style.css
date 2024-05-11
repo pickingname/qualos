@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.imagethatisalignedtotheright {
+  display: block;
+  margin-left: auto;
+}
+
 .bottom-right {
   position: fixed;
   bottom: 0;
