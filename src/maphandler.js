@@ -10,6 +10,7 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').match
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
   theme = event.matches ? "dark" : "light";
+  console.info('theme changed, refreshing...')
   location.reload()
 });
 
