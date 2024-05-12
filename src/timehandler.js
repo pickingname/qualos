@@ -19,7 +19,7 @@ function updateDate() {
 
     var dateString = day + "/" + month + "/" + year;
 
-    document.getElementById("datenow").innerText = dateString;
+    document.getElementById("datenow").innerText = dateString + " JST";
 }
 
 updateDate();
