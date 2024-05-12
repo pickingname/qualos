@@ -17,8 +17,9 @@ const fetchComparisonData = async () => {
 
 const findEnglishName = (compareData, japaneseName) => {
   const match = compareData.find((entry) => entry.jp === japaneseName);
-  return match ? match.en : "Unknown";
+  return match ? match.en : japaneseName;
 };
+
 
 (async () => {
   const response = await axios.get(
