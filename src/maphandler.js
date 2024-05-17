@@ -67,6 +67,20 @@ const findStationCoordinates = (compareData, stationName) => {
         maxZoom: 24,
       }
     ).addTo(map);
+
+  //   (function(){
+  //     var originalInitTile = L.GridLayer.prototype._initTile
+  //     L.GridLayer.include({
+  //         _initTile: function (tile) {
+  //             originalInitTile.call(this, tile);
+  
+  //             var tileSize = this.getTileSize();
+  
+  //             tile.style.width = tileSize.x + 1 + 'px';
+  //             tile.style.height = tileSize.y + 1 + 'px';
+  //         }
+  //     });
+  // })()
   
     L.marker(
       [data.earthquake.hypocenter.latitude, data.earthquake.hypocenter.longitude],
