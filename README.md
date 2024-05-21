@@ -1,6 +1,8 @@
 ### semi functional quarog remake
 ##### [https://quarog.vercel.app](https://quarog.vercel.app)
 
+![app_preview](https://github.com/pickingname/sfqr/assets/115550149/ad7f5b07-55fc-4fe9-95d6-421391bb1e9b)
+
 ---
 #### features
 - basically shows the most recent earthquake information from [p2pquake api](https://www.p2pquake.net/develop/json_api_v2/)
