@@ -1,34 +1,25 @@
 import axios from "axios";
 import Papa from "papaparse";
 
-let theme = "light"; // Default theme
-let isSuccessfulCall = true;
-let isDataChanged = false;
+let userTheme = "light";
+let isApiCallSuccessful = true;
+let isMapDataChanged = false;
 
-// Check the color scheme preference
-if (
-  window.matchMedia &&
-  window.matchMedia("(prefers-color-scheme: dark)").matches
-) {
-  theme = "dark";
+if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  userTheme = "dark";
 }
 
-window
-  .matchMedia("(prefers-color-scheme: dark)")
-  .addEventListener("change", (event) => {
-    theme = event.matches ? "dark" : "light";
-    console.info("theme changed, refreshing...");
-    location.reload();
-  });
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+  userTheme = event.matches ? "dark" : "light";
+  console.info("User theme changed, refreshing...");
+  location.reload();
+});
 
-let p2p =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
+const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
 
 const fetchComparisonData = async () => {
   try {
-    const response = await axios.get(
-      "https://pickingname.github.io/basemap/compare_points.csv"
-    );
+    const response = await axios.get("https://pickingname.github.io/basemap/compare_points.csv");
     const parsedData = Papa.parse(response.data, { header: true }).data;
     return parsedData;
   } catch (error) {
@@ -37,20 +28,18 @@ const fetchComparisonData = async () => {
   }
 };
 
-const findStationCoordinates = (compareData, stationName) => {
-  const station = compareData.find((entry) => entry.name === stationName);
-  return station
-    ? { lat: parseFloat(station.lat), lng: parseFloat(station.long) }
-    : null;
+const findStationCoordinates = (comparisonData, stationName) => {
+  const station = comparisonData.find((entry) => entry.name === stationName);
+  return station ? { lat: parseFloat(station.lat), lng: parseFloat(station.long) } : null;
 };
 
-let previousData = null;
-let map = null;
-let markersGroup = null;
+let previousEarthquakeData = null;
+let mapInstance = null;
+let markersLayerGroup = null;
 
-const updateMap = async (data) => {
-  if (!map) {
-    map = L.map("map", {
+const updateMapWithData = async (earthquakeData) => {
+  if (!mapInstance) {
+    mapInstance = L.map("map", {
       maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
@@ -64,18 +53,15 @@ const updateMap = async (data) => {
       touchZoom: false,
     });
 
-    L.tileLayer(
-      `https://{s}.basemaps.cartocdn.com/${theme}_all/{z}/{x}/{y}{r}.png`,
-      {
-        maxZoom: 24,
-      }
-    ).addTo(map);
+    L.tileLayer(`https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`, {
+      maxZoom: 24,
+    }).addTo(mapInstance);
   }
 
-  if (markersGroup) {
-    markersGroup.clearLayers();
+  if (markersLayerGroup) {
+    markersLayerGroup.clearLayers();
   } else {
-    markersGroup = L.featureGroup().addTo(map);
+    markersLayerGroup = L.featureGroup().addTo(mapInstance);
   }
 
   const epicenterIcon = L.icon({
@@ -84,17 +70,14 @@ const updateMap = async (data) => {
   });
 
   L.marker(
-    [data.earthquake.hypocenter.latitude, data.earthquake.hypocenter.longitude],
+    [earthquakeData.earthquake.hypocenter.latitude, earthquakeData.earthquake.hypocenter.longitude],
     { icon: epicenterIcon }
-  ).addTo(markersGroup);
+  ).addTo(markersLayerGroup);
 
   const comparisonData = await fetchComparisonData();
 
-  data.points.forEach((point) => {
-    const stationCoordinates = findStationCoordinates(
-      comparisonData,
-      point.addr
-    );
+  earthquakeData.points.forEach((point) => {
+    const stationCoordinates = findStationCoordinates(comparisonData, point.addr);
     if (stationCoordinates) {
       const stationIcon = L.icon({
         iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
@@ -103,44 +86,39 @@ const updateMap = async (data) => {
 
       L.marker([stationCoordinates.lat, stationCoordinates.lng], {
         icon: stationIcon,
-      }).addTo(markersGroup);
+      }).addTo(markersLayerGroup);
     }
   });
 
-  map.fitBounds(markersGroup.getBounds().pad(0.1)); // set the padding right here
+  mapInstance.fitBounds(markersLayerGroup.getBounds().pad(0.1)); // Set the padding here
 };
 
-const fetchDataAndLog = async () => {
+const fetchAndUpdateData = async () => {
   try {
-    const response = await axios.get(p2p);
+    const response = await axios.get(apiEndpoint);
     
-    if (isSuccessfulCall === false) {
+    if (!isApiCallSuccessful) {
       console.log("API call successful with response code:", response.status);
-      isSuccessfulCall = true;
+      isApiCallSuccessful = true;
     }
-    isSuccessfulCall = true;
-    const newData = response.data[0];
+    isApiCallSuccessful = true;
+    const latestEarthquakeData = response.data[0];
 
-    if (
-      !previousData ||
-      JSON.stringify(newData) !== JSON.stringify(previousData)
-    ) {
-      isDataChanged = true;
+    if (!previousEarthquakeData || JSON.stringify(latestEarthquakeData) !== JSON.stringify(previousEarthquakeData)) {
+      isMapDataChanged = true;
       console.log("Data has changed, updating map.");
-      await updateMap(newData);
-      previousData = newData;
+      await updateMapWithData(latestEarthquakeData);
+      previousEarthquakeData = latestEarthquakeData;
     } else {
-      if (isDataChanged === true) {
-        // console.log("Data has not changed."); nvm
-        isDataChanged = false;
+      if (isMapDataChanged) {
+        isMapDataChanged = false;
       }
     }
   } catch (error) {
     console.error("API call failed:", error);
-    isSuccessfulCall = false;
+    isApiCallSuccessful = false;
   }
 };
 
-// Fetch data immediately and then every 3 seconds
-fetchDataAndLog();
-setInterval(fetchDataAndLog, 3000);
+fetchAndUpdateData();
+setInterval(fetchAndUpdateData, 3000);
