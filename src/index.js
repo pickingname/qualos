@@ -20,7 +20,7 @@ const findEnglishName = (comparisonData, japaneseName) => {
   return match ? match.en : japaneseName;
 };
 
-(async () => {
+const fetchData = async () => {
   const response = await axios.get(p2pQuakeURL);
 
   const quakeData = response.data;
@@ -73,9 +73,9 @@ const findEnglishName = (comparisonData, japaneseName) => {
     quakeDetails.issue.type === "ScalePrompt"
   ) {
     console.info("Earthquake intensity report recieved");
-    document.getElementById("intensity").remove();
-    document.getElementById("magnitude").remove();
-    document.getElementById("depth").remove();
+    document.getElementById("intensity").textContent = ``;
+    document.getElementById("magnitude").textContent = ``;
+    document.getElementById("depth").textContent = ``;
     document.getElementById(
       "where"
     ).textContent = `Earthquake intensity report recieved`;
@@ -99,4 +99,10 @@ const findEnglishName = (comparisonData, japaneseName) => {
       document.getElementById("where").textContent = `${englishName}`;
     }
   }
-})();
+};
+
+fetchData()
+
+setTimeout(function () {
+    setInterval(fetchData, 5000);
+}, 2000);
