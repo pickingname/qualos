@@ -100,7 +100,7 @@ const fetchData = async () => {
         if (depth === "unknown") {
             document.getElementById("depth").textContent = "";
         } else {
-            document.getElementById("depth").textContent = `Depth: ${depth}km`;
+            document.getElementById("depth").textContent = `Depth: ${depth}`;
         }
         document.getElementById("magnitude").textContent = `Foreign, No mag. data`;
         document.getElementById("time").textContent = `Time: ${time}`;
@@ -115,7 +115,7 @@ const fetchData = async () => {
       document.getElementById("intensity").textContent = intensityDescription;
       document.getElementById("magnitude").textContent = `Magnitude: ${magnitude}`;
       document.getElementById("time").textContent = `Time: ${time}`;
-      document.getElementById("depth").textContent = `Depth: ${depth}km`;
+      document.getElementById("depth").textContent = `Depth: ${depth}`;
       document.getElementById("where").textContent = `${englishName}`;
     }
   }
