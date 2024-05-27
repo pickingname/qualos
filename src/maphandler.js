@@ -149,7 +149,6 @@ const fetchAndUpdateData = async () => {
 
 fetchAndUpdateData();
 
-
 setTimeout(function(){
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
