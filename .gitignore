@@ -24,6 +24,7 @@ package-lock.json
 *.njsproj
 *.sln
 *.sw?
+.vs
 
 # Added by @jhordyess, erase if you want1
 .devcontainer

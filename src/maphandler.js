@@ -4,6 +4,9 @@ import Papa from "papaparse";
 let userTheme = "light";
 let isApiCallSuccessful = true;
 let isMapDataChanged = false;
+let isPreviouslyScalePrompt = false;
+let isPreviouslyUpdated = true;
+let isPreviouslyForeign = false;
 
 if (
   window.matchMedia &&
@@ -20,7 +23,7 @@ window
     location.reload();
   });
 
-const apiEndpoint = "https://pickingname.github.io/ScalePrompt.json";
+const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
 
 const fetchComparisonData = async () => {
   try {
@@ -121,10 +124,33 @@ const fetchAndUpdateData = async () => {
     isApiCallSuccessful = true;
     const latestEarthquakeData = response.data[0];
 
-    if ( latestEarthquakeData.earthquake.hypocenter.depth === -1 && latestEarthquakeData.issue.type === "ScalePrompt") {
+    if (latestEarthquakeData.issue.type === "Foreign") {
+      if (isPreviouslyForeign === false) {
+        var audio = new Audio(
+          "https://pickingname.github.io/datastores/alert.mp3"
+        );
+        audio.play();
+        isPreviouslyForeign = true;
+      }
+    } else {
+      isPreviouslyForeign = false;
+    }
+
+    if (
+      latestEarthquakeData.earthquake.hypocenter.depth === -1 &&
+      latestEarthquakeData.issue.type === "ScalePrompt"
+    ) {
       // intensity report
+      if (isPreviouslyScalePrompt === false) {
+        var audio = new Audio(
+          "https://pickingname.github.io/datastores/yes.mp3"
+        );
+        audio.play();
+        isPreviouslyScalePrompt = true;
+      }
     } else {
       // not intensity report
+      isPreviouslyScalePrompt = false;
     }
 
     if (
@@ -134,10 +160,19 @@ const fetchAndUpdateData = async () => {
     ) {
       isMapDataChanged = true;
       console.log("Data has changed, updating map.");
+      if (isPreviouslyUpdated === false) {
+        var audio = new Audio(
+          "https://pickingname.github.io/datastores/update.mp3"
+        );
+        audio.play();
+        isPreviouslyUpdated = true;
+      }
+
       await updateMapWithData(latestEarthquakeData);
       previousEarthquakeData = latestEarthquakeData;
     } else {
       if (isMapDataChanged) {
+        isPreviouslyUpdated = false;
         isMapDataChanged = false;
       }
     }
@@ -149,6 +184,6 @@ const fetchAndUpdateData = async () => {
 
 fetchAndUpdateData();
 
-setTimeout(function(){
+setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
