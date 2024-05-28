@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.leaflet-marker-icon {
+    pointer-events: none !important;
+}
+
 #map{
   background-color: #262626 !important;
 }

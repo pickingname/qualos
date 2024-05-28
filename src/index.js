@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let p2pQuakeURL = 'https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0';
+let p2pQuakeURL = 'https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0';
 let comparisonDataCache = null;
 
 const fetchComparisonData = async () => {
