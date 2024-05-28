@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\src\\maphandler.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\maphandler.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\src\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\src\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\src\\maphandler.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\maphandler.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -27,15 +31,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "style.css",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\src\\style.css",
+              "RelativeDocumentMoniker": "src\\style.css",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\src\\style.css",
+              "RelativeToolTip": "src\\style.css",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-05-28T00:01:43.012Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "maphandler.js",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\src\\maphandler.js",
               "RelativeDocumentMoniker": "src\\maphandler.js",
               "ToolTip": "C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\src\\maphandler.js",
               "RelativeToolTip": "src\\maphandler.js",
-              "ViewState": "AQIAAC0AAAAAAAAAAAAAADsAAAAVAAAA",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABYAAABDAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-05-27T12:27:17.317Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-27T12:27:17.317Z"
             },
             {
               "$type": "Document",
@@ -45,14 +61,13 @@
               "RelativeDocumentMoniker": "src\\index.js",
               "ToolTip": "C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\src\\index.js",
               "RelativeToolTip": "src\\index.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-05-27T12:27:16.273Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-27T12:27:16.273Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "index.html",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\spaces\\sfqr\\index.html",
               "RelativeDocumentMoniker": "index.html",
@@ -60,8 +75,7 @@
               "RelativeToolTip": "index.html",
               "ViewState": "AQIAADMAAAAAAAAAAAAAwEgAAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2024-05-27T11:25:44.608Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-27T11:25:44.608Z"
             }
           ]
         }
