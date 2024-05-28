@@ -61,8 +61,9 @@ const fetchData = async () => {
         return "6+";
       case 70:
         return "7";
-      default:
-        return "?";
+        default:
+          console.log('default intensity recieved')
+        return "--";
     }
   };
 
@@ -91,8 +92,8 @@ const fetchData = async () => {
       ) {
         document.getElementById(
           "where"
-        ).textContent = `Foregin earthquake information`;
-        if (intensityDescription === "?"){
+        ).textContent = `Foreign earthquake information`;
+        if (intensityDescription === "--"){
             document.getElementById("intensity").textContent = "";
         } else {
             document.getElementById("intensity").textContent = intensityDescription;
