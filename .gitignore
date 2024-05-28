@@ -25,6 +25,3 @@ package-lock.json
 *.sln
 *.sw?
 .vs
-
-# Added by @jhordyess, erase if you want1
-.devcontainer
