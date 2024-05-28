@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let p2pQuakeURL = 'https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0';
+let p2pQuakeURL = 'https://pickingname.github.io/ScalePrompt.json';
 let comparisonDataCache = null;
 
 const fetchComparisonData = async () => {
@@ -75,10 +75,11 @@ const fetchData = async () => {
     quakeDetails.earthquake.hypocenter.depth === -1 &&
     quakeDetails.issue.type === "ScalePrompt"
   ) {
-    console.info("Earthquake intensity report received");
-    document.getElementById("intensity").textContent = ``;
-    document.getElementById("magnitude").textContent = ``;
-    document.getElementById("depth").textContent = ``;
+      console.info("Earthquake intensity report received");
+      let reportScale = getIntensityDescription(maxScale);
+      document.getElementById("intensity").textContent = reportScale;
+    document.getElementById("magnitude").textContent = `mag will be added when the data is getting from -2`;
+    document.getElementById("depth").textContent = `depth will be added also`;
     document.getElementById(
       "where"
     ).textContent = `Earthquake intensity report received`;
