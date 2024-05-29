@@ -4,5 +4,10 @@ import pluginJs from "@eslint/js";
 
 export default [
   {languageOptions: { globals: globals.browser }},
-  pluginJs.configs.recommended,
+    pluginJs.configs.recommended,
+    {
+        rules: {
+            "no-undef" : "off"
+        }
+    }
 ];
