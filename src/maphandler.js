@@ -26,7 +26,7 @@ window
   });
 
 const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
+  "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
 
 const fetchComparisonData = async () => {
   try {
