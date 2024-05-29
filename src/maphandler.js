@@ -130,10 +130,10 @@ const fetchAndUpdateData = async () => {
 
     if (latestEarthquakeData.issue.type === "Foreign") {
       if (isPreviouslyForeign === false) {
-        var audio = new Audio(
+        var alert = new Audio(
           "https://pickingname.github.io/datastores/alert.mp3"
         );
-        audio.play();
+        alert.play();
         isPreviouslyForeign = true;
       }
     } else {
@@ -146,10 +146,10 @@ const fetchAndUpdateData = async () => {
     ) {
       // intensity report
       if (isPreviouslyScalePrompt === false) {
-        var audio = new Audio(
+        var intAudio = new Audio(
           "https://pickingname.github.io/datastores/yes.mp3"
         );
-        audio.play();
+        intAudio.play();
         isPreviouslyScalePrompt = true;
       }
     } else {
@@ -165,10 +165,10 @@ const fetchAndUpdateData = async () => {
       isMapDataChanged = true;
       console.log("Data has changed, updating map.");
       if (isPreviouslyUpdated === false) {
-        var audio = new Audio(
+        var update = new Audio(
           "https://pickingname.github.io/datastores/update.mp3"
         );
-        audio.play();
+        update.play();
         isPreviouslyUpdated = true;
       }
 
