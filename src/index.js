@@ -1,7 +1,10 @@
 import axios from "axios";
 
-let p2pQuakeURL = 'https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0';
+let p2pQuakeURL =
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
+
 let comparisonDataCache = null;
+export let responseCache;
 
 const fetchComparisonData = async () => {
   if (comparisonDataCache) {
@@ -26,7 +29,7 @@ const findEnglishName = (comparisonData, japaneseName) => {
 
 const fetchData = async () => {
   const response = await axios.get(p2pQuakeURL);
-
+  responseCache = response;
   const quakeData = response.data;
   const quakeDetails = quakeData[0];
 
@@ -61,8 +64,8 @@ const fetchData = async () => {
         return "6+";
       case 70:
         return "7";
-        default:
-          console.log('default intensity recieved')
+      default:
+        console.log("default intensity recieved");
         return "--";
     }
   };
@@ -75,10 +78,12 @@ const fetchData = async () => {
     quakeDetails.earthquake.hypocenter.depth === -1 &&
     quakeDetails.issue.type === "ScalePrompt"
   ) {
-      console.info("Earthquake intensity report received");
-      let reportScale = getIntensityDescription(maxScale);
-      document.getElementById("intensity").textContent = reportScale;
-    document.getElementById("magnitude").textContent = `mag will be added when the data is getting from -2`;
+    console.info("Earthquake intensity report received");
+    let reportScale = getIntensityDescription(maxScale);
+    document.getElementById("intensity").textContent = reportScale;
+    document.getElementById(
+      "magnitude"
+    ).textContent = `mag will be added when the data is getting from -2`;
     document.getElementById("depth").textContent = `depth will be added also`;
     document.getElementById(
       "where"
@@ -94,20 +99,22 @@ const fetchData = async () => {
         document.getElementById(
           "where"
         ).textContent = `Foreign earthquake information`;
-        if (intensityDescription === "--"){
-            document.getElementById("intensity").textContent = "";
+        if (intensityDescription === "--") {
+          document.getElementById("intensity").textContent = "";
         } else {
-            document.getElementById("intensity").textContent = intensityDescription;
+          document.getElementById("intensity").textContent =
+            intensityDescription;
         }
         if (depth === "unknown") {
-            document.getElementById("depth").textContent = "";
+          document.getElementById("depth").textContent = "";
         } else {
-            document.getElementById("depth").textContent = `Depth: ${depth}`;
+          document.getElementById("depth").textContent = `Depth: ${depth}`;
         }
-        document.getElementById("magnitude").textContent = `Foreign, No mag. data`;
+        document.getElementById(
+          "magnitude"
+        ).textContent = `Foreign, No mag. data`;
         document.getElementById("time").textContent = `Time: ${time}`;
 
-        
         document.getElementById("where").textContent = `${englishName}`;
       } else {
         console.info("invalid data");
@@ -115,7 +122,9 @@ const fetchData = async () => {
       }
     } else {
       document.getElementById("intensity").textContent = intensityDescription;
-      document.getElementById("magnitude").textContent = `Magnitude: ${magnitude}`;
+      document.getElementById(
+        "magnitude"
+      ).textContent = `Magnitude: ${magnitude}`;
       document.getElementById("time").textContent = `Time: ${time}`;
       document.getElementById("depth").textContent = `Depth: ${depth}`;
       document.getElementById("where").textContent = `${englishName}`;
