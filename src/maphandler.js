@@ -9,6 +9,7 @@ let isMapDataChanged = false;
 let isPreviouslyScalePrompt = false;
 let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
+let scaleIconSize = 30;
 
 var intAudio = new Audio("https://pickingname.github.io/datastores/yes.mp3");
 var update = new Audio("https://pickingname.github.io/datastores/update.mp3");
@@ -85,7 +86,7 @@ const updateMapWithData = async (earthquakeData) => {
   if (earthquakeData.issue.type !== "ScalePrompt") {
     const epicenterIcon = L.icon({
       iconUrl: "https://pickingname.github.io/basemap/icons/epicenter.png",
-      iconSize: [30, 30],
+      iconSize: [scaleIconSize, scaleIconSize],
     });
 
     L.marker(
@@ -109,8 +110,8 @@ const updateMapWithData = async (earthquakeData) => {
       if (stationCoordinates) {
         console.log(`Found coordinates for ${point.addr}: `, stationCoordinates);
         const stationIcon = L.icon({
-          iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
-          iconSize: [20, 20],
+          iconUrl: `https://pickingname.github.io/basemap/icons/scales/${point.scale}.png`,
+          iconSize: [40, 40],
         });
 
         L.marker([stationCoordinates.lat, stationCoordinates.lng], {
