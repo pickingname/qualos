@@ -1,12 +1,18 @@
 import axios from "axios";
 import Papa from "papaparse";
 
+const apiEndpoint = "https://pickingname.github.io/testjson/ScalePrompt.json";
+
 let userTheme = "light";
 let isApiCallSuccessful = true;
 let isMapDataChanged = false;
 let isPreviouslyScalePrompt = false;
 let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
+
+var intAudio = new Audio("https://pickingname.github.io/datastores/yes.mp3");
+var update = new Audio("https://pickingname.github.io/datastores/update.mp3");
+var alert = new Audio("https://pickingname.github.io/datastores/alert.mp3");
 
 export let responseCache;
 
@@ -25,14 +31,9 @@ window
     location.reload();
   });
 
-const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
-
-const fetchComparisonData = async () => {
+const fetchComparisonData = async (url) => {
   try {
-    const response = await axios.get(
-      "https://pickingname.github.io/basemap/compare_points.csv"
-    );
+    const response = await axios.get(url);
     const parsedData = Papa.parse(response.data, { header: true }).data;
     return parsedData;
   } catch (error) {
@@ -63,8 +64,8 @@ const updateMapWithData = async (earthquakeData) => {
       doubleClickZoom: false,
       tap: false,
       touchZoom: false,
-      dragging: false,
-      scrollWheelZoom: false,
+      dragging: true,
+      scrollWheelZoom: true,
     });
 
     L.tileLayer(
@@ -81,39 +82,52 @@ const updateMapWithData = async (earthquakeData) => {
     markersLayerGroup = L.featureGroup().addTo(mapInstance);
   }
 
-  const epicenterIcon = L.icon({
-    iconUrl: "https://pickingname.github.io/basemap/icons/epicenter.png",
-    iconSize: [30, 30],
-  });
+  if (earthquakeData.issue.type !== "ScalePrompt") {
+    const epicenterIcon = L.icon({
+      iconUrl: "https://pickingname.github.io/basemap/icons/epicenter.png",
+      iconSize: [30, 30],
+    });
 
-  L.marker(
-    [
-      earthquakeData.earthquake.hypocenter.latitude,
-      earthquakeData.earthquake.hypocenter.longitude,
-    ],
-    { icon: epicenterIcon }
-  ).addTo(markersLayerGroup);
-
-  const comparisonData = await fetchComparisonData();
-
-  earthquakeData.points.forEach((point) => {
-    const stationCoordinates = findStationCoordinates(
-      comparisonData,
-      point.addr
+    L.marker(
+      [
+        earthquakeData.earthquake.hypocenter.latitude,
+        earthquakeData.earthquake.hypocenter.longitude,
+      ],
+      { icon: epicenterIcon }
+    ).addTo(markersLayerGroup);
+  } else {
+    const comparisonData = await fetchComparisonData(
+      "https://pickingname.github.io/basemap/prefs.csv"
     );
-    if (stationCoordinates) {
-      const stationIcon = L.icon({
-        iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
-        iconSize: [20, 20],
-      });
 
-      L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-        icon: stationIcon,
-      }).addTo(markersLayerGroup);
-    }
-  });
+    earthquakeData.points.forEach((point) => {
+      console.log(`Processing point with addr: ${point.addr}`);
+      const stationCoordinates = findStationCoordinates(
+        comparisonData,
+        point.addr
+      );
+      if (stationCoordinates) {
+        console.log(`Found coordinates for ${point.addr}: `, stationCoordinates);
+        const stationIcon = L.icon({
+          iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
+          iconSize: [20, 20],
+        });
 
-  mapInstance.fitBounds(markersLayerGroup.getBounds().pad(0.1)); // Set the padding here
+        L.marker([stationCoordinates.lat, stationCoordinates.lng], {
+          icon: stationIcon,
+        }).addTo(markersLayerGroup);
+      } else {
+        console.warn(`No coordinates found for ${point.addr}`);
+      }
+    });
+  }
+
+  const bounds = markersLayerGroup.getBounds();
+  if (bounds.isValid()) {
+    mapInstance.fitBounds(bounds.pad(0.1));
+  } else {
+    console.warn("No valid bounds for markersLayerGroup");
+  }
 };
 
 const fetchAndUpdateData = async () => {
@@ -130,9 +144,6 @@ const fetchAndUpdateData = async () => {
 
     if (latestEarthquakeData.issue.type === "Foreign") {
       if (isPreviouslyForeign === false) {
-        var alert = new Audio(
-          "https://pickingname.github.io/datastores/alert.mp3"
-        );
         alert.play();
         isPreviouslyForeign = true;
       }
@@ -144,16 +155,11 @@ const fetchAndUpdateData = async () => {
       latestEarthquakeData.earthquake.hypocenter.depth === -1 &&
       latestEarthquakeData.issue.type === "ScalePrompt"
     ) {
-      // intensity report
       if (isPreviouslyScalePrompt === false) {
-        var intAudio = new Audio(
-          "https://pickingname.github.io/datastores/yes.mp3"
-        );
         intAudio.play();
         isPreviouslyScalePrompt = true;
       }
     } else {
-      // not intensity report
       isPreviouslyScalePrompt = false;
     }
 
@@ -165,9 +171,6 @@ const fetchAndUpdateData = async () => {
       isMapDataChanged = true;
       console.log("Data has changed, updating map.");
       if (isPreviouslyUpdated === false) {
-        var update = new Audio(
-          "https://pickingname.github.io/datastores/update.mp3"
-        );
         update.play();
         isPreviouslyUpdated = true;
       }
