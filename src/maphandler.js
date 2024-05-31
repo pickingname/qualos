@@ -1,7 +1,7 @@
 import axios from "axios";
 import Papa from "papaparse";
 
-const apiEndpoint = "https://pickingname.github.io/testjson/ScalePrompt.json";
+const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=2";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -9,7 +9,7 @@ let isMapDataChanged = false;
 let isPreviouslyScalePrompt = false;
 let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
-let scaleIconSize = 30;
+let scaleIconSize = 25;
 
 var intAudio = new Audio("https://pickingname.github.io/datastores/yes.mp3");
 var update = new Audio("https://pickingname.github.io/datastores/update.mp3");
@@ -86,7 +86,7 @@ const updateMapWithData = async (earthquakeData) => {
   if (earthquakeData.issue.type !== "ScalePrompt") {
     const epicenterIcon = L.icon({
       iconUrl: "https://pickingname.github.io/basemap/icons/epicenter.png",
-      iconSize: [scaleIconSize, scaleIconSize],
+      iconSize: [30, 30],
     });
 
     L.marker(
@@ -111,7 +111,7 @@ const updateMapWithData = async (earthquakeData) => {
         console.log(`Found coordinates for ${point.addr}: `, stationCoordinates);
         const stationIcon = L.icon({
           iconUrl: `https://pickingname.github.io/basemap/icons/scales/${point.scale}.png`,
-          iconSize: [40, 40],
+          iconSize: [scaleIconSize, scaleIconSize],
         });
 
         L.marker([stationCoordinates.lat, stationCoordinates.lng], {
@@ -194,4 +194,5 @@ fetchAndUpdateData();
 
 setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
+  
 }, 2000);

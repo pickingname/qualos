@@ -82,8 +82,8 @@ const fetchData = async () => {
     document.getElementById("intensity").textContent = reportScale;
     document.getElementById(
       "magnitude"
-    ).textContent = `Investigating.`;
-    document.getElementById("depth").textContent = ``;
+    ).textContent = `Magnitude: ${magnitude}`;
+    document.getElementById("depth").textContent = `Awaiting full report`;
     document.getElementById(
       "where"
     ).textContent = `Earthquake intensity report received`;
