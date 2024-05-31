@@ -1,6 +1,7 @@
 import axios from "axios";
 
-let apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+let apiEndpoint =
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let comparisonDataCache = null;
 export let responseCache;
@@ -78,6 +79,8 @@ const fetchData = async () => {
     quakeDetails.issue.type === "ScalePrompt"
   ) {
     console.info("Earthquake intensity report received");
+    document.getElementById("STA").classList.add("hidden");
+    document.getElementById("INT").classList.remove("hidden");
     let reportScale = getIntensityDescription(maxScale);
     document.getElementById("intensity").textContent = reportScale;
     document.getElementById(
@@ -95,6 +98,8 @@ const fetchData = async () => {
         quakeDetails.earthquake.hypocenter.depth === -1 &&
         quakeDetails.issue.type === "Foreign"
       ) {
+        document.getElementById("INT").classList.add("hidden");
+        document.getElementById("STA").classList.add("hidden");
         document.getElementById(
           "where"
         ).textContent = `Foreign earthquake information`;
@@ -120,6 +125,8 @@ const fetchData = async () => {
         document.getElementById("where").textContent = `Invalid data received`;
       }
     } else {
+      document.getElementById("INT").classList.add("hidden");
+      document.getElementById("STA").classList.remove("hidden");
       document.getElementById("intensity").textContent = intensityDescription;
       document.getElementById(
         "magnitude"
