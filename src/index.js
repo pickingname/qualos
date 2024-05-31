@@ -1,7 +1,6 @@
 import axios from "axios";
 
-let p2pQuakeURL =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
+let apiEndpoint = "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
 
 let comparisonDataCache = null;
 export let responseCache;
@@ -28,7 +27,7 @@ const findEnglishName = (comparisonData, japaneseName) => {
 };
 
 const fetchData = async () => {
-  const response = await axios.get(p2pQuakeURL);
+  const response = await axios.get(apiEndpoint);
   responseCache = response;
   const quakeData = response.data;
   const quakeDetails = quakeData[0];
@@ -83,8 +82,8 @@ const fetchData = async () => {
     document.getElementById("intensity").textContent = reportScale;
     document.getElementById(
       "magnitude"
-    ).textContent = `mag will be added when the data is getting from -2`;
-    document.getElementById("depth").textContent = `depth will be added also`;
+    ).textContent = `Magnitude: ${magnitude}`;
+    document.getElementById("depth").textContent = `Awaiting full report`;
     document.getElementById(
       "where"
     ).textContent = `Earthquake intensity report received`;
