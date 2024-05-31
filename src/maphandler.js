@@ -1,7 +1,7 @@
 import axios from "axios";
 import Papa from "papaparse";
 
-const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=2";
+const apiEndpoint = "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -96,6 +96,28 @@ const updateMapWithData = async (earthquakeData) => {
       ],
       { icon: epicenterIcon }
     ).addTo(markersLayerGroup);
+
+    const comparisonData = await fetchComparisonData(
+      "https://pickingname.github.io/basemap/compare_points.csv"
+    );
+
+    earthquakeData.points.forEach((point) => {
+      const stationCoordinates = findStationCoordinates(
+        comparisonData,
+        point.addr
+      );
+      if (stationCoordinates) {
+        const stationIcon = L.icon({
+          iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
+          iconSize: [20, 20],
+        });
+
+        L.marker([stationCoordinates.lat, stationCoordinates.lng], {
+          icon: stationIcon,
+        }).addTo(markersLayerGroup);
+      }
+    });
+
   } else {
     const comparisonData = await fetchComparisonData(
       "https://pickingname.github.io/basemap/prefs.csv"
@@ -194,5 +216,4 @@ fetchAndUpdateData();
 
 setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
-  
 }, 2000);
