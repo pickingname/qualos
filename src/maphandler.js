@@ -1,7 +1,7 @@
 import axios from "axios";
 import Papa from "papaparse";
 
-const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+const apiEndpoint = "https://api-v2-sandbox.p2pquake.net/v2/history";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -57,7 +57,9 @@ let markersLayerGroup = null;
 const updateMapWithData = async (earthquakeData) => {
   if (!mapInstance) {
     mapInstance = L.map("map", {
-      maxZoom: 8,
+      center: [35.689487, 139.691711], // Default center (Tokyo)
+      zoom: 8, // Default zoom level
+      maxZoom: 9,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
@@ -147,7 +149,10 @@ const updateMapWithData = async (earthquakeData) => {
 
   const bounds = markersLayerGroup.getBounds();
   if (bounds.isValid()) {
-    mapInstance.fitBounds(bounds.pad(0.1));
+    mapInstance.flyToBounds(bounds.pad(0.1), {
+      duration: 0.15,
+      easeLinearity: 0.15,
+    });
   } else {
     console.warn("No valid bounds for markersLayerGroup");
   }
