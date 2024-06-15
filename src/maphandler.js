@@ -59,7 +59,7 @@ const updateMapWithData = async (earthquakeData) => {
     mapInstance = L.map("map", {
       center: [35.689487, 139.691711], // Default center (Tokyo)
       zoom: 8, // Default zoom level
-      maxZoom: 9,
+      maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
@@ -119,7 +119,6 @@ const updateMapWithData = async (earthquakeData) => {
         }).addTo(markersLayerGroup);
       }
     });
-
   } else {
     const comparisonData = await fetchComparisonData(
       "https://pickingname.github.io/basemap/prefs.csv"
@@ -132,7 +131,10 @@ const updateMapWithData = async (earthquakeData) => {
         point.addr
       );
       if (stationCoordinates) {
-        console.log(`Found coordinates for ${point.addr}: `, stationCoordinates);
+        console.log(
+          `Found coordinates for ${point.addr}: `,
+          stationCoordinates
+        );
         const stationIcon = L.icon({
           iconUrl: `https://pickingname.github.io/basemap/icons/scales/${point.scale}.png`,
           iconSize: [scaleIconSize, scaleIconSize],
