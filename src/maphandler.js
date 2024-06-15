@@ -1,7 +1,9 @@
+// Existing imports
 import axios from "axios";
 import Papa from "papaparse";
+import { initCircleRendering } from './circleRenderer'; // Import the new circle rendering module
 
-const apiEndpoint = "https://api-v2-sandbox.p2pquake.net/v2/history";
+const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -59,7 +61,7 @@ const updateMapWithData = async (earthquakeData) => {
     mapInstance = L.map("map", {
       center: [35.689487, 139.691711], // Default center (Tokyo)
       zoom: 8, // Default zoom level
-      maxZoom: 9,
+      maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
@@ -77,6 +79,9 @@ const updateMapWithData = async (earthquakeData) => {
         maxZoom: 24,
       }
     ).addTo(mapInstance);
+
+    // Initialize circle rendering
+    initCircleRendering(mapInstance);
   }
 
   if (markersLayerGroup) {
@@ -87,7 +92,7 @@ const updateMapWithData = async (earthquakeData) => {
 
   if (earthquakeData.issue.type !== "ScalePrompt") {
     const epicenterIcon = L.icon({
-      iconUrl: "https://pickingname.github.io/basemap/icons/epicenter.png",
+      iconUrl: "https://pickingname.github.io/basemap/icons/oldEpicenter.png",
       iconSize: [30, 30],
     });
 
@@ -119,7 +124,6 @@ const updateMapWithData = async (earthquakeData) => {
         }).addTo(markersLayerGroup);
       }
     });
-
   } else {
     const comparisonData = await fetchComparisonData(
       "https://pickingname.github.io/basemap/prefs.csv"
@@ -132,7 +136,10 @@ const updateMapWithData = async (earthquakeData) => {
         point.addr
       );
       if (stationCoordinates) {
-        console.log(`Found coordinates for ${point.addr}: `, stationCoordinates);
+        console.log(
+          `Found coordinates for ${point.addr}: `,
+          stationCoordinates
+        );
         const stationIcon = L.icon({
           iconUrl: `https://pickingname.github.io/basemap/icons/scales/${point.scale}.png`,
           iconSize: [scaleIconSize, scaleIconSize],
