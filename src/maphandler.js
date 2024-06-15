@@ -1,7 +1,9 @@
+// Existing imports
 import axios from "axios";
 import Papa from "papaparse";
+import { initCircleRendering } from './circleRenderer'; // Import the new circle rendering module
 
-const apiEndpoint = "https://api-v2-sandbox.p2pquake.net/v2/history";
+const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -77,6 +79,9 @@ const updateMapWithData = async (earthquakeData) => {
         maxZoom: 24,
       }
     ).addTo(mapInstance);
+
+    // Initialize circle rendering
+    initCircleRendering(mapInstance);
   }
 
   if (markersLayerGroup) {
@@ -87,7 +92,7 @@ const updateMapWithData = async (earthquakeData) => {
 
   if (earthquakeData.issue.type !== "ScalePrompt") {
     const epicenterIcon = L.icon({
-      iconUrl: "https://pickingname.github.io/basemap/icons/epicenter.png",
+      iconUrl: "https://pickingname.github.io/basemap/icons/oldEpicenter.png",
       iconSize: [30, 30],
     });
 
