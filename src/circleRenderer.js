@@ -111,7 +111,7 @@ const updateMapWithCircleData = async (mapInstance) => {
 export const initCircleRendering = (mapInstance) => {
   updateMapWithCircleData(mapInstance);
 
-  // Update circles every 2 seconds
+  // Update circles every 1 seconds
   setInterval(() => {
     updateMapWithCircleData(mapInstance);
   }, 1000);
