@@ -2,7 +2,7 @@ import axios from "axios";
 import Papa from "papaparse";
 import { initCircleRendering } from './circleRenderer';
 
-const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+const apiEndpoint = "https://api-v2-sandbox.p2pquake.net/v2/history";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -58,8 +58,8 @@ let markersLayerGroup = null;
 const updateMapWithData = async (earthquakeData) => {
   if (!mapInstance) {
     mapInstance = L.map("map", {
-      center: [35.689487, 139.691711],
-      zoom: 5,
+      center: [35.689487, 139.691711], // Initial view coordinates
+      zoom: 5, // Initial zoom level
       maxZoom: 8,
       zoomControl: false,
       attributionControl: false,

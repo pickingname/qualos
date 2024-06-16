@@ -1,7 +1,8 @@
 import axios from "axios";
+import { isEEW } from "./circleRenderer";
 
 let apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+  "https://api-v2-sandbox.p2pquake.net/v2/history";
 
 let comparisonDataCache = null;
 export let responseCache;
@@ -138,8 +139,18 @@ const fetchData = async () => {
   }
 };
 
-fetchData();
+shouldIChangeTheFuckingText();
+
+function shouldIChangeTheFuckingText () {
+  if (isEEW === true) {
+    console.log('I should not change the text')
+  } else if (isEEW === false) {
+    fetchData();
+  }
+}
 
 setTimeout(function () {
-  setInterval(fetchData, 5000);
+  setInterval(
+    shouldIChangeTheFuckingText
+    , 2000);
 }, 2000);
