@@ -1,6 +1,7 @@
 import axios from "axios";
 import Papa from "papaparse";
 import { initCircleRendering } from './circleRenderer';
+import { isEEWforIndex } from './circleRenderer';
 
 const apiEndpoint = "https://api-v2-sandbox.p2pquake.net/v2/history";
 
@@ -154,7 +155,11 @@ const updateMapWithData = async (earthquakeData) => {
   }
 
   const bounds = markersLayerGroup.getBounds();
-  if (bounds.isValid()) {
+
+  if (isEEWforIndex === true ) {
+    console.log("I should not update the E_Information to its bounds.")
+  }
+  if (bounds.isValid() && isEEWforIndex === false) {
     mapInstance.flyToBounds(bounds.pad(0.1), {
       duration: 0.15,
       easeLinearity: 0.15,

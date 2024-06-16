@@ -1,7 +1,9 @@
 import axios from "axios";
 import e from "cors";
 
-export var isEEW;
+export var isEEW, isEEWforIndex;
+isEEW = false;
+isEEWforIndex = false;
 let reportNum;
 
 console.info("psWave listener started");
@@ -60,10 +62,12 @@ const renderCircles = (mapInstance, circleData) => {
     circleData.psWave.items.length === 0
   ) {
     isEEW = false;
+    isEEWforIndex = false;
     return;
   }
 
   isEEW = true;
+  isEEWforIndex = true;
   const psWaveItem = circleData.psWave.items[0];
 
   // EEW data for parsing in the index.html
