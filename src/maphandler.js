@@ -1,7 +1,6 @@
-// Existing imports
 import axios from "axios";
 import Papa from "papaparse";
-import { initCircleRendering } from './circleRenderer'; // Import the new circle rendering module
+import { initCircleRendering } from './circleRenderer';
 
 const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
@@ -59,8 +58,8 @@ let markersLayerGroup = null;
 const updateMapWithData = async (earthquakeData) => {
   if (!mapInstance) {
     mapInstance = L.map("map", {
-      center: [35.689487, 139.691711], // Default center (Tokyo)
-      zoom: 5, // Default zoom level
+      center: [35.689487, 139.691711],
+      zoom: 5,
       maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
@@ -80,7 +79,7 @@ const updateMapWithData = async (earthquakeData) => {
       }
     ).addTo(mapInstance);
 
-    // Initialize circle rendering
+    // init circle rendering
     initCircleRendering(mapInstance);
   }
 
