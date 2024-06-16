@@ -78,7 +78,8 @@ export const renderCircles = (mapInstance, circleData) => {
 
   // Create and add the P wave circle (blue)
   pCircle = L.circle([latitude, longitude], {
-    color: "blue",
+    weight: 2,
+    color: "#35b4fb",
     fillColor: "blue",
     fillOpacity: 0.0,
     radius: pRadius * 1000, // Convert to meters if the radius is in kilometers
@@ -86,8 +87,9 @@ export const renderCircles = (mapInstance, circleData) => {
 
   // Create and add the S wave circle (red)
   sCircle = L.circle([latitude, longitude], {
-    color: "red",
-    fillColor: "red",
+    weight: 2,
+    color: "#f6521f",
+    fillColor: "#f97316",
     fillOpacity: 0.1,
     radius: sRadius * 1000, // Convert to meters if the radius is in kilometers
   }).addTo(mapInstance);

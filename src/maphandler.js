@@ -60,7 +60,7 @@ const updateMapWithData = async (earthquakeData) => {
   if (!mapInstance) {
     mapInstance = L.map("map", {
       center: [35.689487, 139.691711], // Default center (Tokyo)
-      zoom: 8, // Default zoom level
+      zoom: 5, // Default zoom level
       maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
