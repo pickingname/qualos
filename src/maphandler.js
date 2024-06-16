@@ -1,6 +1,6 @@
 import axios from "axios";
 import Papa from "papaparse";
-import { initCircleRendering, updateMapWithCircleData } from './circleRenderer'; // Import the circle rendering functions
+import { initCircleRendering } from './circleRenderer';
 
 const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
@@ -58,8 +58,8 @@ let markersLayerGroup = null;
 const updateMapWithData = async (earthquakeData) => {
   if (!mapInstance) {
     mapInstance = L.map("map", {
-      center: [35.689487, 139.691711], // Default center (Tokyo)
-      zoom: 6, // Default zoom level
+      center: [35.689487, 139.691711],
+      zoom: 5,
       maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
@@ -68,8 +68,8 @@ const updateMapWithData = async (earthquakeData) => {
       doubleClickZoom: false,
       tap: false,
       touchZoom: false,
-      dragging: true,
-      scrollWheelZoom: true,
+      dragging: false,
+      scrollWheelZoom: false,
     });
 
     L.tileLayer(
@@ -79,7 +79,7 @@ const updateMapWithData = async (earthquakeData) => {
       }
     ).addTo(mapInstance);
 
-    // Initialize circle rendering
+    // init circle rendering
     initCircleRendering(mapInstance);
   }
 
@@ -89,101 +89,78 @@ const updateMapWithData = async (earthquakeData) => {
     markersLayerGroup = L.featureGroup().addTo(mapInstance);
   }
 
-  if (
-    earthquakeData &&
-    earthquakeData.psWave &&
-    earthquakeData.psWave.items &&
-    earthquakeData.psWave.items.length > 0
-  ) {
-    // If there's circle data, update the map to focus on the circle
-    updateMapWithCircleData(mapInstance);
+  if (earthquakeData.issue.type !== "ScalePrompt") {
+    const epicenterIcon = L.icon({
+      iconUrl: "https://pickingname.github.io/basemap/icons/oldEpicenter.png",
+      iconSize: [30, 30],
+    });
+
+    L.marker(
+      [
+        earthquakeData.earthquake.hypocenter.latitude,
+        earthquakeData.earthquake.hypocenter.longitude,
+      ],
+      { icon: epicenterIcon }
+    ).addTo(markersLayerGroup);
+
+    const comparisonData = await fetchComparisonData(
+      "https://pickingname.github.io/basemap/compare_points.csv"
+    );
+
+    earthquakeData.points.forEach((point) => {
+      const stationCoordinates = findStationCoordinates(
+        comparisonData,
+        point.addr
+      );
+      if (stationCoordinates) {
+        const stationIcon = L.icon({
+          iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
+          iconSize: [20, 20],
+        });
+
+        L.marker([stationCoordinates.lat, stationCoordinates.lng], {
+          icon: stationIcon,
+        }).addTo(markersLayerGroup);
+      }
+    });
   } else {
-    // Render earthquake points as before
-    if (earthquakeData.issue.type !== "ScalePrompt") {
-      const epicenterIcon = L.icon({
-        iconUrl: "https://pickingname.github.io/basemap/icons/oldEpicenter.png",
-        iconSize: [30, 30],
-      });
+    const comparisonData = await fetchComparisonData(
+      "https://pickingname.github.io/basemap/prefs.csv"
+    );
 
-      L.marker(
-        [
-          earthquakeData.earthquake.hypocenter.latitude,
-          earthquakeData.earthquake.hypocenter.longitude,
-        ],
-        { icon: epicenterIcon }
-      ).addTo(markersLayerGroup);
-
-      const comparisonData = await fetchComparisonData(
-        "https://pickingname.github.io/basemap/compare_points.csv"
+    earthquakeData.points.forEach((point) => {
+      console.log(`Processing point with addr: ${point.addr}`);
+      const stationCoordinates = findStationCoordinates(
+        comparisonData,
+        point.addr
       );
-
-      earthquakeData.points.forEach((point) => {
-        const stationCoordinates = findStationCoordinates(
-          comparisonData,
-          point.addr
+      if (stationCoordinates) {
+        console.log(
+          `Found coordinates for ${point.addr}: `,
+          stationCoordinates
         );
-        if (stationCoordinates) {
-          const stationIcon = L.icon({
-            iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
-            iconSize: [20, 20],
-          });
-
-          L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-            icon: stationIcon,
-          }).addTo(markersLayerGroup);
-        }
-      });
-
-      // Zoom to fit the markersLayerGroup
-      const bounds = markersLayerGroup.getBounds();
-      if (bounds.isValid()) {
-        mapInstance.flyToBounds(bounds.pad(0.1), {
-          duration: 0.15,
-          easeLinearity: 0.15,
+        const stationIcon = L.icon({
+          iconUrl: `https://pickingname.github.io/basemap/icons/scales/${point.scale}.png`,
+          iconSize: [scaleIconSize, scaleIconSize],
         });
+
+        L.marker([stationCoordinates.lat, stationCoordinates.lng], {
+          icon: stationIcon,
+        }).addTo(markersLayerGroup);
       } else {
-        console.warn("No valid bounds for markersLayerGroup");
+        console.warn(`No coordinates found for ${point.addr}`);
       }
-    } else {
-      const comparisonData = await fetchComparisonData(
-        "https://pickingname.github.io/basemap/prefs.csv"
-      );
+    });
+  }
 
-      earthquakeData.points.forEach((point) => {
-        console.log(`Processing point with addr: ${point.addr}`);
-        const stationCoordinates = findStationCoordinates(
-          comparisonData,
-          point.addr
-        );
-        if (stationCoordinates) {
-          console.log(
-            `Found coordinates for ${point.addr}: `,
-            stationCoordinates
-          );
-          const stationIcon = L.icon({
-            iconUrl: `https://pickingname.github.io/basemap/icons/scales/${point.scale}.png`,
-            iconSize: [scaleIconSize, scaleIconSize],
-          });
-
-          L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-            icon: stationIcon,
-          }).addTo(markersLayerGroup);
-        } else {
-          console.warn(`No coordinates found for ${point.addr}`);
-        }
-      });
-
-      // Zoom to fit the markersLayerGroup
-      const bounds = markersLayerGroup.getBounds();
-      if (bounds.isValid()) {
-        mapInstance.flyToBounds(bounds.pad(0.1), {
-          duration: 0.15,
-          easeLinearity: 0.15,
-        });
-      } else {
-        console.warn("No valid bounds for markersLayerGroup");
-      }
-    }
+  const bounds = markersLayerGroup.getBounds();
+  if (bounds.isValid()) {
+    mapInstance.flyToBounds(bounds.pad(0.1), {
+      duration: 0.15,
+      easeLinearity: 0.15,
+    });
+  } else {
+    console.warn("No valid bounds for markersLayerGroup");
   }
 };
 
