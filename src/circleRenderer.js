@@ -3,8 +3,8 @@ import axios from "axios";
 console.info("psWave listener started");
 
 var date = new Date();
-date.setSeconds(date.getSeconds() - 3);
-date.setMinutes(date.getMinutes() - 0);
+date.setSeconds(date.getSeconds() - 3); // offset to prevent 404 error
+date.setMinutes(date.getMinutes());
 const NowTime =
   date.getFullYear() +
   "" +
@@ -54,7 +54,7 @@ export const renderCircles = (mapInstance, circleData) => {
     !circleData.psWave.items ||
     circleData.psWave.items.length === 0
   ) {
-    console.info("no P and S wave to render yet.");
+    // console.info("no P and S wave to render yet.");
     return;
   }
 
