@@ -3,7 +3,7 @@ import Papa from "papaparse";
 import { initCircleRendering } from './circleRenderer';
 import { isEEWforIndex } from './circleRenderer';
 
-const apiEndpoint = "https://api-v2-sandbox.p2pquake.net/v2/history";
+const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -55,6 +55,17 @@ const findStationCoordinates = (comparisonData, stationName) => {
 let previousEarthquakeData = null;
 let mapInstance = null;
 let markersLayerGroup = null;
+
+const updateCamera = (bounds) => {
+  if (bounds && bounds.isValid()) {
+    mapInstance.flyToBounds(bounds.pad(0.1), {
+      duration: 0.15,
+      easeLinearity: 0.15,
+    });
+  } else {
+    console.warn("No valid bounds for updating camera");
+  }
+};
 
 const updateMapWithData = async (earthquakeData) => {
   if (!mapInstance) {
@@ -156,16 +167,20 @@ const updateMapWithData = async (earthquakeData) => {
 
   const bounds = markersLayerGroup.getBounds();
 
-  if (isEEWforIndex === true ) {
-    console.log("I should not update the E_Information to its bounds.")
-  }
-  if (bounds.isValid() && isEEWforIndex === false) {
-    mapInstance.flyToBounds(bounds.pad(0.1), {
-      duration: 0.15,
-      easeLinearity: 0.15,
-    });
+  var shouldIUpdate;
+
+  if (isEEWforIndex === true) {
+    console.log("I should not update the E_Information to its bounds.");
   } else {
-    console.warn("No valid bounds for markersLayerGroup");
+    shouldIUpdate = true;
+  }
+
+  if (bounds.isValid() && isEEWforIndex === false) {
+    if (shouldIUpdate === true) {
+      updateCamera(bounds);
+    }
+  } else {
+    console.info("No valid bounds for markersLayerGroup");
   }
 };
 
@@ -229,6 +244,18 @@ const fetchAndUpdateData = async () => {
 };
 
 fetchAndUpdateData();
+
+setInterval(() => {
+  if (isEEWforIndex === false) {
+    // Assuming bounds can be obtained from markersLayerGroup
+    const bounds = markersLayerGroup ? markersLayerGroup.getBounds() : null;
+    if (bounds && bounds.isValid()) {
+      updateCamera(bounds);
+    } else {
+      console.info("No valid bounds for interval camera update");
+    }
+  }
+}, 3000);
 
 setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);

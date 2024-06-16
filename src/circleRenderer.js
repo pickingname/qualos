@@ -38,10 +38,8 @@ const fetchCircleData = async () => {
     NowTime +
     ".json";
 
-  const getUrl = "http://localhost:6966"; // replace with const: url for real data, this is for testing
-
   try {
-    const response = await axios.get(getUrl);
+    const response = await axios.get(url);
     return response.data;
   } catch (error) {
     console.error("Error fetching circle data:", error);
