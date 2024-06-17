@@ -19,6 +19,8 @@ const fetchComparisonData = async () => {
     return comparisonDataCache;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
+    document.getElementById("statusText").classList.add("text-red-600")
+    document.getElementById("statusText").textContent = "Error fetching comparison data, "+error;
     return [];
   }
 };

@@ -49,6 +49,8 @@ const fetchCircleData = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching circle data:", error);
+    document.getElementById("statusText").classList.add("text-red-600")
+    document.getElementById("statusText").textContent = "Error fetching circle data, "+error;
     return null;
   }
 };
