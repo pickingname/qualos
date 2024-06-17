@@ -8,8 +8,6 @@ let reportNum;
 console.info("psWave listener started");
 
 function borderYellow() {
-  document.getElementById("changeBorderHere").classList.remove("border");
-  document.getElementById("changeBorderHere").classList.add("border-2");
   document
     .getElementById("changeBorderHere")
     .classList.remove("border-neutral-700");
@@ -20,8 +18,6 @@ function borderYellow() {
 }
 
 function borderOrange() {
-  document.getElementById("changeBorderHere").classList.remove("border");
-  document.getElementById("changeBorderHere").classList.add("border-2");
   document
     .getElementById("changeBorderHere")
     .classList.remove("border-neutral-700");
@@ -34,8 +30,6 @@ function borderOrange() {
 }
 
 function borderRed() {
-  document.getElementById("changeBorderHere").classList.remove("border");
-  document.getElementById("changeBorderHere").classList.add("border-2");
   document
     .getElementById("changeBorderHere")
     .classList.remove("border-neutral-700");
@@ -46,8 +40,6 @@ function borderRed() {
 }
 
 function borderPurple() {
-  document.getElementById("changeBorderHere").classList.remove("border");
-  document.getElementById("changeBorderHere").classList.add("border-2");
   document
     .getElementById("changeBorderHere")
     .classList.remove("border-neutral-700");
@@ -61,8 +53,6 @@ function borderPurple() {
 
 function borderBlue() {
   // this is for test or cancelled EEWs
-  document.getElementById("changeBorderHere").classList.remove("border");
-  document.getElementById("changeBorderHere").classList.add("border-2");
   document
     .getElementById("changeBorderHere")
     .classList.remove("border-neutral-700");
@@ -73,8 +63,6 @@ function borderBlue() {
 }
 
 function returnBorder() {
-  document.getElementById("changeBorderHere").classList.add("border");
-  document.getElementById("changeBorderHere").classList.remove("border-2");
   document
     .getElementById("changeBorderHere")
     .classList.add("border-neutral-700");
