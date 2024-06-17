@@ -1,4 +1,5 @@
 ### semi functional quarog remake
+[![CodeFactor](https://www.codefactor.io/repository/github/pickingname/sfqr/badge)](https://www.codefactor.io/repository/github/pickingname/sfqr)
 ##### [https://quarog.vercel.app](https://quarog.vercel.app)
 
 ![app_preview](https://github.com/pickingname/sfqr/assets/115550149/ad7f5b07-55fc-4fe9-95d6-421391bb1e9b)
