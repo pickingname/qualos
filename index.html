@@ -35,9 +35,10 @@
     <div class="info-container font-outfit">
       <div class="justify-center dark:text-white text-black pb-5">
         <div
-          class="px-5 py-5 font-outfit rounded-md border-neutral-700 border-sm border relative backdrop-blur-sm"
+          class="px-5 py-5 font-outfit rounded-md border-neutral-700 dark:border-neutral-600 border relative backdrop-blur-sm transition-all duration-500 ease-in-out" 
+          id="changeBorderHere"
           style="padding-right: 7.25rem !important"
-        >
+        > <!-- should have added animate-pulse in -->
           <p class="text-3xl text-balance" id="where">?</p>
           <br />
 
@@ -196,10 +197,9 @@
         <p id="datenow" class="font-outfit"></p>
       </div>
     </div>
-    <div class="bottom-left px-5 py-5 font-outfit"> <!-- this is where the status text are being displayed -->
-      <p id="statusText" class="">
-        
-      </p>
+    <div class="bottom-left px-5 py-5 font-outfit">
+      <!-- this is where the status text are being displayed -->
+      <p id="statusText" class=""></p>
     </div>
 
     <script src="src/circleRenderer.js" type="module"></script>

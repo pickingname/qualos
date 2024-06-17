@@ -7,6 +7,97 @@ let reportNum;
 
 console.info("psWave listener started");
 
+function borderYellow() {
+  document.getElementById("changeBorderHere").classList.remove("border");
+  document.getElementById("changeBorderHere").classList.add("border-2");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-neutral-700");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("dark:border-neutral-600");
+  document.getElementById("changeBorderHere").classList.add("border-amber-400");
+}
+
+function borderOrange() {
+  document.getElementById("changeBorderHere").classList.remove("border");
+  document.getElementById("changeBorderHere").classList.add("border-2");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-neutral-700");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("dark:border-neutral-600");
+  document
+    .getElementById("changeBorderHere")
+    .classList.add("border-orange-400");
+}
+
+function borderRed() {
+  document.getElementById("changeBorderHere").classList.remove("border");
+  document.getElementById("changeBorderHere").classList.add("border-2");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-neutral-700");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("dark:border-neutral-600");
+  document.getElementById("changeBorderHere").classList.add("border-red-500");
+}
+
+function borderPurple() {
+  document.getElementById("changeBorderHere").classList.remove("border");
+  document.getElementById("changeBorderHere").classList.add("border-2");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-neutral-700");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("dark:border-neutral-600");
+  document
+    .getElementById("changeBorderHere")
+    .classList.add("border-purple-500");
+}
+
+function borderBlue() {
+  // this is for test or cancelled EEWs
+  document.getElementById("changeBorderHere").classList.remove("border");
+  document.getElementById("changeBorderHere").classList.add("border-2");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-neutral-700");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("dark:border-neutral-600");
+  document.getElementById("changeBorderHere").classList.add("border-blue-500");
+}
+
+function returnBorder() {
+  document.getElementById("changeBorderHere").classList.add("border");
+  document.getElementById("changeBorderHere").classList.remove("border-2");
+  document
+    .getElementById("changeBorderHere")
+    .classList.add("border-neutral-700");
+  document
+    .getElementById("changeBorderHere")
+    .classList.add("dark:border-neutral-600");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-purple-500");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-blue-500");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-red-500");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-orange-400");
+  document
+    .getElementById("changeBorderHere")
+    .classList.remove("border-amber-400");
+}
+
 // Function to fetch circle data from the API
 const fetchCircleData = async () => {
   var date = new Date();
@@ -46,11 +137,13 @@ const fetchCircleData = async () => {
 
   try {
     const response = await axios.get(url);
+    document.getElementById("statusText").textContent = "";
     return response.data;
   } catch (error) {
     console.error("Error fetching circle data:", error);
-    document.getElementById("statusText").classList.add("text-red-600")
-    document.getElementById("statusText").textContent = "Error fetching circle data, "+error;
+    document.getElementById("statusText").classList.add("text-red-600");
+    document.getElementById("statusText").textContent =
+      "Error fetching circle data, " + error;
     return null;
   }
 };
@@ -60,6 +153,7 @@ const renderCircles = (mapInstance, circleData) => {
   // Remove previous layers if they exist
   if (mapInstance.psSGroup) {
     mapInstance.removeLayer(mapInstance.psSGroup);
+    returnBorder();
   }
   if (
     !circleData ||
@@ -106,26 +200,37 @@ const renderCircles = (mapInstance, circleData) => {
   // compare the expected intensity with the calculated intensity
   if (calcIntensity === 0) {
     expInt = "Unknown";
+    borderBlue();
   } else if (calcIntensity == "01") {
     expInt = 1;
+    borderYellow();
   } else if (calcIntensity == "02") {
     expInt = 2;
+    borderYellow();
   } else if (calcIntensity == "03") {
     expInt = 3;
+    borderOrange();
   } else if (calcIntensity == "04") {
     expInt = 4;
+    borderOrange();
   } else if (calcIntensity == "5-") {
     expInt = "5-";
+    borderRed();
   } else if (calcIntensity == "5+") {
     expInt = "5+";
+    borderOrange();
   } else if (calcIntensity == "6-") {
     expInt = "6-";
+    borderPurple();
   } else if (calcIntensity == "6+") {
     expInt = "6+";
+    borderPurple();
   } else if (calcIntensity == "07") {
     expInt = 7;
+    borderPurple();
   } else {
     expInt = "--";
+    borderBlue();
   }
 
   // update the EEW data in the index.html
