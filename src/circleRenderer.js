@@ -127,6 +127,7 @@ const renderCircles = (mapInstance, circleData) => {
   document.getElementById("magnitude").textContent = "Magnitude: " + magnitude;
   document.getElementById("depth").textContent = "Depth: " + depth;
   document.getElementById("time").textContent = reportText;
+  document.getElementById("where").textContent = epicenterName;
 
   const latitude = parseFloat(psWaveItem.latitude.slice(1)); // remove the 'N' and convert to float
   const longitude = parseFloat(psWaveItem.longitude.slice(1)); // remove the 'E' and convert to float
