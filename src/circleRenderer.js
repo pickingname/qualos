@@ -1,5 +1,4 @@
 import axios from "axios";
-import e from "cors";
 
 export var isEEW, isEEWforIndex;
 isEEW = false;
@@ -10,7 +9,14 @@ console.info("psWave listener started");
 
 // Function to fetch circle data from the API
 const fetchCircleData = async () => {
-  const date = new Date();
+  var date = new Date();
+
+  // convert to UTC 0
+  date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+  
+  // convert to JST
+  date = new Date(date.getTime() + (9 * 60 * 60 * 1000));
+  date.setMinutes(date.getMinutes() - 0);
   date.setSeconds(date.getSeconds() - 3); // offset to prevent 404 error
   const NowTime =
     date.getFullYear() +
