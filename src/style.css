@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .leaflet-marker-icon {
-    pointer-events: none !important;
+  pointer-events: none !important;
 }
 
-#map{
+#map {
   background-color: #262626 !important;
 }
 
@@ -41,7 +41,6 @@
   right: 0;
   z-index: 1001;
 }
-
 
 body {
   /*background-color: #1d1d1f; */

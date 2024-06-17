@@ -13,9 +13,9 @@ const fetchCircleData = async () => {
 
   // convert to UTC 0
   date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-  
+
   // convert to JST
-  date = new Date(date.getTime() + (9 * 60 * 60 * 1000));
+  date = new Date(date.getTime() + 9 * 60 * 60 * 1000);
   date.setMinutes(date.getMinutes() - 0);
   date.setSeconds(date.getSeconds() - 3); // offset to prevent 404 error
   const NowTime =
@@ -122,7 +122,7 @@ const renderCircles = (mapInstance, circleData) => {
   }
 
   // update the EEW data in the index.html
-  
+
   document.getElementById("intensity").textContent = expInt;
   document.getElementById("magnitude").textContent = "Magnitude: " + magnitude;
   document.getElementById("depth").textContent = "Depth: " + depth;

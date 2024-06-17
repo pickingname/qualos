@@ -141,16 +141,14 @@ const fetchData = async () => {
 
 shouldIChangeTheFuckingText();
 
-function shouldIChangeTheFuckingText () {
+function shouldIChangeTheFuckingText() {
   if (isEEW === true) {
-    console.log('I should not change the text')
+    console.log("I should not change the text");
   } else if (isEEW === false) {
     fetchData();
   }
 }
 
 setTimeout(function () {
-  setInterval(
-    shouldIChangeTheFuckingText
-    , 2000);
+  setInterval(shouldIChangeTheFuckingText, 2000);
 }, 2000);
