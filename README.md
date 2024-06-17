@@ -1,4 +1,5 @@
 ### semi functional quarog remake
+[![CodeFactor](https://www.codefactor.io/repository/github/pickingname/sfqr/badge)](https://www.codefactor.io/repository/github/pickingname/sfqr) [![CodeTime Badge](https://img.shields.io/endpoint?style=flat&color=222&url=https%3A%2F%2Fapi.codetime.dev%2Fshield%3Fid%3D16851%26project%3Dsfqr%26in=86400000000)](https://codetime.dev)
 ##### [https://quarog.vercel.app](https://quarog.vercel.app)
 
 ![app_preview](https://github.com/pickingname/sfqr/assets/115550149/ad7f5b07-55fc-4fe9-95d6-421391bb1e9b)
