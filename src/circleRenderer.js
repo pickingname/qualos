@@ -187,7 +187,7 @@ const renderCircles = (mapInstance, circleData) => {
 
   // compare the expected intensity with the calculated intensity
   if (calcIntensity === 0) {
-    expInt = "Unknown";
+    expInt = "0";
     borderBlue();
   } else if (calcIntensity == "01") {
     expInt = 1;
@@ -206,7 +206,7 @@ const renderCircles = (mapInstance, circleData) => {
     borderRed();
   } else if (calcIntensity == "5+") {
     expInt = "5+";
-    borderOrange();
+    borderRed();
   } else if (calcIntensity == "6-") {
     expInt = "6-";
     borderPurple();
