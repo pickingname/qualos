@@ -172,18 +172,21 @@ const renderCircles = (mapInstance, circleData) => {
 
   // check if the report is a training report or a final report
 
-  // if (isTraining === true) {
-  //   // TODO: make a bottom status text showing that the EEW is training
-  //   document.getElementById("STA").classList.add("text-red-600")
-  //   document.getElementById("statusText").textContent = "This EEW is marked as Training";
-  // } else {
-  //   document.getElementById("STA").classList.remove("text-red-600")
-  //   document.getElementById("statusText").textContent = ""; // clears the status
-  // }
+  // if (isTraining === 'true') {
+  //    // TODO: make a bottom status text showing that the EEW is training
+  //    document.getElementById("STA").classList.add("text-red-600")
+  //    document.getElementById("statusText").textContent = "This EEW is marked as Training";
+  //  } else {
+  //    document.getElementById("STA").classList.remove("text-red-600")
+  //    document.getElementById("statusText").textContent = "Non training"; // clears the status
+  //  }
 
-  if (isFinal === true) {
+  console.log('isfinal? '+isFinal)
+  if (isFinal === 'true') {
     reportText = "Final report";
-  } else reportText = "Report #" + reportNum;
+  } else if (isFinal === 'false') {
+    reportText = "Report #" + reportNum;
+  }
 
   // compare the expected intensity with the calculated intensity
   if (calcIntensity === 0) {
