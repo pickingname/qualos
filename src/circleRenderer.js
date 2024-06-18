@@ -269,7 +269,7 @@ const renderCircles = (mapInstance, circleData) => {
   const bounds = L.latLngBounds([latitude, longitude]);
   bounds.extend(pCircle.getBounds());
   bounds.extend(sCircle.getBounds());
-  mapInstance.fitBounds(bounds.pad(0.2));
+  mapInstance.fitBounds(bounds.pad(0.002));
 };
 
 // Function to update map with circle data
