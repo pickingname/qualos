@@ -1,7 +1,7 @@
 {
-  "name": "vanilla-tailwindcss-boilerplate",
-  "private": true,
-  "version": "0.0.0",
+  "name": "qualos",
+  "private": false,
+  "version": "1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
