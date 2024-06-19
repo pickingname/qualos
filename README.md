@@ -1,8 +1,8 @@
 ### semi functional quarog remake
-[![CodeFactor](https://www.codefactor.io/repository/github/pickingname/sfqr/badge)](https://www.codefactor.io/repository/github/pickingname/sfqr) [![CodeTime Badge](https://img.shields.io/endpoint?style=flat&color=222&url=https%3A%2F%2Fapi.codetime.dev%2Fshield%3Fid%3D16851%26project%3Dsfqr%26in=86400000000)](https://codetime.dev)
+[![CodeFactor](https://www.codefactor.io/repository/github/pickingname/qualos/badge)](https://www.codefactor.io/repository/github/pickingname/qualos) [![CodeTime Badge](https://img.shields.io/endpoint?style=flat&color=222&url=https%3A%2F%2Fapi.codetime.dev%2Fshield%3Fid%3D16851%26project%3Dqualos%26in=86400000000)](https://codetime.dev)
 ##### [https://quarog.vercel.app](https://quarog.vercel.app)
 
-![appPreview](https://github.com/pickingname/sfqr/assets/115550149/45f3777a-1a59-47ff-917c-5581792fc070)
+![appPreview](https://github.com/pickingname/qualos/assets/115550149/45f3777a-1a59-47ff-917c-5581792fc070)
 
 ---
 #### features
