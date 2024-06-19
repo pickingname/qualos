@@ -96,7 +96,7 @@ const fetchCircleData = async () => {
   // convert to JST
   date = new Date(date.getTime() + 9 * 60 * 60 * 1000);
   date.setMinutes(date.getMinutes() - 0);
-  date.setSeconds(date.getSeconds() - 3); // offset to prevent 404 error
+  date.setSeconds(date.getSeconds() - 1); // offset to prevent 404 error
   const NowTime =
     date.getFullYear() +
     "" +
