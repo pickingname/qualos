@@ -1,6 +1,6 @@
 ### qualos
 [![CodeFactor](https://www.codefactor.io/repository/github/pickingname/qualos/badge)](https://www.codefactor.io/repository/github/pickingname/qualos)
-##### [https://qualos.vercel.app](https://qualos.vercel.app)
+##### [https://qualos.info](https://qualos.info)
 
 ![appPreview](https://github.com/pickingname/qualos/assets/115550149/45f3777a-1a59-47ff-917c-5581792fc070)
 
