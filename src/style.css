@@ -49,6 +49,10 @@
   z-index: 1001;
 }
 
+.leaflet-marker-icon {
+  pointer-events: none !important;
+}
+
 body {
   /*background-color: #1d1d1f; */
   background-color: #000000;
