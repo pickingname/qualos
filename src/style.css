@@ -49,7 +49,7 @@
   z-index: 1001;
 }
 
-.leaflet-marker-icon {
+.leaflet-marker-icon, .leaflet-interactive {
   pointer-events: none !important;
 }
 
