@@ -3,6 +3,9 @@
 ##### [https://qualos.info](https://qualos.info)
 
 ![appPreview](https://github.com/pickingname/qualos/assets/115550149/45f3777a-1a59-47ff-917c-5581792fc070)
+---
+### About the credits at the corner
+As you can see, there a credits at the bottom left of the screen. **You have my permission to remove the credits using F12**. I need to put in the credits to prove my work there, Thanks.
 
 ---
 #### features
