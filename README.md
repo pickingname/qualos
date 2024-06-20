@@ -1,4 +1,8 @@
-### qualos
+# qualos
+<img align="right" width="285" height="71" src="https://pickingname.github.io/icons/qualos/qualos_logo.png">
+
+Website that shows the most recent earthquake in a map using p2pquake API.
+
 [![CodeFactor](https://www.codefactor.io/repository/github/pickingname/qualos/badge)](https://www.codefactor.io/repository/github/pickingname/qualos)
 ##### [https://qualos.info](https://qualos.info)
 
