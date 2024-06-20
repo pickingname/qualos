@@ -6,7 +6,8 @@ Website that shows the most recent earthquake in a map using p2pquake API.
 [![CodeFactor](https://www.codefactor.io/repository/github/pickingname/qualos/badge)](https://www.codefactor.io/repository/github/pickingname/qualos)
 ##### [https://qualos.info](https://qualos.info)
 
-![appPreview](https://github.com/pickingname/qualos/assets/115550149/45f3777a-1a59-47ff-917c-5581792fc070)
+![appPreview](https://github.com/pickingname/qualos/assets/115550149/a9fa2290-3929-4f80-9101-44adfa0b41c1)
+
 ---
 ### About the Credits
 
