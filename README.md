@@ -8,28 +8,27 @@ Website that shows the most recent earthquake in a map using p2pquake API.
 
 ![appPreview](https://github.com/pickingname/qualos/assets/115550149/45f3777a-1a59-47ff-917c-5581792fc070)
 ---
-### About the credits at the corner
-As you can see, there a credits at the bottom left of the screen. **You have my permission to remove the credits using F12**. I need to put in the credits to prove my work there, Thanks.
+### About the Credits
 
----
-#### features
-- basically shows the most recent earthquake information from [p2pquake api](https://www.p2pquake.net/develop/json_api_v2/)
-- renders a banner showing the epicenter location; maximum intensity and other informations such as depth; time and magnitude
-- has a map that show the stations points and their readings as a circle with a number thing idk how to explain
-
----
-#### developing
-- clone this repo
-- make sure you have npm installed
-- `npm i`
-- `npm dev`
-- go to [localhost:5173](http://localhost:5173) or the address that vite shows you in the terminal
+At the bottom left corner of the screen, you'll notice credits displayed. You have permission to remove these credits using the browser's developer tools (F12). However, please note that the credits are essential to acknowledge and verify the work done. Thank you for understanding.
 
 ---
 
-#### notes
-- this codebase is amazingly horrible
-- there will be a unverified commit because i sometimes works on github codespaces and i have no idea how to configure gpg into there
-- `maphandler.js` fetch a data from the p2pquake api; renders the map and do the work of converting points and showing the icons
-- `index.js` fetch a data from p2pquake api; then puts the data into the banner
-- the assets are stored in another website; since vite doesnt seems to work with the `src/` directory
+### Features
+
+- Displays real-time earthquake information sourced from the [p2pquake API](https://www.p2pquake.net/develop/json_api_v2/).
+- Renders a banner showing details such as epicenter location, maximum intensity, depth, time, and magnitude.
+- Shows intensity measured from stations on a map as a circle icon.
+- Displays intensity reports; if intensity exceeds 3, it highlights prefectures with intensity levels using a square icon instead of a circle.
+- Shows P and S wave information during an active earthquake using the Yahoo API.
+
+---
+
+### Development
+
+To get started with development:
+
+1. Clone this repository.
+2. Install dependencies with `npm install`.
+3. Start the development server with `npm run dev`.
+4. Open [localhost:5173](http://localhost:5173) (or the address shown by Vite in the terminal) in your browser.
