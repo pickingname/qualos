@@ -83,8 +83,8 @@ const updateMapWithData = async (earthquakeData) => {
       doubleClickZoom: false,
       tap: false,
       touchZoom: false,
-      dragging: false,
-      scrollWheelZoom: false,
+      dragging: true,
+      scrollWheelZoom: true,
     });
 
     L.tileLayer(
@@ -173,12 +173,12 @@ const updateMapWithData = async (earthquakeData) => {
   var shouldIUpdate;
 
   if (isEEWforIndex === true) {
-    console.log("I should not update the E_Information to its bounds.");
+    shouldIUpdate = true;
   } else {
     shouldIUpdate = true;
   }
 
-  if (bounds.isValid() && isEEWforIndex === false) {
+  if (bounds.isValid()) {
     if (shouldIUpdate === true) {
       updateCamera(bounds);
     }
@@ -250,17 +250,18 @@ const fetchAndUpdateData = async () => {
 
 fetchAndUpdateData();
 
-setInterval(() => {
-  if (isEEWforIndex === false) {
-    // Assuming bounds can be obtained from markersLayerGroup
-    const bounds = markersLayerGroup ? markersLayerGroup.getBounds() : null;
-    if (bounds && bounds.isValid()) {
-      updateCamera(bounds);
-    } else {
-      console.info("No valid bounds for interval camera update");
-    }
-  }
-}, 3000);
+// this will be commented because this will allows the camera to move to the EEW bounds automaticcally and will make the camera overall better.
+// setInterval(() => {
+//   if (isEEWforIndex === false) {
+//     // Assuming bounds can be obtained from markersLayerGroup
+//     const bounds = markersLayerGroup ? markersLayerGroup.getBounds() : null;
+//     if (bounds && bounds.isValid()) {
+//       updateCamera(bounds);
+//     } else {
+//       console.info("No valid bounds for interval camera update");
+//     }
+//   }
+// }, 3000);
 
 setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
