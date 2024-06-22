@@ -22,6 +22,7 @@ At the bottom left corner of the screen, you'll notice credits displayed. You ha
 - Shows intensity measured from stations on a map as a circle icon.
 - Displays intensity reports; if intensity exceeds 3, it highlights prefectures with intensity levels using a square icon instead of a circle.
 - Shows P and S wave information during an active earthquake using the Yahoo API.
+- Light / Dark theme support. (Applied automatically based on the system's theme)
 
 ---
 
