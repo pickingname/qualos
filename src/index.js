@@ -19,8 +19,9 @@ const fetchComparisonData = async () => {
     return comparisonDataCache;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
-    document.getElementById("statusText").classList.add("text-red-600")
-    document.getElementById("statusText").textContent = "Error fetching comparison data, "+error;
+    document.getElementById("statusText").classList.add("text-red-600");
+    document.getElementById("statusText").textContent =
+      "Error fetching comparison data, " + error;
     return [];
   }
 };
@@ -145,7 +146,9 @@ shouldIChangeTheFuckingText();
 
 function shouldIChangeTheFuckingText() {
   if (isEEW === true) {
-    console.log("I should not change the text");
+    console.log("");
+    // it is now possible to change the text.
+    
   } else if (isEEW === false) {
     fetchData();
   }

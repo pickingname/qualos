@@ -97,7 +97,7 @@ const fetchCircleData = async () => {
   // convert to JST
   date = new Date(date.getTime() + 9 * 60 * 60 * 1000);
   date.setMinutes(date.getMinutes() - 0);
-  date.setSeconds(date.getSeconds() - 1); // offset to prevent 404 error
+  date.setSeconds(date.getSeconds() - 2); // offset to prevent 404 error
   const NowTime =
     date.getFullYear() +
     "" +
@@ -244,6 +244,10 @@ const renderCircles = (mapInstance, circleData) => {
   const pRadius = parseFloat(psWaveItem.pRadius);
   const sRadius = parseFloat(psWaveItem.sRadius);
 
+  function updateEpicenterLocationOnce() {
+    document.getElementById("intensity").textContent = expInt;
+  }
+
   // Create a layer group for P wave, S wave, and epicenter
   mapInstance.psSGroup = L.layerGroup().addTo(mapInstance);
 
@@ -278,6 +282,7 @@ const renderCircles = (mapInstance, circleData) => {
   // Fit the map to the bounds of the P and S wave circles
   const bounds = L.latLngBounds([latitude, longitude]);
   if (isThisTheFirstTime === false) {
+    updateEpicenterLocationOnce();
     fitCircleBounds();
   }
 
