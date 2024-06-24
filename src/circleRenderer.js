@@ -4,6 +4,7 @@ export var isEEW, isEEWforIndex;
 isEEW = false;
 isEEWforIndex = false;
 let reportNum;
+let isThisTheFirstTime = false;
 
 console.info("psWave listener started");
 
@@ -138,6 +139,11 @@ const fetchCircleData = async () => {
 
 // Function to render P wave, S wave circles, and epicenter icon on the map
 const renderCircles = (mapInstance, circleData) => {
+  function fitCircleBounds() {
+    bounds.extend(pCircle.getBounds());
+    bounds.extend(sCircle.getBounds());
+    mapInstance.fitBounds(bounds.pad(0.002));
+  }
   // Remove previous layers if they exist
   if (mapInstance.psSGroup) {
     mapInstance.removeLayer(mapInstance.psSGroup);
@@ -149,6 +155,7 @@ const renderCircles = (mapInstance, circleData) => {
     !circleData.psWave.items ||
     circleData.psWave.items.length === 0
   ) {
+    isThisTheFirstTime = false;
     isEEW = false;
     isEEWforIndex = false;
     return;
@@ -237,6 +244,10 @@ const renderCircles = (mapInstance, circleData) => {
   const pRadius = parseFloat(psWaveItem.pRadius);
   const sRadius = parseFloat(psWaveItem.sRadius);
 
+  function updateEpicenterLocationOnce() {
+    document.getElementById("intensity").textContent = expInt;
+  }
+
   // Create a layer group for P wave, S wave, and epicenter
   mapInstance.psSGroup = L.layerGroup().addTo(mapInstance);
 
@@ -270,9 +281,12 @@ const renderCircles = (mapInstance, circleData) => {
 
   // Fit the map to the bounds of the P and S wave circles
   const bounds = L.latLngBounds([latitude, longitude]);
-  bounds.extend(pCircle.getBounds());
-  bounds.extend(sCircle.getBounds());
-  mapInstance.fitBounds(bounds.pad(0.002));
+  if (isThisTheFirstTime === false) {
+    updateEpicenterLocationOnce();
+    fitCircleBounds();
+  }
+
+  isThisTheFirstTime = true;
 };
 
 // Function to update map with circle data
