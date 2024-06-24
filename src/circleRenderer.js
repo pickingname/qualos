@@ -125,7 +125,7 @@ const fetchCircleData = async () => {
     ".json";
 
   try {
-    const response = await axios.get("http://localhost:6966");
+    const response = await axios.get(url);
     document.getElementById("statusText").textContent = "";
     return response.data;
   } catch (error) {
