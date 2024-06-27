@@ -85,7 +85,7 @@ const updateMapWithData = async (earthquakeData) => {
       tap: false,
       touchZoom: false,
       dragging: false,
-      scrollWheelZoom: false
+      scrollWheelZoom: false,
     });
 
     L.tileLayer(
@@ -251,18 +251,17 @@ const fetchAndUpdateData = async () => {
 
 fetchAndUpdateData();
 
-// this will be commented because this will allows the camera to move to the EEW bounds automaticcally and will make the camera overall better.
-// setInterval(() => {
-//   if (isEEWforIndex === false) {
-//     // Assuming bounds can be obtained from markersLayerGroup
-//     const bounds = markersLayerGroup ? markersLayerGroup.getBounds() : null;
-//     if (bounds && bounds.isValid()) {
-//       updateCamera(bounds);
-//     } else {
-//       console.info("No valid bounds for interval camera update");
-//     }
-//   }
-// }, 3000);
+// uncomment this incase the EEW does not triggers a DetailScale from p2pquake api
+setInterval(() => {
+  if (isEEWforIndex === false) {
+    const bounds = markersLayerGroup ? markersLayerGroup.getBounds() : null;
+    if (bounds && bounds.isValid()) {
+      updateCamera(bounds);
+    } else {
+      console.info("No valid bounds for interval camera update");
+    }
+  }
+}, 3000);
 
 setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
