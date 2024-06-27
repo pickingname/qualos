@@ -125,7 +125,7 @@ const fetchCircleData = async () => {
     ".json";
 
   try {
-    const response = await axios.get(url);
+    const response = await axios.get("http://localhost:6966");
     document.getElementById("statusText").textContent = "";
     return response.data;
   } catch (error) {
@@ -179,16 +179,15 @@ const renderCircles = (mapInstance, circleData) => {
 
   // check if the report is a training report or a final report
 
-  // if (isTraining === 'true') {
-  //    // TODO: make a bottom status text showing that the EEW is training
-  //    document.getElementById("STA").classList.add("text-red-600")
-  //    document.getElementById("statusText").textContent = "This EEW is marked as Training";
-  //  } else {
-  //    document.getElementById("STA").classList.remove("text-red-600")
-  //    document.getElementById("statusText").textContent = "Non training"; // clears the status
-  //  }
-
-  console.log('isfinal? '+isFinal)
+   if (isTraining === 'true') {
+      document.getElementById("statusText").classList.add("text-red-600")
+      document.getElementById("statusText").classList.add("animate-pulse")
+      document.getElementById("statusText").textContent = "Warning: This EEW is marked as Training";
+    } else {
+      document.getElementById("statustext").classList.remove("text-red-600")
+      document.getElementById("statusText").classList.remove("animate-pulse")
+      document.getElementById("statusText").textContent = "";
+    }
   if (isFinal === 'true') {
     reportText = "Final report";
   } else if (isFinal === 'false') {
