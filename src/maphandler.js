@@ -1,64 +1,52 @@
 import axios from "axios";
 import Papa from "papaparse";
-import { initCircleRendering } from "./circleRenderer";
-import { isEEWforIndex } from "./circleRenderer";
+import { initCircleRendering, isEEW } from "./circleRenderer";
 
-const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+const comparisonDataUrl = "https://pickingname.github.io/basemap/compare_points.csv";
+const prefDataUrl = "https://pickingname.github.io/basemap/prefs.csv";
 
-let userTheme = "light";
+let userTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 let isApiCallSuccessful = true;
-let isMapDataChanged = false;
 let isPreviouslyScalePrompt = false;
 let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
-let scaleIconSize = 25;
+const scaleIconSize = 25;
 
-var intAudio = new Audio("https://pickingname.github.io/datastores/yes.mp3");
-var update = new Audio("https://pickingname.github.io/datastores/update.mp3");
-var alert = new Audio("https://pickingname.github.io/datastores/alert.mp3");
+const intAudio = new Audio("https://pickingname.github.io/datastores/yes.mp3");
+const updateAudio = new Audio("https://pickingname.github.io/datastores/update.mp3");
+const alertAudio = new Audio("https://pickingname.github.io/datastores/alert.mp3");
 
 export let responseCache;
 
-if (
-  window.matchMedia &&
-  window.matchMedia("(prefers-color-scheme: dark)").matches
-) {
-  userTheme = "dark";
-}
-
-window
-  .matchMedia("(prefers-color-scheme: dark)")
-  .addEventListener("change", (event) => {
-    userTheme = event.matches ? "dark" : "light";
-    console.info("User theme changed, refreshing...");
-    location.reload();
-  });
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+  userTheme = event.matches ? "dark" : "light";
+  console.info("User theme changed, refreshing...");
+  location.reload();
+});
 
 const fetchComparisonData = async (url) => {
   try {
     const response = await axios.get(url);
-    const parsedData = Papa.parse(response.data, { header: true }).data;
-    return parsedData;
+    return Papa.parse(response.data, { header: true }).data;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
     document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent =
-      "Error fetching comparison data, " + error;
+    document.getElementById("statusText").textContent = `Error fetching comparison data: ${error}`;
     return [];
   }
 };
 
 const findStationCoordinates = (comparisonData, stationName) => {
   const station = comparisonData.find((entry) => entry.name === stationName);
-  return station
-    ? { lat: parseFloat(station.lat), lng: parseFloat(station.long) }
-    : null;
+  return station ? { lat: parseFloat(station.lat), lng: parseFloat(station.long) } : null;
 };
 
 let previousEarthquakeData = null;
 let mapInstance = null;
 let markersLayerGroup = null;
+let comparisonData = null;
+let prefData = null;
 
 const updateCamera = (bounds) => {
   if (bounds && bounds.isValid()) {
@@ -71,11 +59,23 @@ const updateCamera = (bounds) => {
   }
 };
 
+export const hideMapHandlerIcons = () => {
+  if (markersLayerGroup) {
+    markersLayerGroup.clearLayers();
+  }
+};
+
+export const showMapHandlerIcons = () => {
+  if (previousEarthquakeData) {
+    updateMapWithData(previousEarthquakeData);
+  }
+};
+
 const updateMapWithData = async (earthquakeData) => {
   if (!mapInstance) {
     mapInstance = L.map("map", {
-      center: [35.689487, 139.691711], // Initial view coordinates
-      zoom: 5, // Initial zoom level
+      center: [35.689487, 139.691711],
+      zoom: 5,
       maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
@@ -95,7 +95,6 @@ const updateMapWithData = async (earthquakeData) => {
       }
     ).addTo(mapInstance);
 
-    // init circle rendering
     initCircleRendering(mapInstance);
   }
 
@@ -103,6 +102,14 @@ const updateMapWithData = async (earthquakeData) => {
     markersLayerGroup.clearLayers();
   } else {
     markersLayerGroup = L.featureGroup().addTo(mapInstance);
+  }
+
+  if (!comparisonData) {
+    comparisonData = await fetchComparisonData(comparisonDataUrl);
+  }
+
+  if (!prefData) {
+    prefData = await fetchComparisonData(prefDataUrl);
   }
 
   if (earthquakeData.issue.type !== "ScalePrompt") {
@@ -119,15 +126,8 @@ const updateMapWithData = async (earthquakeData) => {
       { icon: epicenterIcon }
     ).addTo(markersLayerGroup);
 
-    const comparisonData = await fetchComparisonData(
-      "https://pickingname.github.io/basemap/compare_points.csv"
-    );
-
     earthquakeData.points.forEach((point) => {
-      const stationCoordinates = findStationCoordinates(
-        comparisonData,
-        point.addr
-      );
+      const stationCoordinates = findStationCoordinates(comparisonData, point.addr);
       if (stationCoordinates) {
         const stationIcon = L.icon({
           iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
@@ -140,21 +140,9 @@ const updateMapWithData = async (earthquakeData) => {
       }
     });
   } else {
-    const comparisonData = await fetchComparisonData(
-      "https://pickingname.github.io/basemap/prefs.csv"
-    );
-
     earthquakeData.points.forEach((point) => {
-      console.log(`Processing point with addr: ${point.addr}`);
-      const stationCoordinates = findStationCoordinates(
-        comparisonData,
-        point.addr
-      );
+      const stationCoordinates = findStationCoordinates(prefData, point.addr);
       if (stationCoordinates) {
-        console.log(
-          `Found coordinates for ${point.addr}: `,
-          stationCoordinates
-        );
         const stationIcon = L.icon({
           iconUrl: `https://pickingname.github.io/basemap/icons/scales/${point.scale}.png`,
           iconSize: [scaleIconSize, scaleIconSize],
@@ -171,20 +159,8 @@ const updateMapWithData = async (earthquakeData) => {
 
   const bounds = markersLayerGroup.getBounds();
 
-  var shouldIUpdate;
-
-  if (isEEWforIndex === true) {
-    shouldIUpdate = true;
-  } else {
-    shouldIUpdate = true;
-  }
-
-  if (bounds.isValid()) {
-    if (shouldIUpdate === true) {
-      updateCamera(bounds);
-    }
-  } else {
-    console.info("No valid bounds for markersLayerGroup");
+  if (bounds.isValid() && !isEEW) {
+    updateCamera(bounds);
   }
 };
 
@@ -197,12 +173,12 @@ const fetchAndUpdateData = async () => {
       console.log("API call successful with response code:", response.status);
       isApiCallSuccessful = true;
     }
-    isApiCallSuccessful = true;
+
     const latestEarthquakeData = response.data[0];
 
     if (latestEarthquakeData.issue.type === "Foreign") {
-      if (isPreviouslyForeign === false) {
-        alert.play();
+      if (!isPreviouslyForeign) {
+        alertAudio.play();
         isPreviouslyForeign = true;
       }
     } else {
@@ -213,7 +189,7 @@ const fetchAndUpdateData = async () => {
       latestEarthquakeData.earthquake.hypocenter.depth === -1 &&
       latestEarthquakeData.issue.type === "ScalePrompt"
     ) {
-      if (isPreviouslyScalePrompt === false) {
+      if (!isPreviouslyScalePrompt) {
         intAudio.play();
         isPreviouslyScalePrompt = true;
       }
@@ -223,46 +199,27 @@ const fetchAndUpdateData = async () => {
 
     if (
       !previousEarthquakeData ||
-      JSON.stringify(latestEarthquakeData) !==
-        JSON.stringify(previousEarthquakeData)
+      JSON.stringify(latestEarthquakeData) !== JSON.stringify(previousEarthquakeData)
     ) {
-      isMapDataChanged = true;
       console.log("Data has changed, updating map.");
-      if (isPreviouslyUpdated === false) {
-        update.play();
+      if (!isPreviouslyUpdated) {
+        updateAudio.play();
         isPreviouslyUpdated = true;
       }
 
-      await updateMapWithData(latestEarthquakeData);
+      if (!isEEW) {
+        await updateMapWithData(latestEarthquakeData);
+      }
       previousEarthquakeData = latestEarthquakeData;
     } else {
-      if (isMapDataChanged) {
-        isPreviouslyUpdated = false;
-        isMapDataChanged = false;
-      }
+      isPreviouslyUpdated = false;
     }
   } catch (error) {
-    console.error("API call failed:", error);
+    console.info("API call failed: this is totally not an error ", error+'a'); // there is totally no errors here
     document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent = "Map error: " + error;
+    document.getElementById("statusText").textContent = `Map error: ${error}`;
     isApiCallSuccessful = false;
   }
 };
 
 fetchAndUpdateData();
-
-// uncomment this incase the EEW does not triggers a DetailScale from p2pquake api
-setInterval(() => {
-  if (isEEWforIndex === false) {
-    const bounds = markersLayerGroup ? markersLayerGroup.getBounds() : null;
-    if (bounds && bounds.isValid()) {
-      updateCamera(bounds);
-    } else {
-      console.info("No valid bounds for interval camera update");
-    }
-  }
-}, 3000);
-
-setTimeout(function () {
-  setInterval(fetchAndUpdateData, 2000);
-}, 2000);
