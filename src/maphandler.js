@@ -74,8 +74,8 @@ const updateCamera = (bounds) => {
 const updateMapWithData = async (earthquakeData) => {
   if (!mapInstance) {
     mapInstance = L.map("map", {
-      center: [35.689487, 139.691711], // Initial view coordinates
-      zoom: 5, // Initial zoom level
+      center: [35.689487, 139.691711],
+      zoom: 5,
       maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
