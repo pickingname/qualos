@@ -241,8 +241,8 @@ const renderCircles = (mapInstance, circleData) => {
 
   const latitude = parseFloat(psWaveItem.latitude.slice(1)); // remove the 'N' and convert to float
   const longitude = parseFloat(psWaveItem.longitude.slice(1)); // remove the 'E' and convert to float
-  const pRadius = parseFloat(psWaveItem.pRadius);
-  const sRadius = parseFloat(psWaveItem.sRadius);
+  const pRadius = parseFloat(psWaveItem.pRadius) || 0;
+  const sRadius = parseFloat(psWaveItem.sRadius) || 0;
 
   function updateEpicenterLocationOnce() {
     document.getElementById("intensity").textContent = expInt;
