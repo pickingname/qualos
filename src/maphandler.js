@@ -4,7 +4,7 @@ import { initCircleRendering } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
 
 const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=1";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -12,7 +12,6 @@ let isMapDataChanged = false;
 let isPreviouslyScalePrompt = false;
 let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
-let scaleIconSize = 25;
 
 var intAudio = new Audio("https://pickingname.github.io/datastores/yes.mp3");
 var update = new Audio("https://pickingname.github.io/datastores/update.mp3");
@@ -109,7 +108,7 @@ const updateMapWithData = async (earthquakeData) => {
     mapInstance = L.map("map", {
       center: [35.689487, 139.691711],
       zoom: 5,
-      maxZoom: 8,
+      // maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
