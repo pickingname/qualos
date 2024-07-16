@@ -72,7 +72,6 @@ const updateCamera = (bounds) => {
 };
 
 const getScaleColor = (scale) => {
-  // Define colors for different scales
   const colors = {
     '1': '#97FFB4',
     '2': '#32B76C',
@@ -84,7 +83,7 @@ const getScaleColor = (scale) => {
     '6+': '#4B0082',
     '7': '#000000'
   };
-  return colors[scale] || '#CCCCCC'; // Default color if scale is not found
+  return colors[scale] || '#CCCCCC';
 };
 
 const createDeflatedIcon = (scale) => {
@@ -96,8 +95,10 @@ const createDeflatedIcon = (scale) => {
 };
 
 const createInflatedIcon = (scale) => {
+  let iconScale = String(scale).replace('+', 'p').replace('-', 'm');
+  const iconUrl = `https://pickingname.github.io/basemap/icons/intensities/${iconScale}.png`;
   return L.divIcon({
-    html: `<div style="background-color: ${getScaleColor(scale)}; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${scale}</div>`,
+    html: `<img src="${iconUrl}" style="width: 20px; height: 20px;">`,
     className: 'inflated-marker',
     iconSize: [20, 20]
   });
@@ -108,7 +109,6 @@ const updateMapWithData = async (earthquakeData) => {
     mapInstance = L.map("map", {
       center: [35.689487, 139.691711],
       zoom: 5,
-      // maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
@@ -127,7 +127,6 @@ const updateMapWithData = async (earthquakeData) => {
       }
     ).addTo(mapInstance);
 
-    // init circle rendering
     initCircleRendering(mapInstance);
   }
 
@@ -141,7 +140,9 @@ const updateMapWithData = async (earthquakeData) => {
     stationMarkersGroup.clearLayers();
   } else {
     stationMarkersGroup = L.inflatableMarkersGroup({
-      iconCreateFunction: createDeflatedIcon
+      iconCreateFunction: function(marker) {
+        return createDeflatedIcon(marker.myScale);
+      }
     }).addTo(mapInstance);
   }
 
@@ -172,7 +173,7 @@ const updateMapWithData = async (earthquakeData) => {
         const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
           icon: createInflatedIcon(point.scale)
         });
-        marker.myScale = point.scale; // Store the scale for later use
+        marker.myScale = point.scale;
         stationMarkersGroup.addLayer(marker);
       }
     });
@@ -195,7 +196,7 @@ const updateMapWithData = async (earthquakeData) => {
         const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
           icon: createInflatedIcon(point.scale)
         });
-        marker.myScale = point.scale; // Store the scale for later use
+        marker.myScale = point.scale;
         stationMarkersGroup.addLayer(marker);
       } else {
         console.warn(`No coordinates found for ${point.addr}`);
@@ -205,19 +206,11 @@ const updateMapWithData = async (earthquakeData) => {
 
   const bounds = markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds());
 
-  var shouldIUpdate;
+  var shouldIUpdate = isEEWforIndex || true;
 
-  if (isEEWforIndex === true) {
-    shouldIUpdate = true;
-  } else {
-    shouldIUpdate = true;
-  }
-
-  if (bounds.isValid()) {
-    if (shouldIUpdate === true) {
-      updateCamera(bounds);
-    }
-  } else {
+  if (bounds.isValid() && shouldIUpdate) {
+    updateCamera(bounds);
+  } else if (!bounds.isValid()) {
     console.info("No valid bounds for markersLayerGroup");
   }
 };
@@ -285,7 +278,6 @@ const fetchAndUpdateData = async () => {
 
 fetchAndUpdateData();
 
-// uncomment this incase the EEW does not triggers a DetailScale from p2pquake api
 setInterval(() => {
   if (isEEWforIndex === false) {
     const bounds = markersLayerGroup ? markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds()) : null;
