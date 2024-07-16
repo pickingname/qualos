@@ -59,6 +59,7 @@ const findStationCoordinates = (comparisonData, stationName) => {
 let previousEarthquakeData = null;
 let mapInstance = null;
 let markersLayerGroup = null;
+let stationMarkersGroup = null;
 
 const updateCamera = (bounds) => {
   if (bounds && bounds.isValid()) {
@@ -69,6 +70,38 @@ const updateCamera = (bounds) => {
   } else {
     console.warn("No valid bounds for updating camera");
   }
+};
+
+const getScaleColor = (scale) => {
+  // Define colors for different scales
+  const colors = {
+    '1': '#97FFB4',
+    '2': '#32B76C',
+    '3': '#FFE600',
+    '4': '#FF9900',
+    '5-': '#FF2800',
+    '5+': '#8B0000',
+    '6-': '#8B008B',
+    '6+': '#4B0082',
+    '7': '#000000'
+  };
+  return colors[scale] || '#CCCCCC'; // Default color if scale is not found
+};
+
+const createDeflatedIcon = (scale) => {
+  return L.divIcon({
+    html: `<div style="background-color: ${getScaleColor(scale)}; width: 10px; height: 10px; border-radius: 50%;"></div>`,
+    className: 'deflated-marker',
+    iconSize: [10, 10]
+  });
+};
+
+const createInflatedIcon = (scale) => {
+  return L.divIcon({
+    html: `<div style="background-color: ${getScaleColor(scale)}; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${scale}</div>`,
+    className: 'inflated-marker',
+    iconSize: [20, 20]
+  });
 };
 
 const updateMapWithData = async (earthquakeData) => {
@@ -84,8 +117,8 @@ const updateMapWithData = async (earthquakeData) => {
       doubleClickZoom: false,
       tap: false,
       touchZoom: false,
-      dragging: false,
-      scrollWheelZoom: false,
+      dragging: true,
+      scrollWheelZoom: true,
     });
 
     L.tileLayer(
@@ -103,6 +136,14 @@ const updateMapWithData = async (earthquakeData) => {
     markersLayerGroup.clearLayers();
   } else {
     markersLayerGroup = L.featureGroup().addTo(mapInstance);
+  }
+
+  if (stationMarkersGroup) {
+    stationMarkersGroup.clearLayers();
+  } else {
+    stationMarkersGroup = L.inflatableMarkersGroup({
+      iconCreateFunction: createDeflatedIcon
+    }).addTo(mapInstance);
   }
 
   if (earthquakeData.issue.type !== "ScalePrompt") {
@@ -129,14 +170,11 @@ const updateMapWithData = async (earthquakeData) => {
         point.addr
       );
       if (stationCoordinates) {
-        const stationIcon = L.icon({
-          iconUrl: `https://pickingname.github.io/basemap/icons/intensities/${point.scale}.png`,
-          iconSize: [20, 20],
+        const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
+          icon: createInflatedIcon(point.scale)
         });
-
-        L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-          icon: stationIcon,
-        }).addTo(markersLayerGroup);
+        marker.myScale = point.scale; // Store the scale for later use
+        stationMarkersGroup.addLayer(marker);
       }
     });
   } else {
@@ -155,21 +193,18 @@ const updateMapWithData = async (earthquakeData) => {
           `Found coordinates for ${point.addr}: `,
           stationCoordinates
         );
-        const stationIcon = L.icon({
-          iconUrl: `https://pickingname.github.io/basemap/icons/scales/${point.scale}.png`,
-          iconSize: [scaleIconSize, scaleIconSize],
+        const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
+          icon: createInflatedIcon(point.scale)
         });
-
-        L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-          icon: stationIcon,
-        }).addTo(markersLayerGroup);
+        marker.myScale = point.scale; // Store the scale for later use
+        stationMarkersGroup.addLayer(marker);
       } else {
         console.warn(`No coordinates found for ${point.addr}`);
       }
     });
   }
 
-  const bounds = markersLayerGroup.getBounds();
+  const bounds = markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds());
 
   var shouldIUpdate;
 
@@ -254,7 +289,7 @@ fetchAndUpdateData();
 // uncomment this incase the EEW does not triggers a DetailScale from p2pquake api
 setInterval(() => {
   if (isEEWforIndex === false) {
-    const bounds = markersLayerGroup ? markersLayerGroup.getBounds() : null;
+    const bounds = markersLayerGroup ? markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds()) : null;
     if (bounds && bounds.isValid()) {
       updateCamera(bounds);
     } else {
