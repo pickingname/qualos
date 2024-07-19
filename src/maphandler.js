@@ -2,9 +2,9 @@ import axios from "axios";
 import Papa from "papaparse";
 import { initCircleRendering } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
+let isScalePrompt = false;
 
-const apiEndpoint =
-  "https://pickingname.github.io/testjson/big.json";
+const apiEndpoint = "https://pickingname.github.io/testjson/ScalePrompt.json";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -72,36 +72,43 @@ const updateCamera = (bounds) => {
 };
 
 const getScaleColor = (scale) => {
-  console.log(scale)
+  console.log(scale);
   const colors = {
-    '10': '#6b7878',
-    '20': '#119a4c',
-    '30': '#136ca5',
-    '40': '#c99c00',
-    '45': '#f18a2d',
-    '50': '#d16a0c',
-    '55': '#eb1900',
-    '60': '#b71300',
-    '70': '#960096'
+    10: "#6b7878",
+    20: "#119a4c",
+    30: "#136ca5",
+    40: "#c99c00",
+    45: "#f18a2d",
+    50: "#d16a0c",
+    55: "#eb1900",
+    60: "#b71300",
+    70: "#960096",
   };
-  return colors[scale] || '#CCCCCC';
+  return colors[scale] || "#CCCCCC";
 };
 
 const createDeflatedIcon = (scale) => {
   return L.divIcon({
-    html: `<div style="background-color: ${getScaleColor(scale)}; width: 10px; height: 10px; border-radius: 50%;"></div>`,
-    className: 'deflated-marker',
-    iconSize: [10, 10]
+    html: `<div style="background-color: ${getScaleColor(
+      scale
+    )}; width: 10px; height: 10px; border-radius: 50%;"></div>`,
+    className: "deflated-marker",
+    iconSize: [10, 10],
   });
 };
 
 const createInflatedIcon = (scale) => {
-  let iconScale = scale.toString().replace('+', 'p').replace('-', 'm');
-  const iconUrl = `https://pickingname.github.io/basemap/icons/intensities/${iconScale}.png`;
+  let iconScale = scale.toString().replace("+", "p").replace("-", "m");
+  let iconUrl = "";
+  if (isScalePrompt === true) {
+    iconUrl = `https://pickingname.github.io/basemap/icons/scales/${iconScale}.png`;
+  } else {
+    iconUrl = `https://pickingname.github.io/basemap/icons/intensities/${iconScale}.png`;
+  }
   return L.divIcon({
     html: `<img src="${iconUrl}" style="width: 20px; height: 20px;">`,
-    className: 'inflated-marker',
-    iconSize: [20, 20]
+    className: "inflated-marker",
+    iconSize: [20, 20],
   });
 };
 
@@ -141,9 +148,9 @@ const updateMapWithData = async (earthquakeData) => {
     stationMarkersGroup.clearLayers();
   } else {
     stationMarkersGroup = L.inflatableMarkersGroup({
-      iconCreateFunction: function(marker) {
+      iconCreateFunction: function (marker) {
         return createDeflatedIcon(marker.options.scale);
-      }
+      },
     }).addTo(mapInstance);
   }
 
@@ -171,10 +178,13 @@ const updateMapWithData = async (earthquakeData) => {
         point.addr
       );
       if (stationCoordinates) {
-        const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-          icon: createInflatedIcon(point.scale),
-          scale: point.scale
-        });
+        const marker = L.marker(
+          [stationCoordinates.lat, stationCoordinates.lng],
+          {
+            icon: createInflatedIcon(point.scale),
+            scale: point.scale,
+          }
+        );
         stationMarkersGroup.addLayer(marker);
       }
     });
@@ -184,6 +194,7 @@ const updateMapWithData = async (earthquakeData) => {
     );
 
     earthquakeData.points.forEach((point) => {
+      isScalePrompt = true;
       console.log(`Processing point with addr: ${point.addr}`);
       const stationCoordinates = findStationCoordinates(
         comparisonData,
@@ -194,10 +205,13 @@ const updateMapWithData = async (earthquakeData) => {
           `Found coordinates for ${point.addr}: `,
           stationCoordinates
         );
-        const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-          icon: createInflatedIcon(point.scale),
-          scale: point.scale
-        });
+        const marker = L.marker(
+          [stationCoordinates.lat, stationCoordinates.lng],
+          {
+            icon: createInflatedIcon(point.scale),
+            scale: point.scale,
+          }
+        );
         stationMarkersGroup.addLayer(marker);
       } else {
         console.warn(`No coordinates found for ${point.addr}`);
@@ -205,7 +219,9 @@ const updateMapWithData = async (earthquakeData) => {
     });
   }
 
-  const bounds = markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds());
+  const bounds = markersLayerGroup
+    .getBounds()
+    .extend(stationMarkersGroup.getBounds());
 
   var shouldIUpdate = isEEWforIndex || true;
 
@@ -281,7 +297,9 @@ fetchAndUpdateData();
 
 setInterval(() => {
   if (isEEWforIndex === false) {
-    const bounds = markersLayerGroup ? markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds()) : null;
+    const bounds = markersLayerGroup
+      ? markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds())
+      : null;
     if (bounds && bounds.isValid()) {
       updateCamera(bounds);
     } else {
