@@ -117,6 +117,7 @@ const updateMapWithData = async (earthquakeData) => {
       center: [35.689487, 139.691711],
       zoom: 5,
       maxZoom: 8,
+      minZoom: 3,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
