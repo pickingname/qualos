@@ -13,9 +13,9 @@ let isPreviouslyScalePrompt = false;
 let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
 
-var intAudio = new Audio("https://pickingname.github.io/datastores/yes.mp3");
-var update = new Audio("https://pickingname.github.io/datastores/update.mp3");
-var alert = new Audio("https://pickingname.github.io/datastores/alert.mp3");
+var newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
+var intensityReport = new Audio("https://pickingname.github.io/datastores/update.mp3");
+var distantArea = new Audio("https://pickingname.github.io/datastores/alert.mp3");
 
 export let responseCache;
 
@@ -246,7 +246,7 @@ const fetchAndUpdateData = async () => {
 
     if (latestEarthquakeData.issue.type === "Foreign") {
       if (isPreviouslyForeign === false) {
-        alert.play();
+        distantArea.play();
         isPreviouslyForeign = true;
       }
     } else {
@@ -258,7 +258,7 @@ const fetchAndUpdateData = async () => {
       latestEarthquakeData.issue.type === "ScalePrompt"
     ) {
       if (isPreviouslyScalePrompt === false) {
-        intAudio.play();
+        newData.play();
         isPreviouslyScalePrompt = true;
       }
     } else {
@@ -273,7 +273,7 @@ const fetchAndUpdateData = async () => {
       isMapDataChanged = true;
       console.log("Data has changed, updating map.");
       if (isPreviouslyUpdated === false) {
-        update.play();
+        intensityReport.play();
         isPreviouslyUpdated = true;
       }
 
