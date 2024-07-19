@@ -4,7 +4,7 @@ import { initCircleRendering } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
 
 const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=1";
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
