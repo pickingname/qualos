@@ -4,7 +4,7 @@ import { initCircleRendering } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
 let isScalePrompt = false;
 
-const apiEndpoint = "https://pickingname.github.io/testjson/ScalePrompt.json";
+const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -72,7 +72,6 @@ const updateCamera = (bounds) => {
 };
 
 const getScaleColor = (scale) => {
-  console.log(scale);
   const colors = {
     10: "#6b7878",
     20: "#119a4c",
@@ -117,6 +116,7 @@ const updateMapWithData = async (earthquakeData) => {
     mapInstance = L.map("map", {
       center: [35.689487, 139.691711],
       zoom: 5,
+      maxZoom: 8,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
@@ -124,8 +124,8 @@ const updateMapWithData = async (earthquakeData) => {
       doubleClickZoom: false,
       tap: false,
       touchZoom: false,
-      dragging: true,
-      scrollWheelZoom: true,
+      dragging: false,
+      scrollWheelZoom: false,
     });
 
     L.tileLayer(
