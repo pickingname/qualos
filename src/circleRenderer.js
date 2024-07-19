@@ -167,7 +167,7 @@ const renderCircles = (mapInstance, circleData) => {
 
   // EEW data for parsing in the index.html
   let epicenterName = circleData.hypoInfo.items[0].regionName;
-  let magnitude = circleData.hypoInfo.items[0].magnitude;
+  let magnitude = parseFloat(circleData.hypoInfo.items[0].magnitude).toFixed(1);
   reportNum = circleData.hypoInfo.items[0].reportNum;
   let depth = circleData.hypoInfo.items[0].depth;
   let isTraining = circleData.hypoInfo.items[0].isTraining;
