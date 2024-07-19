@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@meteo-concept/leaflet-inflatable-markers-group':
-        specifier: ^1.6.0
-        version: 1.6.0(leaflet@1.9.4)
       axios:
         specifier: ^1.6.8
         version: 1.6.8
@@ -193,11 +190,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
-
-  '@meteo-concept/leaflet-inflatable-markers-group@1.6.0':
-    resolution: {integrity: sha512-/N1/0vOv/1peKK7Q8jfKJM61xFCS3P/Mhn4heGueKVmiN0VI1h1V+RCZWSmkDoQ2qeO+bDEsVE0w9oAOGJq0yQ==}
-    peerDependencies:
-      leaflet: ^1.0.0
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -432,9 +424,6 @@ packages:
   jiti@1.21.0:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
-
-  leaflet@1.9.4:
-    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
 
   lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
@@ -816,10 +805,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@meteo-concept/leaflet-inflatable-markers-group@1.6.0(leaflet@1.9.4)':
-    dependencies:
-      leaflet: 1.9.4
-
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -1058,8 +1043,6 @@ snapshots:
       '@pkgjs/parseargs': 0.11.0
 
   jiti@1.21.0: {}
-
-  leaflet@1.9.4: {}
 
   lilconfig@2.1.0: {}
 
