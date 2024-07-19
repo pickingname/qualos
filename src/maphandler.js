@@ -4,7 +4,7 @@ import { initCircleRendering } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
 
 const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+  "https://pickingname.github.io/testjson/big.json";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -62,7 +62,7 @@ let stationMarkersGroup = null;
 
 const updateCamera = (bounds) => {
   if (bounds && bounds.isValid()) {
-    mapInstance.flyToBounds(bounds.pad(0.1), {
+    mapInstance.flyToBounds(bounds.pad(0), {
       duration: 0.15,
       easeLinearity: 0.15,
     });
@@ -72,16 +72,17 @@ const updateCamera = (bounds) => {
 };
 
 const getScaleColor = (scale) => {
+  console.log(scale)
   const colors = {
-    '1': '#97FFB4',
-    '2': '#32B76C',
-    '3': '#FFE600',
-    '4': '#FF9900',
-    '5-': '#FF2800',
-    '5+': '#8B0000',
-    '6-': '#8B008B',
-    '6+': '#4B0082',
-    '7': '#000000'
+    '10': '#6b7878',
+    '20': '#119a4c',
+    '30': '#136ca5',
+    '40': '#c99c00',
+    '45': '#f18a2d',
+    '50': '#d16a0c',
+    '55': '#eb1900',
+    '60': '#b71300',
+    '70': '#960096'
   };
   return colors[scale] || '#CCCCCC';
 };
@@ -95,7 +96,7 @@ const createDeflatedIcon = (scale) => {
 };
 
 const createInflatedIcon = (scale) => {
-  let iconScale = String(scale).replace('+', 'p').replace('-', 'm');
+  let iconScale = scale.toString().replace('+', 'p').replace('-', 'm');
   const iconUrl = `https://pickingname.github.io/basemap/icons/intensities/${iconScale}.png`;
   return L.divIcon({
     html: `<img src="${iconUrl}" style="width: 20px; height: 20px;">`,
@@ -141,7 +142,7 @@ const updateMapWithData = async (earthquakeData) => {
   } else {
     stationMarkersGroup = L.inflatableMarkersGroup({
       iconCreateFunction: function(marker) {
-        return createDeflatedIcon(marker.myScale);
+        return createDeflatedIcon(marker.options.scale);
       }
     }).addTo(mapInstance);
   }
@@ -171,9 +172,9 @@ const updateMapWithData = async (earthquakeData) => {
       );
       if (stationCoordinates) {
         const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-          icon: createInflatedIcon(point.scale)
+          icon: createInflatedIcon(point.scale),
+          scale: point.scale
         });
-        marker.myScale = point.scale;
         stationMarkersGroup.addLayer(marker);
       }
     });
@@ -194,9 +195,9 @@ const updateMapWithData = async (earthquakeData) => {
           stationCoordinates
         );
         const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-          icon: createInflatedIcon(point.scale)
+          icon: createInflatedIcon(point.scale),
+          scale: point.scale
         });
-        marker.myScale = point.scale;
         stationMarkersGroup.addLayer(marker);
       } else {
         console.warn(`No coordinates found for ${point.addr}`);
