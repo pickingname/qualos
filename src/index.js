@@ -37,7 +37,7 @@ const fetchData = async () => {
   const quakeData = response.data;
   const quakeDetails = quakeData[0];
 
-  const magnitude = quakeDetails.earthquake.hypocenter.magnitude;
+  const magnitude = parseFloat(quakeDetails.earthquake.hypocenter.magnitude).toFixed(1);
   const maxScale = quakeDetails.earthquake.maxScale;
   const time = quakeDetails.earthquake.time;
   const depth =
