@@ -1,7 +1,7 @@
 # qualos
-<img align="right" width="285" height="71" src="https://pickingname.github.io/icons/qualos/qualos_logo.png">
+[unused logo]: <> (<img align="right" width="285" height="71" src="https://pickingname.github.io/icons/qualos/qualos_logo.png">)
 
-Website that shows the most recent earthquake in a map using p2pquake API.
+A website that shows the most recent earthquake in a map using p2pquake API.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/pickingname/qualos/badge)](https://www.codefactor.io/repository/github/pickingname/qualos)
 ##### [https://qualos.info](https://qualos.info)
@@ -9,9 +9,17 @@ Website that shows the most recent earthquake in a map using p2pquake API.
 ![appPreview](https://github.com/pickingname/qualos/assets/115550149/a9fa2290-3929-4f80-9101-44adfa0b41c1)
 
 ---
-### About the Credits
+### Inspiration
 
-At the bottom left corner of the screen, you'll notice credits displayed. You have permission to remove these credits using the browser's developer tools (F12). However, please note that the credits are essential to acknowledge and verify the work done. Thank you for understanding.
+This app was developed as an alternative to [quarog](https://fuku1213.github.io/quarog-site/), serving as a web-based remake of the original. We extend our gratitude to the original creator for the app's concept. Please note that this app is not affiliated with the original app's creator.
+
+---
+
+### Limitations
+- Cannot display tsunami lines
+- Cannot display the live data from the stations
+- Cannot display the english name when the EEW is issued
+- Camera movement is not good enough
 
 ---
 
