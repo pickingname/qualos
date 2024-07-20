@@ -129,11 +129,11 @@ const updateMapWithData = async (earthquakeData) => {
       attributionControl: false,
       keyboard: false,
       boxZoom: false,
-      doubleClickZoom: false,
-      tap: false,
-      touchZoom: false,
-      dragging: false,
-      scrollWheelZoom: false,
+      doubleClickZoom: true,
+      tap: true,
+      touchZoom: true,
+      dragging: true,
+      scrollWheelZoom: true,
     });
 
     L.tileLayer(
