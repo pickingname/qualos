@@ -1,10 +1,9 @@
 import axios from "axios";
 import Papa from "papaparse";
-import { initCircleRendering } from "./circleRenderer";
-import { isEEWforIndex } from "./circleRenderer";
-let isScalePrompt = false;
+let isEEWforIndex, isScalePrompt, prevForeign = false;
 let iconPadding = 0.0;
-let prevForeign = false; // this is for the padding marker system
+
+alert('You can zoom, pan, move in the map. Allow the map to load. If it takes too long or the icon does not load correcylt, please try refreshing the map.')
 
 const apiEndpoint =
   "https://pickingname.github.io/testjson/big.json";
@@ -142,8 +141,6 @@ const updateMapWithData = async (earthquakeData) => {
         maxZoom: 24,
       }
     ).addTo(mapInstance);
-
-    initCircleRendering(mapInstance);
   }
 
   if (markersLayerGroup) {
