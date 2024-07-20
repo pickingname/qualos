@@ -37,7 +37,9 @@ const fetchData = async () => {
   const quakeData = response.data;
   const quakeDetails = quakeData[0];
 
-  const magnitude = parseFloat(quakeDetails.earthquake.hypocenter.magnitude).toFixed(1);
+  const magnitude = parseFloat(
+    quakeDetails.earthquake.hypocenter.magnitude
+  ).toFixed(1);
   const maxScale = quakeDetails.earthquake.maxScale;
   const time = quakeDetails.earthquake.time;
   const depth =
@@ -148,7 +150,6 @@ function shouldIChangeTheFuckingText() {
   if (isEEW === true) {
     console.log("");
     // it is now possible to change the text.
-    
   } else if (isEEW === false) {
     fetchData();
   }

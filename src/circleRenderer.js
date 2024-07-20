@@ -188,10 +188,10 @@ const renderCircles = (mapInstance, circleData) => {
   //    document.getElementById("statusText").textContent = "Non training"; // clears the status
   //  }
 
-  console.log('isfinal? '+isFinal)
-  if (isFinal === 'true') {
+  console.log("isfinal? " + isFinal);
+  if (isFinal === "true") {
     reportText = "Final report";
-  } else if (isFinal === 'false') {
+  } else if (isFinal === "false") {
     reportText = "Report #" + reportNum;
   }
 
