@@ -3,8 +3,11 @@ import Papa from "papaparse";
 import { initCircleRendering } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
 let isScalePrompt = false;
+let iconPadding = 0.0;
+let prevForeign = false; // this is for the padding marker system
 
-const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+const apiEndpoint =
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -14,8 +17,12 @@ let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
 
 var newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
-var intensityReport = new Audio("https://pickingname.github.io/datastores/update.mp3");
-var distantArea = new Audio("https://pickingname.github.io/datastores/alert.mp3");
+var intensityReport = new Audio(
+  "https://pickingname.github.io/datastores/update.mp3"
+);
+var distantArea = new Audio(
+  "https://pickingname.github.io/datastores/alert.mp3"
+);
 
 export let responseCache;
 
@@ -62,7 +69,7 @@ let stationMarkersGroup = null;
 
 const updateCamera = (bounds) => {
   if (bounds && bounds.isValid()) {
-    mapInstance.flyToBounds(bounds.pad(0), {
+    mapInstance.flyToBounds(bounds.pad(iconPadding), {
       duration: 0.15,
       easeLinearity: 0.15,
     });
@@ -117,7 +124,7 @@ const updateMapWithData = async (earthquakeData) => {
       center: [35.689487, 139.691711],
       zoom: 5,
       maxZoom: 8,
-      minZoom: 3,
+      minZoom: 2,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
@@ -155,7 +162,20 @@ const updateMapWithData = async (earthquakeData) => {
     }).addTo(mapInstance);
   }
 
+  if (earthquakeData.issue.type === "Foreign") {
+    // if its a foreign then qpply the marker to both NE and SW of the country to make a padding
+    prevForeign = true;
+    L.marker([24.444243, 122.927329]).setOpacity(0.0).addTo(markersLayerGroup); // lower left
+    L.marker([45.65552, 141.92889]).setOpacity(0.0).addTo(markersLayerGroup); // upper
+    L.marker([44.538807, 147.777433]).setOpacity(0.0).addTo(markersLayerGroup); // upper right
+    iconPadding = 0.1;
+  } else {
+    prevForeign = false;
+    iconPadding = 0;
+  }
+
   if (earthquakeData.issue.type !== "ScalePrompt") {
+    isScalePrompt = false;
     const epicenterIcon = L.icon({
       iconUrl: "https://pickingname.github.io/basemap/icons/oldEpicenter.png",
       iconSize: [30, 30],
@@ -196,7 +216,7 @@ const updateMapWithData = async (earthquakeData) => {
 
     earthquakeData.points.forEach((point) => {
       isScalePrompt = true;
-      console.log(`Processing point with addr: ${point.addr}`);
+      console.log(`Processing point with address: ${point.addr}`);
       const stationCoordinates = findStationCoordinates(
         comparisonData,
         point.addr
