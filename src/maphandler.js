@@ -1,9 +1,9 @@
+alert('You can zoom, move in the map. Allow the map to load. If the map or the icon does not load correctly, please try refreshing the map. 地図のズーム、移動ができます。地図が読み込まれるまでお待ちください。地図やアイコンが正しく読み込まれない場合は、地図を更新してみてください。')
+
 import axios from "axios";
 import Papa from "papaparse";
 let isEEWforIndex, isScalePrompt, prevForeign = false;
 let iconPadding = 0.0;
-
-alert('You can zoom, pan, move in the map. Allow the map to load. If it takes too long or the icon does not load correcylt, please try refreshing the map.')
 
 const apiEndpoint =
   "https://pickingname.github.io/testjson/big.json";
