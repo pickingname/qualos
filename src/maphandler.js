@@ -7,7 +7,7 @@ let iconPadding = 0.0;
 let prevForeign = false; // this is for the padding marker system
 
 const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+  "https://pickingname.github.io/testjson/big.json";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -329,6 +329,4 @@ setInterval(() => {
   }
 }, 3000);
 
-setTimeout(function () {
-  setInterval(fetchAndUpdateData, 2000);
-}, 2000);
+fetchAndUpdateData();
