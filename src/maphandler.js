@@ -314,9 +314,6 @@ const fetchAndUpdateData = async () => {
   }
 };
 
-fetchAndUpdateData();
-
-setInterval(() => {
   if (isEEWforIndex === false) {
     const bounds = markersLayerGroup
       ? markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds())
@@ -327,6 +324,5 @@ setInterval(() => {
       console.info("No valid bounds for interval camera update");
     }
   }
-}, 3000);
 
 fetchAndUpdateData();
