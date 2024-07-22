@@ -64,7 +64,7 @@
         level on your browser.
       </p>
     </div>
-    <div class="bottom-right px-5 py-5">
+    <div class="intensity-legend bottom-right px-5 py-5">
       <div
         id="INT"
         class="hidden dark:text-white text-black font-outfit border border-stone-600 px-3 py-3 rounded-md backdrop-blur-sm"
@@ -194,7 +194,7 @@
         </div>
       </div>
     </div>
-    <div class="top-right px-5 py-5 md:block sm:hidden hidden">
+    <div class="clock-display top-right px-5 py-5 md:block sm:hidden hidden">
       <div
         class="dark:text-white text-black border border-stone-600 px-3 py-3 rounded-md w-32 text-center backdrop-blur-sm"
       >
@@ -202,13 +202,20 @@
         <p id="datenow" class="font-outfit"></p>
       </div>
     </div>
-    <div class="bottom-left px-5 py-5 font-outfit">
+    <div class="status-text bottom-left px-5 py-5 font-outfit">
       <!-- this is where the status text are being displayed -->
       <p id="statusText" class=""></p>
       <!-- <a href="https://github.com/pickingname/qualos" id="watermark" class="dark:text-neutral-300 text-neutral-600 underline-offset-2 underline hover:text-blue-500 transition-all ease-in-out duration-300" target="_blank">
         qualos.info
       </a>
       no this for this for now. -->
+    </div>
+    <div id="emergWarnTextContainer" class="hidden immediate-warning-text pb-5 bottom-middle">
+      <div class="bg-[#ffff00] px-5 py-1 rounded-sm">
+        <p id="emergWarnText" class="text-[#ff0000] text-xl font-outfit">
+          
+        </p>
+      </div>
     </div>
 
     <script src="src/circleRenderer.js" type="module"></script>

@@ -5,9 +5,10 @@ import { isEEWforIndex } from "./circleRenderer";
 let isScalePrompt = false;
 let iconPadding = 0.0;
 let prevForeign = false; // this is for the padding marker system
+let currentTW = false;
 
 const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+  "http://localhost:5500/tsunami.json";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -22,6 +23,9 @@ var intensityReport = new Audio(
 );
 var distantArea = new Audio(
   "https://pickingname.github.io/datastores/alert.mp3"
+);
+var tsunamiWarning = new Audio(
+  "https://pickingname.github.io/datastores/eq/E4.mp3"
 );
 
 export let responseCache;
@@ -54,6 +58,26 @@ const fetchComparisonData = async (url) => {
     return [];
   }
 };
+
+function handleTsunamiWarning(type) {
+  tsunamiWarning.play();
+  document.getElementById("emergWarnTextContainer").classList.remove("hidden");
+  if (type === "Warning") {
+    console.info("tsunami warning has been issued");
+    document.getElementById("emergWarnText").textContent = "TSUNAMI WARNING";
+  }
+  if (type === "Watch") {
+    console.info("tsunami watch has been issued");
+    document.getElementById("emergWarnText").textContent =
+      "TSUNAMI WATCH ISSUED";
+  }
+}
+
+function removeTsunamiWarning() {
+  tsunamiWarning.pause();
+  document.getElementById("emergWarnTextContainer").classList.add("hidden");
+  document.getElementById("emergWarnText").textContent = "";
+}
 
 const findStationCoordinates = (comparisonData, stationName) => {
   const station = comparisonData.find((entry) => entry.name === stationName);
@@ -162,8 +186,36 @@ const updateMapWithData = async (earthquakeData) => {
     }).addTo(mapInstance);
   }
 
+  // TSUNAMI HANDLER STARTS HERE
+
+  if (earthquakeData.earthquake.domesticTsunami === "Warning") {
+    currentTW = true;
+    handleTsunamiWarning("Warning");
+  } else if (earthquakeData.earthquake.domesticTsunami === "Watch") {
+    currentTW = true;
+    handleTsunamiWarning("Watch");
+  } else {
+    if (currentTW === false) {
+      removeTsunamiWarning();
+    }
+  }
+
+  if (earthquakeData.earthquake.foreignTsunami === "Warning") {
+    currentTW = true;
+    handleTsunamiWarning("Warning");
+  } else if (earthquakeData.earthquake.foreignTsunami === "Watch") {
+    currentTW = true;
+    handleTsunamiWarning("Watch");
+  } else {
+    if (currentTW === false) {
+      removeTsunamiWarning();
+    }
+  }
+
+  // TSUNAMI HANDLER ENDS HERE
+
   if (earthquakeData.issue.type === "Foreign") {
-    // if its a foreign then qpply the marker to both NE and SW of the country to make a padding
+    // if its a foreign then apply the marker to both NE and SW of the country to make a padding
     prevForeign = true;
     L.marker([24.444243, 122.927329]).setOpacity(0.0).addTo(markersLayerGroup); // lower left
     L.marker([45.65552, 141.92889]).setOpacity(0.0).addTo(markersLayerGroup); // upper
