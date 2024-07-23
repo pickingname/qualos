@@ -6,6 +6,8 @@ let isScalePrompt = false;
 let iconPadding = 0.0;
 let prevForeign = false; // this is for the padding marker system
 let currentTW = false;
+let foreTs = false;
+let domeTs = false; 
 
 const apiEndpoint =
   "http://localhost:5500/tsunami.json";
@@ -188,28 +190,37 @@ const updateMapWithData = async (earthquakeData) => {
 
   // TSUNAMI HANDLER STARTS HERE
 
-  if (earthquakeData.earthquake.domesticTsunami === "Warning") {
+  if (earthquakeData.earthquake.domesticTsunami.toLowerCase() === "warning") {
     currentTW = true;
+    domeTs = true;
     handleTsunamiWarning("Warning");
-  } else if (earthquakeData.earthquake.domesticTsunami === "Watch") {
+  } else if (earthquakeData.earthquake.domesticTsunami.toLowerCase() === "watch") {
     currentTW = true;
+    domeTs = true;
     handleTsunamiWarning("Watch");
   } else {
-    if (currentTW === false) {
-      removeTsunamiWarning();
-    }
+    domeTs = false;
   }
 
-  if (earthquakeData.earthquake.foreignTsunami === "Warning") {
+  if (earthquakeData.earthquake.foreignTsunami.toLowerCase() === "warning") {
     currentTW = true;
-    handleTsunamiWarning("Warning");
-  } else if (earthquakeData.earthquake.foreignTsunami === "Watch") {
+    foreTs = true;
+    handleTsunamiWarning("Warning (Foreign)");
+  } else if (earthquakeData.earthquake.foreignTsunami.toLowerCase() === "watch") {
     currentTW = true;
-    handleTsunamiWarning("Watch");
+    foreTs = true;
+    handleTsunamiWarning("Watch (Foreign)");
   } else {
-    if (currentTW === false) {
-      removeTsunamiWarning();
-    }
+    foreTs = false;
+  }
+
+  // checking system
+  if (foreTs === false && domeTs === false) {
+    // no ts
+    removeTsunamiWarning();
+  } else if (foreTs === true && domeTs === true) {
+    // both ts (no way this will happen)
+    handleTsunamiWarning("Warning (Both foreign and domestic)");
   }
 
   // TSUNAMI HANDLER ENDS HERE
