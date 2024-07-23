@@ -10,8 +10,7 @@ let foreTs = false;
 let domeTs = false;
 let tsMag, tsInt, tsDepth, tsHeight;
 
-const apiEndpoint =
-  "http://localhost:5500/tsunami.json";
+const apiEndpoint = "http://localhost:5500/tsunami.json";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -97,22 +96,28 @@ function handleTsunamiWarning(type) {
   }
   if (type === "Watch") {
     console.info("Watch");
-    document.getElementById("tsType").textContent =
-      "Watch";
+    document.getElementById("tsType").textContent = "Watch";
   }
 }
 
 function handleTsunamiOriginType(type) {
-  if (type.toLowerCase() === "foreign") { // foreign
+  if (type.toLowerCase() === "foreign") {
+    // foreign
     document.getElementById("warnOrigin").textContent = "Foreign";
-  } else if (type.toLowerCase() === "domestic") { // domestic
+  } else if (type.toLowerCase() === "domestic") {
+    // domestic
     document.getElementById("warnOrigin").textContent = "Domestic";
-  } else { // other
+  } else if (type.toLowerCase() === "foreign & domestic") {
+    // both
+    document.getElementById("warnOrigin").textContent = "Foreign & Domestic";
+  } else {
+    // other
     document.getElementById("warnOrigin").textContent = "Unknown";
   }
 }
 
-function setTsWarningTexts(mag, int, depth, height) { // basically parse the data and set the text in the html
+function setTsWarningTexts(mag, int, depth, height) {
+  // basically parse the data and set the text in the html
   document.getElementById("tsMag").textContent = mag;
   document.getElementById("tsInt").textContent = int;
   document.getElementById("tsDepth").textContent = depth;
@@ -239,7 +244,9 @@ const updateMapWithData = async (earthquakeData) => {
     domeTs = true;
     handleTsunamiOriginType("domestic");
     handleTsunamiWarning("Warning");
-  } else if (earthquakeData.earthquake.domesticTsunami.toLowerCase() === "watch") {
+  } else if (
+    earthquakeData.earthquake.domesticTsunami.toLowerCase() === "watch"
+  ) {
     currentTW = true;
     domeTs = true;
     handleTsunamiOriginType("domestic");
@@ -252,12 +259,14 @@ const updateMapWithData = async (earthquakeData) => {
     currentTW = true;
     foreTs = true;
     handleTsunamiOriginType("foreign");
-    handleTsunamiWarning("Warning (Foreign)");
-  } else if (earthquakeData.earthquake.foreignTsunami.toLowerCase() === "watch") {
+    handleTsunamiWarning("Warning");
+  } else if (
+    earthquakeData.earthquake.foreignTsunami.toLowerCase() === "watch"
+  ) {
     currentTW = true;
     foreTs = true;
     handleTsunamiOriginType("foreign");
-    handleTsunamiWarning("Watch (Foreign)");
+    handleTsunamiWarning("Watch");
   } else {
     foreTs = false;
   }
@@ -268,7 +277,8 @@ const updateMapWithData = async (earthquakeData) => {
     removeTsunamiWarning();
   } else if (foreTs === true && domeTs === true) {
     // both ts (no way this will happen)
-    handleTsunamiWarning("Warning (Both foreign and domestic)");
+    handleTsunamiWarning("Warning");
+    handleTsunamiOriginType("foreign & domestic");
   }
 
   // TSUNAMI HANDLER ENDS HERE
@@ -427,11 +437,9 @@ const fetchAndUpdateData = async () => {
     document.getElementById("statusText").textContent = "Map error: " + error;
     isApiCallSuccessful = false;
   }
-  
+
   if (currentTW === true) {
-    setTsWarningTexts(
-      tsMag, tsInt, tsDepth
-    )
+    setTsWarningTexts(tsMag, tsInt, tsDepth);
   }
 };
 
