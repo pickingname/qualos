@@ -12,6 +12,11 @@
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
+  .bottom-middle {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100%;
+  }
 }
 
 .bottom-middle {
@@ -85,10 +90,6 @@ body {
 .nah {
   user-select: none;
 }
-
-/* Add these styles to your existing style.css file or create a new one */
-
-/* Add these styles to your existing style.css file or create a new one */
 
 html,
 body {
