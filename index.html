@@ -30,14 +30,14 @@
     ></script>
     <!-- END OF LEAFLET IMPORT -->
   </head>
-  <body class="overflow-hidden">
+  <body class="overflow-hidden" style="min-width: 430px;">
     <div class="map-container" style="background-color: black !important">
       <div class="map-wrapper">
         <div class="map" id="map"></div>
       </div>
     </div>
     <div class="info-container font-outfit">
-      <div class="justify-center dark:text-white text-black pb-5">
+      <div class="justify-center dark:text-white text-black pb-5 pr-5">
         <div
           class="px-5 py-5 font-outfit rounded-md border-neutral-700 dark:border-neutral-600 border relative backdrop-blur-sm transition-all duration-500 ease-in-out"
           id="changeBorderHere"
@@ -64,7 +64,7 @@
         level on your browser.
       </p>
     </div>
-    <div class="intensity-legend bottom-right px-5 py-5">
+    <div class="intensity-legend bottom-right px-5 py-5 hidden sm:block">
       <div
         id="INT"
         class="hidden dark:text-white text-black font-outfit border border-stone-600 px-3 py-3 rounded-md backdrop-blur-sm"
@@ -218,9 +218,9 @@
         class="w-full max-w-lg rounded-lg border border-neutral-500 bg-[#1a1a2e] p-6 text-white shadow-sm"
         data-v0-t="card"
       >
-        <div class="mb-4 flex items-center justify-between">
+        <div class="mb-4 flex items-center justify-between text-center sm:text-left">
           <span class="text-3xl font-regular text-red-500">
-            [<span id="warnOrigin"></span>] Tsunami <span id="tsType"></span>
+            <span class="hidden sm:block">[<span id="warnOrigin"></span>]</span> Tsunami <span id="tsType"></span>
           </span>
           <div
             class="ml-auto focus:ring-ring hover:bg-primary/80 w-fit items-center whitespace-nowrap rounded-lg border border-transparent bg-red-500 px-4 py-2 text-lg text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 sm:inline-flex hidden"
@@ -229,12 +229,12 @@
             &gt; <span id="tsHeight"></span>M
           </div>
         </div>
-        <div class="mb-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div class="mb-4 grid grid-cols-2 sm:grid-cols-3 gap-4 reducecolsonsmall">
           <div class="text-center">
             <p class="text-lg">Magnitude</p>
             <p class="text-4xl font-medium"><span id="tsMag"></span></p>
           </div>
-          <div class="text-center">
+          <div class="text-center hideonsmall">
             <p class="text-lg">Intensity</p>
             <p class="text-4xl font-medium"><span id="tsInt"></span></p>
           </div>

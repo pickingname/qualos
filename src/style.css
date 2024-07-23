@@ -4,6 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (max-width: 440px) {
+  .hideonsmall {
+    display: none;
+  }
+  .reducecolsonsmall {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+}
+
 .bottom-middle {
   position: fixed;
   bottom: 0;
