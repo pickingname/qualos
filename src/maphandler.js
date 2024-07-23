@@ -11,7 +11,7 @@ let domeTs = false;
 let tsMag, tsInt, tsDepth;
 
 const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=1";
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -181,7 +181,6 @@ const createDeflatedIcon = (scale) => {
 const createInflatedIcon = (scale) => {
   let iconScale = scale.toString().replace("+", "p").replace("-", "m");
   let iconUrl = "";
-  console.log("scale log: " + iconScale);
   const validScales = [10, 20, 30, 40, 45, 50, 55, 60, 70];
 
   // Convert iconScale to a number
