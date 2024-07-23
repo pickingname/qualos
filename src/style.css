@@ -4,6 +4,33 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  min-width: 430px !important;
+}
+
+@media (max-width: 440px) {
+  .hideonsmall {
+    display: none;
+  }
+  .reducecolsonsmall {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .bottom-middle {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100%;
+  }
+}
+
+.bottom-middle {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1004;
+}
+
 .leaflet-marker-icon {
   pointer-events: none !important;
 }
@@ -54,11 +81,6 @@
   pointer-events: none !important;
 }
 
-body {
-  /*background-color: #1d1d1f; */
-  background-color: #000000;
-}
-
 .font-outfit {
   font-family: "Outfit", sans-serif;
   font-style: normal;
@@ -67,10 +89,6 @@ body {
 .nah {
   user-select: none;
 }
-
-/* Add these styles to your existing style.css file or create a new one */
-
-/* Add these styles to your existing style.css file or create a new one */
 
 html,
 body {

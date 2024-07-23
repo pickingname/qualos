@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="info-container font-outfit">
-      <div class="justify-center dark:text-white text-black pb-5">
+      <div class="justify-center dark:text-white text-black pb-5 pr-5">
         <div
           class="px-5 py-5 font-outfit rounded-md border-neutral-700 dark:border-neutral-600 border relative backdrop-blur-sm transition-all duration-500 ease-in-out"
           id="changeBorderHere"
@@ -64,7 +64,7 @@
         level on your browser.
       </p>
     </div>
-    <div class="bottom-right px-5 py-5">
+    <div class="intensity-legend bottom-right px-5 py-5 hidden sm:block">
       <div
         id="INT"
         class="hidden dark:text-white text-black font-outfit border border-stone-600 px-3 py-3 rounded-md backdrop-blur-sm"
@@ -194,15 +194,7 @@
         </div>
       </div>
     </div>
-    <div class="top-right px-5 py-5 md:block sm:hidden hidden">
-      <div
-        class="dark:text-white text-black border border-stone-600 px-3 py-3 rounded-md w-32 text-center backdrop-blur-sm"
-      >
-        <p id="rightnow" class="text-xl font-mono">...</p>
-        <p id="datenow" class="font-outfit"></p>
-      </div>
-    </div>
-    <div class="bottom-left px-5 py-5 font-outfit">
+    <div class="status-text bottom-left px-5 py-5 font-outfit">
       <!-- this is where the status text are being displayed -->
       <p id="statusText" class=""></p>
       <!-- <a href="https://github.com/pickingname/qualos" id="watermark" class="dark:text-neutral-300 text-neutral-600 underline-offset-2 underline hover:text-blue-500 transition-all ease-in-out duration-300" target="_blank">
@@ -210,11 +202,45 @@
       </a>
       no this for this for now. -->
     </div>
+    <div
+      class="immediate-warning-text hidden pb-5 bottom-middle font-outfit"
+      id="emergWarnTextContainer"
+    >
+      <div
+        class="w-full max-w-lg rounded-lg border border-neutral-500 bg-[#1a1a2e] p-6 text-white shadow-sm"
+      >
+        <div class="mb-4 text-center">
+          <span class="text-3xl font-regular text-red-500">
+            <span class="hidden sm:block">[<span id="warnOrigin"></span>]</span>
+            Tsunami <span id="tsType"></span>
+          </span>
+        </div>
+        <div
+          class="mb-4 grid grid-cols-2 sm:grid-cols-3 gap-4 reducecolsonsmall"
+        >
+          <div class="text-center">
+            <p class="text-lg">Magnitude</p>
+            <p class="text-4xl font-medium"><span id="tsMag"></span></p>
+          </div>
+          <div class="text-center hideonsmall">
+            <p class="text-lg">Intensity</p>
+            <p class="text-4xl font-medium"><span id="tsInt"></span></p>
+          </div>
+          <div class="text-center sm:block hidden">
+            <p class="text-lg">Depth</p>
+            <p class="text-4xl font-medium"><span id="tsDepth"></span>km</p>
+          </div>
+        </div>
+        <p class="text-center text-sm text-neutral-400">
+          If you are near the lines shown in the map, Please evacuate
+          immediately.
+        </p>
+      </div>
+    </div>
 
     <script src="src/circleRenderer.js" type="module"></script>
     <script src="src/index.js" type="module"></script>
     <script src="src/maphandler.js" type="module"></script>
-    <script src="src/timehandler.js" type="module"></script>
     <script
       src="https://pickingname.github.io/basemap/js/clustering.js"
       charset="utf-8"
