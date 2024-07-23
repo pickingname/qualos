@@ -10,7 +10,8 @@ let foreTs = false;
 let domeTs = false;
 let tsMag, tsInt, tsDepth;
 
-const apiEndpoint = "http://localhost:5500/tsunami.json";
+const apiEndpoint =
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
