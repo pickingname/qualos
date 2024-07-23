@@ -81,11 +81,6 @@ body {
   pointer-events: none !important;
 }
 
-body {
-  /*background-color: #1d1d1f; */
-  background-color: #000000;
-}
-
 .font-outfit {
   font-family: "Outfit", sans-serif;
   font-style: normal;
