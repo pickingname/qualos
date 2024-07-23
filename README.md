@@ -26,6 +26,7 @@ This app was developed as an alternative to [quarog](https://fuku1213.github.io/
 - Displays intensity reports; if intensity exceeds 3, it highlights prefectures with intensity levels using a square icon instead of a circle.
 - Shows P and S wave information during an active earthquake using the Yahoo API.
 - Light / Dark theme support. (Applied automatically based on the system's theme)
+- Displays tsunami warning (**Text only**) as a card
 
 ---
 
@@ -37,6 +38,7 @@ Please note that this might be changed
 - Cannot display the live data from the stations
 - Cannot display the english name when the EEW is issued
 - Camera movement is not good enough
+- Mobile UI is not good enough, this can be fixed by decrease the zoom value if the screen is too small to display any information
 
 ---
 
