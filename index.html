@@ -210,10 +210,42 @@
       </a>
       no this for this for now. -->
     </div>
-    <div id="emergWarnTextContainer" class="hidden immediate-warning-text pb-5 bottom-middle">
-      <div class="bg-[#ffff00] px-5 py-1 rounded-sm">
-        <p id="emergWarnText" class="text-[#ff0000] text-xl font-outfit">
-          
+    <div
+      id="emergWarnTextContainer"
+      class="hidden immediate-warning-text pb-5 bottom-middle font-outfit"
+    >
+      <div
+        class="w-full max-w-lg rounded-lg border bg-[#1a1a2e] p-6 text-white shadow-sm"
+        data-v0-t="card"
+      >
+        <div class="mb-4 flex items-center justify-between">
+          <span class="text-lg font-bold text-red-500"
+            >[<span id="warnOrigin"></span>] tsunami <span id="tsType" /></span
+          >
+          <div
+            class="focus:ring-ring hover:bg-primary/80 inline-flex w-fit items-center whitespace-nowrap rounded-lg border border-transparent bg-red-500 px-4 py-2 text-lg font-semibold text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
+            data-v0-t="badge"
+          >
+            &gt; 3M
+          </div>
+        </div>
+        <div class="mb-4 grid grid-cols-3 gap-4">
+          <div class="text-center">
+            <p class="text-lg">Magnitude</p>
+            <p class="text-4xl font-bold"><span>7.3</span></p>
+          </div>
+          <div class="text-center">
+            <p class="text-lg">Intensity</p>
+            <p class="text-4xl font-bold">7</p>
+          </div>
+          <div class="text-center">
+            <p class="text-lg">Depth</p>
+            <p class="text-4xl font-bold">10km</p>
+          </div>
+        </div>
+        <p class="text-center text-sm text-gray-400">
+          If you are near the lines shown in the map, Please evacuate
+          immediately.
         </p>
       </div>
     </div>

@@ -65,20 +65,30 @@ function handleTsunamiWarning(type) {
   tsunamiWarning.play();
   document.getElementById("emergWarnTextContainer").classList.remove("hidden");
   if (type === "Warning") {
-    console.info("tsunami warning has been issued");
-    document.getElementById("emergWarnText").textContent = "TSUNAMI WARNING";
+    console.info("Warning");
+    document.getElementById("tsType").textContent = "Warning";
   }
   if (type === "Watch") {
-    console.info("tsunami watch has been issued");
-    document.getElementById("emergWarnText").textContent =
-      "TSUNAMI WATCH ISSUED";
+    console.info("Watch");
+    document.getElementById("tsType").textContent =
+      "Watch";
+  }
+}
+
+function handleTsunamiOriginType(type) {
+  if (type.toLowerCase() === "foreign") { // foreign
+    document.getElementById("warnOrigin").textContent = "Foreign";
+  } else if (type.toLowerCase() === "domestic") { // domestic
+    document.getElementById("warnOrigin").textContent = "Domestic";
+  } else { // other
+    document.getElementById("warnOrigin").textContent = "Unknown";
   }
 }
 
 function removeTsunamiWarning() {
   tsunamiWarning.pause();
   document.getElementById("emergWarnTextContainer").classList.add("hidden");
-  document.getElementById("emergWarnText").textContent = "";
+  document.getElementById("tsType").textContent = "";
 }
 
 const findStationCoordinates = (comparisonData, stationName) => {
@@ -188,15 +198,17 @@ const updateMapWithData = async (earthquakeData) => {
     }).addTo(mapInstance);
   }
 
-  // TSUNAMI HANDLER STARTS HERE
+  // TSUNAMI HANDLER STARTS HERE {}|
 
   if (earthquakeData.earthquake.domesticTsunami.toLowerCase() === "warning") {
     currentTW = true;
     domeTs = true;
+    handleTsunamiOriginType("domestic");
     handleTsunamiWarning("Warning");
   } else if (earthquakeData.earthquake.domesticTsunami.toLowerCase() === "watch") {
     currentTW = true;
     domeTs = true;
+    handleTsunamiOriginType("domestic");
     handleTsunamiWarning("Watch");
   } else {
     domeTs = false;
@@ -205,10 +217,12 @@ const updateMapWithData = async (earthquakeData) => {
   if (earthquakeData.earthquake.foreignTsunami.toLowerCase() === "warning") {
     currentTW = true;
     foreTs = true;
+    handleTsunamiOriginType("foreign");
     handleTsunamiWarning("Warning (Foreign)");
   } else if (earthquakeData.earthquake.foreignTsunami.toLowerCase() === "watch") {
     currentTW = true;
     foreTs = true;
+    handleTsunamiOriginType("foreign");
     handleTsunamiWarning("Watch (Foreign)");
   } else {
     foreTs = false;
