@@ -83,7 +83,7 @@ const getTrueIntensity = (maxScale) => {
     case 70:
       return "7";
     default:
-      console.log("default intensity recieved");
+      console.log("intensity isnt on the list, " + maxScale);
       return "--";
   }
 };
@@ -181,9 +181,20 @@ const createDeflatedIcon = (scale) => {
 const createInflatedIcon = (scale) => {
   let iconScale = scale.toString().replace("+", "p").replace("-", "m");
   let iconUrl = "";
+  const validScales = [10, 20, 30, 40, 45, 50, 55, 60, 70];
+
+  // Convert iconScale to a number
+  const numericIconScale = parseInt(iconScale, 10);
+
   if (isScalePrompt === true) {
+    if (!validScales.includes(numericIconScale)) {
+      iconScale = "invalid";
+    }
     iconUrl = `https://pickingname.github.io/basemap/icons/scales/${iconScale}.png`;
   } else {
+    if (!validScales.includes(numericIconScale)) {
+      iconScale = "invalid";
+    }
     iconUrl = `https://pickingname.github.io/basemap/icons/intensities/${iconScale}.png`;
   }
   return L.divIcon({
