@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  min-width: 430px !important;
+}
+
 @media (max-width: 440px) {
   .hideonsmall {
     display: none;

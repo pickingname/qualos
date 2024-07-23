@@ -8,7 +8,7 @@ let prevForeign = false; // this is for the padding marker system
 let currentTW = false;
 let foreTs = false;
 let domeTs = false;
-let tsMag, tsInt, tsDepth, tsHeight;
+let tsMag, tsInt, tsDepth;
 
 const apiEndpoint = "http://localhost:5500/tsunami.json";
 
@@ -116,12 +116,11 @@ function handleTsunamiOriginType(type) {
   }
 }
 
-function setTsWarningTexts(mag, int, depth, height) {
+function setTsWarningTexts(mag, int, depth) {
   // basically parse the data and set the text in the html
   document.getElementById("tsMag").textContent = mag;
   document.getElementById("tsInt").textContent = int;
   document.getElementById("tsDepth").textContent = depth;
-  document.getElementById("tsHeight").textContent = height;
 }
 
 function removeTsunamiWarning() {
