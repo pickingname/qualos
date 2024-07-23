@@ -7,7 +7,8 @@ let iconPadding = 0.0;
 let prevForeign = false; // this is for the padding marker system
 let currentTW = false;
 let foreTs = false;
-let domeTs = false; 
+let domeTs = false;
+let tsMag, tsInt, tsDepth, tsHeight;
 
 const apiEndpoint =
   "http://localhost:5500/tsunami.json";
@@ -61,6 +62,32 @@ const fetchComparisonData = async (url) => {
   }
 };
 
+const getTrueIntensity = (maxScale) => {
+  switch (maxScale) {
+    case 10:
+      return "1";
+    case 20:
+      return "2";
+    case 30:
+      return "3";
+    case 40:
+      return "4";
+    case 45:
+      return "5-";
+    case 50:
+      return "5+";
+    case 55:
+      return "6-";
+    case 60:
+      return "6+";
+    case 70:
+      return "7";
+    default:
+      console.log("default intensity recieved");
+      return "--";
+  }
+};
+
 function handleTsunamiWarning(type) {
   tsunamiWarning.play();
   document.getElementById("emergWarnTextContainer").classList.remove("hidden");
@@ -83,6 +110,13 @@ function handleTsunamiOriginType(type) {
   } else { // other
     document.getElementById("warnOrigin").textContent = "Unknown";
   }
+}
+
+function setTsWarningTexts(mag, int, depth, height) { // basically parse the data and set the text in the html
+  document.getElementById("tsMag").textContent = mag;
+  document.getElementById("tsInt").textContent = int;
+  document.getElementById("tsDepth").textContent = depth;
+  document.getElementById("tsHeight").textContent = height;
 }
 
 function removeTsunamiWarning() {
@@ -342,6 +376,10 @@ const fetchAndUpdateData = async () => {
     isApiCallSuccessful = true;
     const latestEarthquakeData = response.data[0];
 
+    tsDepth = latestEarthquakeData.earthquake.hypocenter.depth;
+    tsInt = getTrueIntensity(latestEarthquakeData.earthquake.maxScale);
+    tsMag = latestEarthquakeData.earthquake.hypocenter.magnitude;
+
     if (latestEarthquakeData.issue.type === "Foreign") {
       if (isPreviouslyForeign === false) {
         distantArea.play();
@@ -388,6 +426,12 @@ const fetchAndUpdateData = async () => {
     document.getElementById("statusText").classList.add("text-red-600");
     document.getElementById("statusText").textContent = "Map error: " + error;
     isApiCallSuccessful = false;
+  }
+  
+  if (currentTW === true) {
+    setTsWarningTexts(
+      tsMag, tsInt, tsDepth
+    )
   }
 };
 
