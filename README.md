@@ -8,7 +8,7 @@ A website that shows the most recent earthquake in a map using p2pquake API.
 
 ##### [https://qualos.info](https://qualos.info)
 
-![appPreview](https://github.com/pickingname/qualos/assets/115550149/a9fa2290-3929-4f80-9101-44adfa0b41c1)
+![appPreview](https://github.com/user-attachments/assets/b19336e8-e2f6-4c7a-ae20-7f8a596b5343)
 
 ---
 
