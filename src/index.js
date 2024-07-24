@@ -1,7 +1,7 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
-let apiEndpoint = "http://localhost:5500/tsunami.json";
+let apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
 
 let comparisonDataCache = null;
 export let responseCache;
