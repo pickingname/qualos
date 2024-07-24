@@ -1,8 +1,7 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
-let apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+let apiEndpoint = "http://localhost:5500/tsunami.json";
 
 let comparisonDataCache = null;
 export let responseCache;
@@ -77,6 +76,21 @@ const fetchData = async () => {
   };
 
   const intensityDescription = getIntensityDescription(maxScale);
+
+  if (intensityDescription === "--") {
+    document.getElementById("STA").classList.add("hidden");
+    document.getElementById("INT").classList.add("hidden");
+  } else if (quakeDetails.issue.type === "ScalePrompt") {
+    document.getElementById("STA").classList.add("hidden");
+    document.getElementById("INT").classList.remove("hidden");
+  } else if (quakeDetails.issue.type === "DetailScale") {
+    document.getElementById("STA").classList.remove("hidden");
+    document.getElementById("INT").classList.add("hidden");
+  } else if (quakeDetails.issue.type === "Foreign") {
+    document.getElementById("STA").classList.add("hidden");
+    document.getElementById("INT").classList.add("hidden");
+  }
+
   const comparisonData = await fetchComparisonData();
   const englishName = findEnglishName(comparisonData, locationName);
 
@@ -85,8 +99,6 @@ const fetchData = async () => {
     quakeDetails.issue.type === "ScalePrompt"
   ) {
     console.info("Earthquake intensity report received");
-    document.getElementById("STA").classList.add("hidden");
-    document.getElementById("INT").classList.remove("hidden");
     let reportScale = getIntensityDescription(maxScale);
     document.getElementById("intensity").textContent = reportScale;
     document.getElementById(
@@ -101,11 +113,9 @@ const fetchData = async () => {
   } else {
     if (quakeDetails.earthquake.hypocenter.depth === -1) {
       if (
-        quakeDetails.earthquake.hypocenter.depth === -1 &&
         quakeDetails.issue.type === "Foreign"
       ) {
-        document.getElementById("INT").classList.add("hidden");
-        document.getElementById("STA").classList.add("hidden");
+        console.log('what the fuck ')
         document.getElementById(
           "where"
         ).textContent = `Foreign earthquake information`;
@@ -131,8 +141,6 @@ const fetchData = async () => {
         document.getElementById("where").textContent = `Invalid data received`;
       }
     } else {
-      document.getElementById("INT").classList.add("hidden");
-      document.getElementById("STA").classList.remove("hidden");
       document.getElementById("intensity").textContent = intensityDescription;
       document.getElementById(
         "magnitude"
