@@ -153,19 +153,36 @@ const updateCamera = (bounds) => {
   }
 };
 
+let deflatedIconColors = {};
+
 const getScaleColor = (scale) => {
-  const colors = {
-    10: "#6b787850",
-    20: "#119a4c50",
-    30: "#136ca560",
-    40: "#c99c0060",
-    45: "#f18a2d70",
-    50: "#d16a0c80",
-    55: "#eb190090",
-    60: "#b71300",
-    70: "#960096",
-  };
-  return colors[scale] || "#CCCCCC";
+  if (userTheme === "dark") {
+    deflatedIconColors = {
+      10: "#8e979780",
+      20: "#119a4c80",
+      30: "#136ca580",
+      40: "#c99c0090",
+      45: "#f18a2d90",
+      50: "#d16a0c90",
+      55: "#eb190090",
+      60: "#b7130090",
+      70: "#96009690",
+    };
+  } else {
+    deflatedIconColors = {
+      10: "#6b787850",
+      20: "#119a4c50",
+      30: "#136ca560",
+      40: "#c99c0060",
+      45: "#f18a2d70",
+      50: "#d16a0c80",
+      55: "#eb190090",
+      60: "#b7130090",
+      70: "#96009690",
+    };
+  }
+
+  return deflatedIconColors[scale] || "#CCCCCC50";
 };
 
 const createDeflatedIcon = (scale) => {
