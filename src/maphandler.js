@@ -10,9 +10,12 @@ let foreTs = false;
 let domeTs = false;
 let tsMag, tsInt, tsDepth;
 
-const apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
-const tsunamiApiEndpoint = "https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=7";
-const geojsonUrl = "https://pickingname.github.io/basemap/tsunami_areas.geojson";
+const apiEndpoint =
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+const tsunamiApiEndpoint =
+  "http://localhost:5500/tsunami.json"; // https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=7
+const geojsonUrl =
+  "https://pickingname.github.io/basemap/tsunami_areas.geojson";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -22,9 +25,15 @@ let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
 
 var newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
-var intensityReport = new Audio("https://pickingname.github.io/datastores/update.mp3");
-var distantArea = new Audio("https://pickingname.github.io/datastores/alert.mp3");
-var tsunamiWarning = new Audio("https://pickingname.github.io/datastores/eq/E4.mp3");
+var intensityReport = new Audio(
+  "https://pickingname.github.io/datastores/update.mp3"
+);
+var distantArea = new Audio(
+  "https://pickingname.github.io/datastores/alert.mp3"
+);
+var tsunamiWarning = new Audio(
+  "https://pickingname.github.io/datastores/eq/E4.mp3"
+);
 
 export let responseCache;
 
@@ -34,15 +43,20 @@ let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
 
-if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+if (
+  window.matchMedia &&
+  window.matchMedia("(prefers-color-scheme: dark)").matches
+) {
   userTheme = "dark";
 }
 
-window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
-  userTheme = event.matches ? "dark" : "light";
-  console.info("User theme changed, refreshing...");
-  location.reload();
-});
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change", (event) => {
+    userTheme = event.matches ? "dark" : "light";
+    console.info("User theme changed, refreshing...");
+    location.reload();
+  });
 
 const fetchComparisonData = async (url) => {
   try {
@@ -52,22 +66,32 @@ const fetchComparisonData = async (url) => {
   } catch (error) {
     console.error("Error fetching comparison data:", error);
     document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent = "Error fetching comparison data, " + error;
+    document.getElementById("statusText").textContent =
+      "Error fetching comparison data, " + error;
     return [];
   }
 };
 
 const getTrueIntensity = (maxScale) => {
   switch (maxScale) {
-    case 10: return "1";
-    case 20: return "2";
-    case 30: return "3";
-    case 40: return "4";
-    case 45: return "5-";
-    case 50: return "5+";
-    case 55: return "6-";
-    case 60: return "6+";
-    case 70: return "7";
+    case 10:
+      return "1";
+    case 20:
+      return "2";
+    case 30:
+      return "3";
+    case 40:
+      return "4";
+    case 45:
+      return "5-";
+    case 50:
+      return "5+";
+    case 55:
+      return "6-";
+    case 60:
+      return "6+";
+    case 70:
+      return "7";
     default:
       console.log("intensity isnt on the list, " + maxScale);
       return "--";
@@ -81,7 +105,8 @@ function handleTsunamiWarning(type) {
 }
 
 function handleTsunamiOriginType(type) {
-  document.getElementById("warnOrigin").textContent = type.charAt(0).toUpperCase() + type.slice(1);
+  document.getElementById("warnOrigin").textContent =
+    type.charAt(0).toUpperCase() + type.slice(1);
 }
 
 function setTsWarningTexts(mag, int, depth) {
@@ -98,7 +123,9 @@ function removeTsunamiWarning() {
 
 const findStationCoordinates = (comparisonData, stationName) => {
   const station = comparisonData.find((entry) => entry.name === stationName);
-  return station ? { lat: parseFloat(station.lat), lng: parseFloat(station.long) } : null;
+  return station
+    ? { lat: parseFloat(station.lat), lng: parseFloat(station.long) }
+    : null;
 };
 
 const updateCamera = (bounds) => {
@@ -117,13 +144,27 @@ let deflatedIconColors = {};
 const getScaleColor = (scale) => {
   if (userTheme === "dark") {
     deflatedIconColors = {
-      10: "#8e979780", 20: "#119a4c80", 30: "#136ca580", 40: "#c99c0090",
-      45: "#f18a2d90", 50: "#d16a0c90", 55: "#eb190090", 60: "#b7130090", 70: "#96009690"
+      10: "#8e979780",
+      20: "#119a4c80",
+      30: "#136ca580",
+      40: "#c99c0090",
+      45: "#f18a2d90",
+      50: "#d16a0c90",
+      55: "#eb190090",
+      60: "#b7130090",
+      70: "#96009690",
     };
   } else {
     deflatedIconColors = {
-      10: "#6b787850", 20: "#119a4c50", 30: "#136ca560", 40: "#c99c0060",
-      45: "#f18a2d70", 50: "#d16a0c80", 55: "#eb190090", 60: "#b7130090", 70: "#96009690"
+      10: "#6b787850",
+      20: "#119a4c50",
+      30: "#136ca560",
+      40: "#c99c0060",
+      45: "#f18a2d70",
+      50: "#d16a0c80",
+      55: "#eb190090",
+      60: "#b7130090",
+      70: "#96009690",
     };
   }
   return deflatedIconColors[scale] || "#CCCCCC50";
@@ -131,7 +172,9 @@ const getScaleColor = (scale) => {
 
 const createDeflatedIcon = (scale) => {
   return L.divIcon({
-    html: `<div style="background-color: ${getScaleColor(scale)}; width: 10px; height: 10px; border-radius: 50%;"></div>`,
+    html: `<div style="background-color: ${getScaleColor(
+      scale
+    )}; width: 10px; height: 10px; border-radius: 50%;"></div>`,
     className: "deflated-marker",
     iconSize: [10, 10],
   });
@@ -141,15 +184,15 @@ const createInflatedIcon = (scale) => {
   let iconScale = scale.toString().replace("+", "p").replace("-", "m");
   const validScales = [10, 20, 30, 40, 45, 50, 55, 60, 70];
   const numericIconScale = parseInt(iconScale, 10);
-  
+
   if (!validScales.includes(numericIconScale)) {
     iconScale = "invalid";
   }
-  
+
   const iconUrl = isScalePrompt
     ? `https://pickingname.github.io/basemap/icons/scales/${iconScale}.png`
     : `https://pickingname.github.io/basemap/icons/intensities/${iconScale}.png`;
-  
+
   return L.divIcon({
     html: `<img src="${iconUrl}" style="width: 20px; height: 20px;">`,
     className: "inflated-marker",
@@ -175,9 +218,12 @@ const updateMapWithData = async (earthquakeData) => {
       scrollWheelZoom: false,
     });
 
-    L.tileLayer(`https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`, {
-      maxZoom: 24,
-    }).addTo(mapInstance);
+    L.tileLayer(
+      `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
+      {
+        maxZoom: 24,
+      }
+    ).addTo(mapInstance);
 
     initCircleRendering(mapInstance);
   }
@@ -199,8 +245,10 @@ const updateMapWithData = async (earthquakeData) => {
   }
 
   // Tsunami warning handler
-  if (earthquakeData.earthquake.domesticTsunami.toLowerCase() === "warning" || 
-      earthquakeData.earthquake.domesticTsunami.toLowerCase() === "watch") {
+  if (
+    earthquakeData.earthquake.domesticTsunami.toLowerCase() === "warning" ||
+    earthquakeData.earthquake.domesticTsunami.toLowerCase() === "watch"
+  ) {
     currentTW = true;
     domeTs = true;
     handleTsunamiOriginType("domestic");
@@ -209,8 +257,10 @@ const updateMapWithData = async (earthquakeData) => {
     domeTs = false;
   }
 
-  if (earthquakeData.earthquake.foreignTsunami.toLowerCase() === "warning" || 
-      earthquakeData.earthquake.foreignTsunami.toLowerCase() === "watch") {
+  if (
+    earthquakeData.earthquake.foreignTsunami.toLowerCase() === "warning" ||
+    earthquakeData.earthquake.foreignTsunami.toLowerCase() === "watch"
+  ) {
     currentTW = true;
     foreTs = true;
     handleTsunamiOriginType("foreign");
@@ -245,35 +295,57 @@ const updateMapWithData = async (earthquakeData) => {
     });
 
     L.marker(
-      [earthquakeData.earthquake.hypocenter.latitude, earthquakeData.earthquake.hypocenter.longitude],
+      [
+        earthquakeData.earthquake.hypocenter.latitude,
+        earthquakeData.earthquake.hypocenter.longitude,
+      ],
       { icon: epicenterIcon }
     ).addTo(markersLayerGroup);
 
-    const comparisonData = await fetchComparisonData("https://pickingname.github.io/basemap/compare_points.csv");
+    const comparisonData = await fetchComparisonData(
+      "https://pickingname.github.io/basemap/compare_points.csv"
+    );
 
     earthquakeData.points.forEach((point) => {
-      const stationCoordinates = findStationCoordinates(comparisonData, point.addr);
+      const stationCoordinates = findStationCoordinates(
+        comparisonData,
+        point.addr
+      );
       if (stationCoordinates) {
-        const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-          icon: createInflatedIcon(point.scale),
-          scale: point.scale,
-        });
+        const marker = L.marker(
+          [stationCoordinates.lat, stationCoordinates.lng],
+          {
+            icon: createInflatedIcon(point.scale),
+            scale: point.scale,
+          }
+        );
         stationMarkersGroup.addLayer(marker);
       }
     });
   } else {
     isScalePrompt = true;
-    const comparisonData = await fetchComparisonData("https://pickingname.github.io/basemap/prefs.csv");
+    const comparisonData = await fetchComparisonData(
+      "https://pickingname.github.io/basemap/prefs.csv"
+    );
 
     earthquakeData.points.forEach((point) => {
       console.log(`Processing point with address: ${point.addr}`);
-      const stationCoordinates = findStationCoordinates(comparisonData, point.addr);
+      const stationCoordinates = findStationCoordinates(
+        comparisonData,
+        point.addr
+      );
       if (stationCoordinates) {
-        console.log(`Found coordinates for ${point.addr}: `, stationCoordinates);
-        const marker = L.marker([stationCoordinates.lat, stationCoordinates.lng], {
-          icon: createInflatedIcon(point.scale),
-          scale: point.scale,
-        });
+        console.log(
+          `Found coordinates for ${point.addr}: `,
+          stationCoordinates
+        );
+        const marker = L.marker(
+          [stationCoordinates.lat, stationCoordinates.lng],
+          {
+            icon: createInflatedIcon(point.scale),
+            scale: point.scale,
+          }
+        );
         stationMarkersGroup.addLayer(marker);
       } else {
         console.warn(`No coordinates found for ${point.addr}`);
@@ -281,7 +353,14 @@ const updateMapWithData = async (earthquakeData) => {
     });
   }
 
-  const bounds = markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds());
+  const bounds = markersLayerGroup
+    .getBounds()
+    .extend(stationMarkersGroup.getBounds());
+
+  // Include tsunamiGeojsonLayer bounds if it exists
+  if (tsunamiGeojsonLayer) {
+    bounds.extend(tsunamiGeojsonLayer.getBounds());
+  }
 
   var shouldIUpdate = isEEWforIndex || true;
 
@@ -323,28 +402,33 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
 
   tsunamiGeojsonLayer = L.geoJSON(geojsonData, {
     style: (feature) => {
-      const tsunamiArea = tsunamiData.areas.find(area => area.name === feature.properties.name);
+      const tsunamiArea = tsunamiData.areas.find(
+        (area) => area.name === feature.properties.name
+      );
       if (tsunamiArea) {
         return {
           color: getTsunamiColor(tsunamiArea.grade),
           weight: 3,
-          opacity: 0.7
+          opacity: 0.7,
         };
       }
       return {
-        color: '#ccc',
+        color: "#ccc",
         weight: 1,
-        opacity: 0.3
+        opacity: 0.3,
       };
-    }
+    },
   }).addTo(mapInstance);
 };
 
 const getTsunamiColor = (grade) => {
   switch (grade) {
-    case "Warning": return "#ff0000";
-    case "Watch": return "#ffff00";
-    default: return "#ccc";
+    case "Warning":
+      return "#ff0000";
+    case "Watch":
+      return "#ffff00";
+    default:
+      return "#ccc";
   }
 };
 
@@ -417,7 +501,6 @@ const fetchAndUpdateData = async () => {
 
     // Update tsunami data
     await updateMapWithTsunamiData();
-
   } catch (error) {
     console.error("API call failed:", error);
     document.getElementById("statusText").classList.add("text-red-600");
