@@ -10,8 +10,10 @@ let foreTs = false;
 let domeTs = false;
 let tsMag, tsInt, tsDepth;
 
-const apiEndpoint = "http://localhost:5500/details.json"; // https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0
-const tsunamiApiEndpoint = "http://localhost:5500/tsunami.json"; // https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=7
+const apiEndpoint =
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+const tsunamiApiEndpoint =
+  "https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=0";
 const geojsonUrl =
   "https://pickingname.github.io/basemap/tsunami_areas.geojson";
 

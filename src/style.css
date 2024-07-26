@@ -8,6 +8,10 @@ body {
   min-width: 430px !important;
 }
 
+.wasdwasd {
+  color: red;
+}
+
 @media (max-width: 440px) {
   .hideonsmall {
     display: none;
