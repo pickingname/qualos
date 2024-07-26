@@ -203,11 +203,11 @@
       no this for this for now. -->
     </div>
     <div
-      class="immediate-warning-text hidden pb-5 bottom-middle font-outfit"
+      class="immediate-warning-text hidden px-5 py-5 top-right font-outfit"
       id="emergWarnTextContainer"
     >
       <div
-        class="w-full max-w-lg rounded-lg border border-neutral-500 bg-[#1a1a2e] p-6 text-white shadow-sm"
+        class="w-full max-w-lg rounded-lg border border-neutral-500 backdrop-blur-sm p-6 text-white shadow-sm"
       >
         <div class="mb-4 text-center">
           <span class="text-3xl font-regular text-red-500">
@@ -216,22 +216,22 @@
           </span>
         </div>
         <div
-          class="mb-4 grid grid-cols-2 sm:grid-cols-3 gap-4 reducecolsonsmall"
+          class="mb-4 grid grid-cols-2 sm:grid-cols-3 gap-4 reducecolsonsmall text-black dark:text-white"
         >
           <div class="text-center">
             <p class="text-lg">Magnitude</p>
-            <p class="text-4xl font-medium"><span id="tsMag"></span></p>
+            <p class="text-4xl font-medium"><span id="tsMag">--</span></p>
           </div>
           <div class="text-center hideonsmall">
             <p class="text-lg">Intensity</p>
-            <p class="text-4xl font-medium"><span id="tsInt"></span></p>
+            <p class="text-4xl font-medium"><span id="tsInt">--</span></p>
           </div>
           <div class="text-center sm:block hidden">
             <p class="text-lg">Depth</p>
-            <p class="text-4xl font-medium"><span id="tsDepth"></span>km</p>
+            <p class="text-4xl font-medium"><span id="tsDepth">-</span>km</p>
           </div>
         </div>
-        <p class="text-center text-sm text-neutral-400">
+        <p class="text-center text-sm dark:text-neutral-400 text-neutral-600">
           If you are near the lines shown in the map, Please evacuate
           immediately.
         </p>
@@ -242,7 +242,7 @@
     <script src="src/index.js" type="module"></script>
     <script src="src/maphandler.js" type="module"></script>
     <script
-      src="https://pickingname.github.io/basemap/js/clustering.js"
+      src="http://localhost:5500/clustering.js"
       charset="utf-8"
       type="module"
     ></script>
