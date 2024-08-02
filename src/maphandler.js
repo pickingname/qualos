@@ -122,7 +122,6 @@ const updateMapWithData = async (earthquakeData) => {
     mapInstance = L.map("map", {
       center: [35.689487, 139.691711],
       zoom: 5,
-      maxZoom: 8,
       minZoom: 2,
       zoomControl: false,
       attributionControl: false,
@@ -135,12 +134,7 @@ const updateMapWithData = async (earthquakeData) => {
       scrollWheelZoom: true,
     });
 
-    L.tileLayer(
-      `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
-      {
-        maxZoom: 24,
-      }
-    ).addTo(mapInstance);
+    L.tileLayer(`https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`).addTo(mapInstance);
   }
 
   if (markersLayerGroup) {
