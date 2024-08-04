@@ -3,7 +3,6 @@ import axios from "axios";
 export var isEEW, isEEWforIndex;
 isEEW = false;
 isEEWforIndex = false;
-let reportNum;
 let isThisTheFirstTime = false;
 
 console.info("psWave listener started");
@@ -85,57 +84,12 @@ const renderCircles = (mapInstance, circleData) => {
   // EEW data for parsing in the index.html
   let epicenterName = circleData.hypoInfo.items[0].regionName;
   let magnitude = parseFloat(circleData.hypoInfo.items[0].magnitude).toFixed(1);
-  reportNum = circleData.hypoInfo.items[0].reportNum;
-  let depth = circleData.hypoInfo.items[0].depth;
   let isTraining = circleData.hypoInfo.items[0].isTraining;
   let isFinal = circleData.hypoInfo.items[0].isFinal;
   let calcIntensity = circleData.hypoInfo.items[0].calcintensity;
   console.log(calcIntensity);
-  let expInt;
-  let reportText;
-
-  console.log("isfinal? " + isFinal);
-  if (isFinal === "true") {
-    reportText = "Final report";
-  } else if (isFinal === "false") {
-    reportText = "Report #" + reportNum;
-  }
 
   // compare the expected intensity with the calculated intensity
-  if (calcIntensity === 0) {
-    expInt = "0";
-    borderBlue();
-  } else if (calcIntensity == "01") {
-    expInt = 1;
-    borderYellow();
-  } else if (calcIntensity == "02") {
-    expInt = 2;
-    borderYellow();
-  } else if (calcIntensity == "03") {
-    expInt = 3;
-    borderOrange();
-  } else if (calcIntensity == "04") {
-    expInt = 4;
-    borderOrange();
-  } else if (calcIntensity == "5-") {
-    expInt = "5-";
-    borderRed();
-  } else if (calcIntensity == "5+") {
-    expInt = "5+";
-    borderRed();
-  } else if (calcIntensity == "6-") {
-    expInt = "6-";
-    borderPurple();
-  } else if (calcIntensity == "6+") {
-    expInt = "6+";
-    borderPurple();
-  } else if (calcIntensity == "07") {
-    expInt = 7;
-    borderPurple();
-  } else {
-    expInt = "--";
-    borderBlue();
-  }
 
   // update the EEW data in the index.html
 
@@ -145,10 +99,6 @@ const renderCircles = (mapInstance, circleData) => {
   const longitude = parseFloat(psWaveItem.longitude.slice(1)); // remove the 'E' and convert to float
   const pRadius = parseFloat(psWaveItem.pRadius) || 0;
   const sRadius = parseFloat(psWaveItem.sRadius) || 0;
-
-  function updateEpicenterLocationOnce() {
-
-  }
 
   // Create a layer group for P wave, S wave, and epicenter
   mapInstance.psSGroup = L.layerGroup().addTo(mapInstance);
@@ -201,7 +151,7 @@ const updateMapWithCircleData = async (mapInstance) => {
 export const initCircleRendering = (mapInstance) => {
   updateMapWithCircleData(mapInstance);
 
-  // Update circles every 1 second
+  // Update circles every 5 second
   setInterval(() => {
     updateMapWithCircleData(mapInstance);
   }, 5000);
