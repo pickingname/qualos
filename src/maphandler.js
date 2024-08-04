@@ -11,7 +11,7 @@ let domeTs = false;
 let tsMag, tsInt, tsDepth;
 
 const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=2&offset=0";
+  "https://api.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
 
 let userTheme = "light";
 let isApiCallSuccessful = true;
@@ -55,9 +55,6 @@ const fetchComparisonData = async (url) => {
     return parsedData;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
-    document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent =
-      "Error fetching comparison data, " + error;
     return [];
   }
 };
@@ -87,48 +84,6 @@ const getTrueIntensity = (maxScale) => {
       return "--";
   }
 };
-
-function handleTsunamiWarning(type) {
-  tsunamiWarning.play();
-  document.getElementById("emergWarnTextContainer").classList.remove("hidden");
-  if (type === "Warning") {
-    console.info("Warning");
-    document.getElementById("tsType").textContent = "Warning";
-  }
-  if (type === "Watch") {
-    console.info("Watch");
-    document.getElementById("tsType").textContent = "Watch";
-  }
-}
-
-function handleTsunamiOriginType(type) {
-  if (type.toLowerCase() === "foreign") {
-    // foreign
-    document.getElementById("warnOrigin").textContent = "Foreign";
-  } else if (type.toLowerCase() === "domestic") {
-    // domestic
-    document.getElementById("warnOrigin").textContent = "Domestic";
-  } else if (type.toLowerCase() === "foreign & domestic") {
-    // both
-    document.getElementById("warnOrigin").textContent = "Foreign & Domestic";
-  } else {
-    // other
-    document.getElementById("warnOrigin").textContent = "Unknown";
-  }
-}
-
-function setTsWarningTexts(mag, int, depth) {
-  // basically parse the data and set the text in the html
-  document.getElementById("tsMag").textContent = mag;
-  document.getElementById("tsInt").textContent = int;
-  document.getElementById("tsDepth").textContent = depth;
-}
-
-function removeTsunamiWarning() {
-  tsunamiWarning.pause();
-  document.getElementById("emergWarnTextContainer").classList.add("hidden");
-  document.getElementById("tsType").textContent = "";
-}
 
 const findStationCoordinates = (comparisonData, stationName) => {
   const station = comparisonData.find((entry) => entry.name === stationName);
@@ -264,52 +219,6 @@ const updateMapWithData = async (earthquakeData) => {
       },
     }).addTo(mapInstance);
   }
-
-  // TSUNAMI HANDLER STARTS HERE {}|
-
-  if (earthquakeData.earthquake.domesticTsunami.toLowerCase() === "warning") {
-    currentTW = true;
-    domeTs = true;
-    handleTsunamiOriginType("domestic");
-    handleTsunamiWarning("Warning");
-  } else if (
-    earthquakeData.earthquake.domesticTsunami.toLowerCase() === "watch"
-  ) {
-    currentTW = true;
-    domeTs = true;
-    handleTsunamiOriginType("domestic");
-    handleTsunamiWarning("Watch");
-  } else {
-    domeTs = false;
-  }
-
-  if (earthquakeData.earthquake.foreignTsunami.toLowerCase() === "warning") {
-    currentTW = true;
-    foreTs = true;
-    handleTsunamiOriginType("foreign");
-    handleTsunamiWarning("Warning");
-  } else if (
-    earthquakeData.earthquake.foreignTsunami.toLowerCase() === "watch"
-  ) {
-    currentTW = true;
-    foreTs = true;
-    handleTsunamiOriginType("foreign");
-    handleTsunamiWarning("Watch");
-  } else {
-    foreTs = false;
-  }
-
-  // checking system
-  if (foreTs === false && domeTs === false) {
-    // no ts
-    removeTsunamiWarning();
-  } else if (foreTs === true && domeTs === true) {
-    // both ts (no way this will happen)
-    handleTsunamiWarning("Warning");
-    handleTsunamiOriginType("foreign & domestic");
-  }
-
-  // TSUNAMI HANDLER ENDS HERE
 
   if (earthquakeData.issue.type === "Foreign") {
     // if its a foreign then apply the marker to both NE and SW of the country to make a padding
@@ -461,13 +370,7 @@ const fetchAndUpdateData = async () => {
     }
   } catch (error) {
     console.error("API call failed:", error);
-    document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent = "Map error: " + error;
     isApiCallSuccessful = false;
-  }
-
-  if (currentTW === true) {
-    setTsWarningTexts(tsMag, tsInt, tsDepth);
   }
 };
 
@@ -486,6 +389,4 @@ setInterval(() => {
   }
 }, 3000);
 
-setTimeout(function () {
-  setInterval(fetchAndUpdateData, 2000);
-}, 2000);
+setInterval(fetchAndUpdateData, 5000);

@@ -8,85 +8,6 @@ let isThisTheFirstTime = false;
 
 console.info("psWave listener started");
 
-function borderYellow() {
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-neutral-700");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("dark:border-neutral-600");
-  document.getElementById("changeBorderHere").classList.add("border-amber-400");
-}
-
-function borderOrange() {
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-neutral-700");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("dark:border-neutral-600");
-  document
-    .getElementById("changeBorderHere")
-    .classList.add("border-orange-400");
-}
-
-function borderRed() {
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-neutral-700");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("dark:border-neutral-600");
-  document.getElementById("changeBorderHere").classList.add("border-red-500");
-}
-
-function borderPurple() {
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-neutral-700");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("dark:border-neutral-600");
-  document
-    .getElementById("changeBorderHere")
-    .classList.add("border-purple-500");
-}
-
-function borderBlue() {
-  // this is for test or cancelled EEWs
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-neutral-700");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("dark:border-neutral-600");
-  document.getElementById("changeBorderHere").classList.add("border-blue-500");
-}
-
-function returnBorder() {
-  document
-    .getElementById("changeBorderHere")
-    .classList.add("border-neutral-700");
-  document
-    .getElementById("changeBorderHere")
-    .classList.add("dark:border-neutral-600");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-purple-500");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-blue-500");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-red-500");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-orange-400");
-  document
-    .getElementById("changeBorderHere")
-    .classList.remove("border-amber-400");
-}
-
 // Function to fetch circle data from the API
 const fetchCircleData = async () => {
   var date = new Date();
@@ -126,13 +47,9 @@ const fetchCircleData = async () => {
 
   try {
     const response = await axios.get(url);
-    document.getElementById("statusText").textContent = "";
     return response.data;
   } catch (error) {
     console.error("Error fetching circle data:", error);
-    document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent =
-      "Error fetching circle data, " + error;
     return null;
   }
 };
@@ -176,17 +93,6 @@ const renderCircles = (mapInstance, circleData) => {
   console.log(calcIntensity);
   let expInt;
   let reportText;
-
-  // check if the report is a training report or a final report
-
-  // if (isTraining === 'true') {
-  //    // TODO: make a bottom status text showing that the EEW is training
-  //    document.getElementById("STA").classList.add("text-red-600")
-  //    document.getElementById("statusText").textContent = "This EEW is marked as Training";
-  //  } else {
-  //    document.getElementById("STA").classList.remove("text-red-600")
-  //    document.getElementById("statusText").textContent = "Non training"; // clears the status
-  //  }
 
   console.log("isfinal? " + isFinal);
   if (isFinal === "true") {
@@ -233,11 +139,7 @@ const renderCircles = (mapInstance, circleData) => {
 
   // update the EEW data in the index.html
 
-  document.getElementById("intensity").textContent = expInt;
-  document.getElementById("magnitude").textContent = "Magnitude: " + magnitude;
-  document.getElementById("depth").textContent = "Depth: " + depth;
-  document.getElementById("time").textContent = reportText;
-  document.getElementById("where").textContent = epicenterName;
+
 
   const latitude = parseFloat(psWaveItem.latitude.slice(1)); // remove the 'N' and convert to float
   const longitude = parseFloat(psWaveItem.longitude.slice(1)); // remove the 'E' and convert to float
@@ -245,7 +147,7 @@ const renderCircles = (mapInstance, circleData) => {
   const sRadius = parseFloat(psWaveItem.sRadius) || 0;
 
   function updateEpicenterLocationOnce() {
-    document.getElementById("intensity").textContent = expInt;
+
   }
 
   // Create a layer group for P wave, S wave, and epicenter
@@ -302,5 +204,5 @@ export const initCircleRendering = (mapInstance) => {
   // Update circles every 1 second
   setInterval(() => {
     updateMapWithCircleData(mapInstance);
-  }, 1000);
+  }, 5000);
 };
