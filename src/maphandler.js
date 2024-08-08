@@ -247,7 +247,6 @@ const updateMapWithData = async (earthquakeData) => {
     }).addTo(mapInstance);
   }
 
-  // Tsunami warning handler
   if (
     earthquakeData.earthquake.domesticTsunami.toLowerCase() === "warning" ||
     earthquakeData.earthquake.domesticTsunami.toLowerCase() === "watch"
@@ -390,12 +389,10 @@ const fetchGeojsonData = async () => {
 };
 
 const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
-  // Remove existing layer if it exists
   if (tsunamiGeojsonLayer) {
     mapInstance.removeLayer(tsunamiGeojsonLayer);
   }
 
-  // Check if tsunami data is valid and not cancelled
   if (tsunamiData && !tsunamiData.cancelled) {
     if (geojsonData) {
       tsunamiGeojsonLayer = L.geoJSON(geojsonData, {
@@ -408,20 +405,19 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
               color: getTsunamiColor(tsunamiArea.grade),
               weight: 3,
               opacity: 0.7,
-              smoothFactor: 0.0, // Increase smoothFactor for higher resolution
-              noClip: false, // Prevent clipping at map edges
+              smoothFactor: 0.0,
+              noClip: false,
             };
           }
           return {
             color: "#ccc",
             weight: 0,
             opacity: 0,
-            smoothFactor: 999994, // Increase smoothFactor for higher resolution
+            smoothFactor: 999994,
           };
         },
       }).addTo(mapInstance);
 
-      // Optionally update bounds
       const bounds = tsunamiGeojsonLayer.getBounds();
       if (bounds.isValid()) {
         updateCamera(bounds);
@@ -459,7 +455,6 @@ const updateMapWithTsunamiData = async () => {
         }
       }
     } else {
-      // Remove tsunami layer if there's no data
       if (tsunamiGeojsonLayer) {
         mapInstance.removeLayer(tsunamiGeojsonLayer);
       }
@@ -527,7 +522,6 @@ const fetchAndUpdateData = async () => {
       }
     }
 
-    // Update tsunami data
     await updateMapWithTsunamiData();
   } catch (error) {
     console.error("API call failed:", error);
@@ -541,10 +535,8 @@ const fetchAndUpdateData = async () => {
   }
 };
 
-// Initial data fetch and update
 fetchAndUpdateData();
 
-// Set up intervals for regular updates
 setInterval(() => {
   if (isEEWforIndex === false) {
     const bounds = markersLayerGroup
@@ -562,5 +554,4 @@ setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
 
-// New interval for updating tsunami data
 setInterval(updateMapWithTsunamiData, 12000);
