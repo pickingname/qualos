@@ -9,6 +9,7 @@ let currentTW = false;
 let foreTs = false;
 let domeTs = false;
 let tsMag, tsInt, tsDepth;
+let doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
 
 const apiEndpoint =
   "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
@@ -443,6 +444,16 @@ const updateMapWithTsunamiData = async () => {
 
     if (tsunamiData || geojsonData) {
       await updateTsunamiLayer(tsunamiData, geojsonData);
+
+      if (tsunamiData) {
+        if (tsunamiData.cancelled === true) {
+          doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
+          console.log("there is no tsunami");
+        } else {
+          doNotUpdateBondBecauseThereIsAFuckingTsunami = true;
+          console.log("there is a tsunami");
+        }
+      }
     } else {
       // Remove tsunami layer if there's no data
       if (tsunamiGeojsonLayer) {
