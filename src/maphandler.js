@@ -413,7 +413,7 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
           };
         },
       }).addTo(mapInstance);
-      
+
       // Optionally update bounds
       const bounds = tsunamiGeojsonLayer.getBounds();
       if (bounds.isValid()) {
@@ -424,7 +424,6 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
     }
   }
 };
-
 
 const getTsunamiColor = (grade) => {
   switch (grade) {
@@ -454,7 +453,6 @@ const updateMapWithTsunamiData = async () => {
     console.error("Error updating tsunami data:", error);
   }
 };
-
 
 const fetchAndUpdateData = async () => {
   try {
