@@ -130,7 +130,7 @@ const findStationCoordinates = (comparisonData, stationName) => {
 
 const updateCamera = (bounds) => {
   if (bounds && bounds.isValid()) {
-    if (doNotUpdateBondBecauseThereIsAFuckingTsunami === false ) {
+    if (doNotUpdateBondBecauseThereIsAFuckingTsunami === false) {
       mapInstance.flyToBounds(bounds.pad(iconPadding), {
         duration: 0.15,
         easeLinearity: 0.15,
@@ -407,12 +407,15 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
               color: getTsunamiColor(tsunamiArea.grade),
               weight: 3,
               opacity: 0.7,
+              smoothFactor: 0.0, // Increase smoothFactor for higher resolution
+              noClip: false, // Prevent clipping at map edges
             };
           }
           return {
             color: "#ccc",
-            weight: 1,
-            opacity: 0.3,
+            weight: 0,
+            opacity: 0,
+            smoothFactor: 999994, // Increase smoothFactor for higher resolution
           };
         },
       }).addTo(mapInstance);
