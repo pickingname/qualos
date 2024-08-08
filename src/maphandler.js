@@ -12,8 +12,7 @@ let tsMag, tsInt, tsDepth;
 
 const apiEndpoint =
   "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
-const tsunamiApiEndpoint =
-  "https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=0";
+const tsunamiApiEndpoint = "http://localhost:5500/tsunami.json";
 const geojsonUrl =
   "https://pickingname.github.io/basemap/tsunami_areas.geojson";
 
@@ -214,8 +213,8 @@ const updateMapWithData = async (earthquakeData) => {
       doubleClickZoom: false,
       tap: false,
       touchZoom: false,
-      dragging: true,
-      scrollWheelZoom: true,
+      dragging: false,
+      scrollWheelZoom: false,
     });
 
     L.tileLayer(
@@ -353,18 +352,9 @@ const updateMapWithData = async (earthquakeData) => {
     });
   }
 
-  // Update bounds after adding tsunami layer
-  await updateMapWithTsunamiData();
-
-  tsunamiGeojsonLayer.setZIndex(2);
-  markersLayerGroup.setZIndex(1);
-  stationMarkersGroup.setZIndex(1);
-
-  const bounds = L.featureGroup([
-    tsunamiGeojsonLayer,
-    markersLayerGroup,
-    stationMarkersGroup,
-  ]).getBounds(); // initally
+  const bounds = markersLayerGroup
+    .getBounds()
+    .extend(stationMarkersGroup.getBounds());
 
   var shouldIUpdate = isEEWforIndex || true;
 
@@ -396,48 +386,45 @@ const fetchGeojsonData = async () => {
 };
 
 const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
-  if (!mapInstance) {
-    console.warn(
-      "Map instance is not initialized. Skipping tsunami layer update."
-    );
-    return;
-  }
-
+  // Remove existing layer if it exists
   if (tsunamiGeojsonLayer) {
     mapInstance.removeLayer(tsunamiGeojsonLayer);
   }
 
-  if (tsunamiData.cancelled) {
-    return; // Don't display anything if cancelled is true
-  }
-
-  console.log("[DEBUG] UPDATING TSUNAMI LAYER");
-  currentTW = true;
-
-  tsunamiGeojsonLayer = L.geoJSON(geojsonData, {
-    style: (feature) => {
-      const tsunamiArea = tsunamiData.areas.find(
-        (area) => area.name === feature.properties.name
-      );
-      if (tsunamiArea) {
-        return {
-          color: getTsunamiColor(tsunamiArea.grade),
-          weight: 3,
-          opacity: 0.7,
-          smoothFactor: 0.0, // Increase smoothFactor for higher resolution
-          noClip: false, // Prevent clipping at map edges
-        };
+  // Check if tsunami data is valid and not cancelled
+  if (tsunamiData && !tsunamiData.cancelled) {
+    if (geojsonData) {
+      tsunamiGeojsonLayer = L.geoJSON(geojsonData, {
+        style: (feature) => {
+          const tsunamiArea = tsunamiData.areas.find(
+            (area) => area.name === feature.properties.name
+          );
+          if (tsunamiArea) {
+            return {
+              color: getTsunamiColor(tsunamiArea.grade),
+              weight: 3,
+              opacity: 0.7,
+            };
+          }
+          return {
+            color: "#ccc",
+            weight: 1,
+            opacity: 0.3,
+          };
+        },
+      }).addTo(mapInstance);
+      
+      // Optionally update bounds
+      const bounds = tsunamiGeojsonLayer.getBounds();
+      if (bounds.isValid()) {
+        updateCamera(bounds);
+      } else {
+        console.warn("Invalid bounds for tsunamiGeojsonLayer");
       }
-      return null; // No style if the feature should be removed
-    },
-    filter: (feature) => {
-      const tsunamiArea = tsunamiData.areas.find(
-        (area) => area.name === feature.properties.name
-      );
-      return !!tsunamiArea; // Include the feature only if it matches
-    },
-  }).addTo(mapInstance);
+    }
+  }
 };
+
 
 const getTsunamiColor = (grade) => {
   switch (grade) {
@@ -446,19 +433,28 @@ const getTsunamiColor = (grade) => {
     case "Watch":
       return "#ffff00";
     default:
-      return "#ccc";
+      return "#1582d6";
   }
 };
 
 const updateMapWithTsunamiData = async () => {
-  console.info("[DEBUG] UPDAING MAP WITH TS DATA");
-  const tsunamiData = await fetchTsunamiData();
-  const geojsonData = await fetchGeojsonData();
+  try {
+    const tsunamiData = await fetchTsunamiData();
+    const geojsonData = await fetchGeojsonData();
 
-  if (tsunamiData && geojsonData) {
-    await updateTsunamiLayer(tsunamiData, geojsonData);
+    if (tsunamiData || geojsonData) {
+      await updateTsunamiLayer(tsunamiData, geojsonData);
+    } else {
+      // Remove tsunami layer if there's no data
+      if (tsunamiGeojsonLayer) {
+        mapInstance.removeLayer(tsunamiGeojsonLayer);
+      }
+    }
+  } catch (error) {
+    console.error("Error updating tsunami data:", error);
   }
 };
+
 
 const fetchAndUpdateData = async () => {
   try {
@@ -517,6 +513,9 @@ const fetchAndUpdateData = async () => {
         isMapDataChanged = false;
       }
     }
+
+    // Update tsunami data
+    await updateMapWithTsunamiData();
   } catch (error) {
     console.error("API call failed:", error);
     document.getElementById("statusText").classList.add("text-red-600");
@@ -532,19 +531,12 @@ const fetchAndUpdateData = async () => {
 // Initial data fetch and update
 fetchAndUpdateData();
 
-setInterval(updateMapWithTsunamiData, 7000);
-
 // Set up intervals for regular updates
 setInterval(() => {
   if (isEEWforIndex === false) {
-    tsunamiGeojsonLayer.setZIndex(2);
-    markersLayerGroup.setZIndex(1);
-    stationMarkersGroup.setZIndex(1);
-    const bounds = L.featureGroup([
-      tsunamiGeojsonLayer,
-      markersLayerGroup,
-      stationMarkersGroup,
-    ]).getBounds(); // repeat
+    const bounds = markersLayerGroup
+      ? markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds())
+      : null;
     if (bounds && bounds.isValid()) {
       updateCamera(bounds);
     } else {
@@ -556,3 +548,6 @@ setInterval(() => {
 setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
+
+// New interval for updating tsunami data
+setInterval(updateMapWithTsunamiData, 6000);
