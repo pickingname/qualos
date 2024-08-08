@@ -13,7 +13,8 @@ let doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
 
 const apiEndpoint =
   "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
-const tsunamiApiEndpoint = "http://localhost:5500/tsunami.json";
+const tsunamiApiEndpoint =
+  "https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=0";
 const geojsonUrl =
   "https://pickingname.github.io/basemap/tsunami_areas.geojson";
 
@@ -562,4 +563,4 @@ setTimeout(function () {
 }, 2000);
 
 // New interval for updating tsunami data
-setInterval(updateMapWithTsunamiData, 6000);
+setInterval(updateMapWithTsunamiData, 12000);
