@@ -130,10 +130,12 @@ const findStationCoordinates = (comparisonData, stationName) => {
 
 const updateCamera = (bounds) => {
   if (bounds && bounds.isValid()) {
-    mapInstance.flyToBounds(bounds.pad(iconPadding), {
-      duration: 0.15,
-      easeLinearity: 0.15,
-    });
+    if (doNotUpdateBondBecauseThereIsAFuckingTsunami === false ) {
+      mapInstance.flyToBounds(bounds.pad(iconPadding), {
+        duration: 0.15,
+        easeLinearity: 0.15,
+      });
+    }
   } else {
     console.warn("No valid bounds for updating camera");
   }
@@ -448,10 +450,8 @@ const updateMapWithTsunamiData = async () => {
       if (tsunamiData) {
         if (tsunamiData.cancelled === true) {
           doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
-          console.log("there is no tsunami");
         } else {
           doNotUpdateBondBecauseThereIsAFuckingTsunami = true;
-          console.log("there is a tsunami");
         }
       }
     } else {
