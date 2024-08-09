@@ -4,7 +4,7 @@ import { initCircleRendering, isEEW } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
 let isScalePrompt = false;
 let iconPadding = 0.0;
-let prevForeign = false; // this is for the padding marker system
+let prevForeign = false;
 let currentTW = false;
 let foreTs = false;
 let domeTs = false;
@@ -446,7 +446,7 @@ const getTsunamiColor = (grade) => {
     case "Watch":
       return "#ffff00";
     default:
-      return "#1c7aff"; // Default color for any other grades or valid but unlisted grades.
+      return "#1c7aff";
   }
 };
 
@@ -532,7 +532,6 @@ const fetchAndUpdateData = async () => {
         isMapDataChanged = false;
       }
     }
-
   } catch (error) {
     console.error("API call failed:", error);
     document.getElementById("statusText").classList.add("text-red-600");
