@@ -1,10 +1,10 @@
 import axios from "axios";
 import Papa from "papaparse";
-import { initCircleRendering } from "./circleRenderer";
+import { initCircleRendering, isEEW } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
 let isScalePrompt = false;
 let iconPadding = 0.0;
-let prevForeign = false; // this is for the padding marker system
+let prevForeign = false;
 let currentTW = false;
 let foreTs = false;
 let domeTs = false;
@@ -233,7 +233,7 @@ const updateMapWithData = async (earthquakeData) => {
 
   if (markersLayerGroup) {
     markersLayerGroup.clearLayers();
-  } else {
+  } else if (isEEWforIndex === false) {
     markersLayerGroup = L.featureGroup().addTo(mapInstance);
   }
 
@@ -393,37 +393,48 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
     mapInstance.removeLayer(tsunamiGeojsonLayer);
   }
 
-  if (tsunamiData && !tsunamiData.cancelled) {
-    if (geojsonData) {
-      tsunamiGeojsonLayer = L.geoJSON(geojsonData, {
-        style: (feature) => {
-          const tsunamiArea = tsunamiData.areas.find(
-            (area) => area.name === feature.properties.name
-          );
-          if (tsunamiArea) {
-            return {
-              color: getTsunamiColor(tsunamiArea.grade),
-              weight: 3,
-              opacity: 0.7,
-              smoothFactor: 0.0,
-              noClip: false,
-            };
-          }
-          return {
-            color: "#ccc",
-            weight: 0,
-            opacity: 0,
-            smoothFactor: 999994,
-          };
-        },
-      }).addTo(mapInstance);
+  if (tsunamiData && !tsunamiData.cancelled && geojsonData) {
+    // Filter out features without a valid tsunami grade
+    const filteredGeojsonData = {
+      ...geojsonData,
+      features: geojsonData.features.filter((feature) => {
+        const tsunamiArea = tsunamiData.areas.find(
+          (area) => area.name === feature.properties.name
+        );
+        return tsunamiArea && tsunamiArea.grade;
+      }),
+    };
 
-      const bounds = tsunamiGeojsonLayer.getBounds();
-      if (bounds.isValid()) {
-        updateCamera(bounds);
-      } else {
-        console.warn("Invalid bounds for tsunamiGeojsonLayer");
-      }
+    tsunamiGeojsonLayer = L.geoJSON(filteredGeojsonData, {
+      style: (feature) => {
+        const tsunamiArea = tsunamiData.areas.find(
+          (area) => area.name === feature.properties.name
+        );
+        if (tsunamiArea) {
+          return {
+            color: getTsunamiColor(tsunamiArea.grade),
+            weight: 3,
+            opacity: 0.7,
+            smoothFactor: 0.0,
+            noClip: false,
+          };
+        }
+        // If no valid tsunamiArea or grade is found, this part should be unreachable
+        // due to the filtering above. However, keeping it as a fallback.
+        return {
+          color: "#ccc",
+          weight: 0,
+          opacity: 0,
+          smoothFactor: 999994,
+        };
+      },
+    }).addTo(mapInstance);
+
+    const bounds = tsunamiGeojsonLayer.getBounds();
+    if (bounds.isValid()) {
+      updateCamera(bounds);
+    } else {
+      console.warn("Invalid bounds for tsunamiGeojsonLayer");
     }
   }
 };
@@ -435,7 +446,7 @@ const getTsunamiColor = (grade) => {
     case "Watch":
       return "#ffff00";
     default:
-      return "#1582d6";
+      return "#1c7aff";
   }
 };
 
@@ -521,8 +532,6 @@ const fetchAndUpdateData = async () => {
         isMapDataChanged = false;
       }
     }
-
-    await updateMapWithTsunamiData();
   } catch (error) {
     console.error("API call failed:", error);
     document.getElementById("statusText").classList.add("text-red-600");
@@ -554,4 +563,4 @@ setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
 
-setInterval(updateMapWithTsunamiData, 12000);
+setInterval(updateMapWithTsunamiData, 8000);
