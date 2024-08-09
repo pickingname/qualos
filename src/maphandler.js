@@ -419,8 +419,6 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
             noClip: false,
           };
         }
-        // If no valid tsunamiArea or grade is found, this part should be unreachable
-        // due to the filtering above. However, keeping it as a fallback.
         return {
           color: "#ccc",
           weight: 0,
@@ -430,11 +428,21 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
       },
     }).addTo(mapInstance);
 
-    const bounds = tsunamiGeojsonLayer.getBounds();
+    // Combine bounds of tsunamiGeojsonLayer and other layers
+    let bounds = tsunamiGeojsonLayer.getBounds();
+    if (markersLayerGroup && markersLayerGroup.getBounds().isValid()) {
+      bounds = bounds.extend(markersLayerGroup.getBounds());
+    }
+    if (stationMarkersGroup && stationMarkersGroup.getBounds().isValid()) {
+      bounds = bounds.extend(stationMarkersGroup.getBounds());
+    }
+
     if (bounds.isValid()) {
       updateCamera(bounds);
     } else {
-      console.warn("Invalid bounds for tsunamiGeojsonLayer");
+      console.warn(
+        "Invalid bounds after combining tsunamiGeojsonLayer with other layers"
+      );
     }
   }
 };
