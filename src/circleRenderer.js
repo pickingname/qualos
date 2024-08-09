@@ -158,12 +158,22 @@ const renderCircles = (mapInstance, circleData) => {
     isThisTheFirstTime = false;
     isEEW = false;
     isEEWforIndex = false;
+
+    console.log("CHANGE")
+    document.getElementById("EEW").classList.remove("flex");
+    document.getElementById("EEW").classList.add("hidden");
     return;
   }
 
   isEEW = true;
   isEEWforIndex = true;
   const psWaveItem = circleData.psWave.items[0];
+
+  console.log('EEW FLEX')
+  document.getElementById("INT").classList.add("hidden");
+  document.getElementById("STA").classList.add("hidden");
+  document.getElementById("EEW").classList.remove("hidden");
+  document.getElementById("EEW").classList.add("flex");
 
   // EEW data for parsing in the index.html
   let epicenterName = circleData.hypoInfo.items[0].regionName;
