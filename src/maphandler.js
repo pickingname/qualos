@@ -1,6 +1,6 @@
 import axios from "axios";
 import Papa from "papaparse";
-import { initCircleRendering } from "./circleRenderer";
+import { initCircleRendering, isEEW } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
 let isScalePrompt = false;
 let iconPadding = 0.0;
@@ -14,7 +14,7 @@ let doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
 const apiEndpoint =
   "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
 const tsunamiApiEndpoint =
-  "https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=0";
+  "http://localhost:5500/tsunami.json";
 const geojsonUrl =
   "https://pickingname.github.io/basemap/tsunami_areas.geojson";
 
@@ -233,7 +233,7 @@ const updateMapWithData = async (earthquakeData) => {
 
   if (markersLayerGroup) {
     markersLayerGroup.clearLayers();
-  } else {
+  } else if (isEEWforIndex === false) {
     markersLayerGroup = L.featureGroup().addTo(mapInstance);
   }
 
@@ -554,4 +554,4 @@ setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
 
-setInterval(updateMapWithTsunamiData, 12000);
+setInterval(updateMapWithTsunamiData, 2000);
