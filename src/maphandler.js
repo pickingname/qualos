@@ -533,7 +533,6 @@ const fetchAndUpdateData = async () => {
       }
     }
 
-    await updateMapWithTsunamiData();
   } catch (error) {
     console.error("API call failed:", error);
     document.getElementById("statusText").classList.add("text-red-600");
@@ -565,4 +564,4 @@ setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
 
-setInterval(updateMapWithTsunamiData, 12000);
+setInterval(updateMapWithTsunamiData, 8000);
