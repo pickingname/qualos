@@ -14,7 +14,7 @@ let doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
 const apiEndpoint =
   "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
 const tsunamiApiEndpoint =
-  "http://localhost:5500/tsunami.json";
+  "https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=0";
 const geojsonUrl =
   "https://pickingname.github.io/basemap/tsunami_areas.geojson";
 
@@ -393,37 +393,48 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
     mapInstance.removeLayer(tsunamiGeojsonLayer);
   }
 
-  if (tsunamiData && !tsunamiData.cancelled) {
-    if (geojsonData) {
-      tsunamiGeojsonLayer = L.geoJSON(geojsonData, {
-        style: (feature) => {
-          const tsunamiArea = tsunamiData.areas.find(
-            (area) => area.name === feature.properties.name
-          );
-          if (tsunamiArea) {
-            return {
-              color: getTsunamiColor(tsunamiArea.grade),
-              weight: 3,
-              opacity: 0.7,
-              smoothFactor: 0.0,
-              noClip: false,
-            };
-          }
-          return {
-            color: "#ccc",
-            weight: 0,
-            opacity: 0,
-            smoothFactor: 999994,
-          };
-        },
-      }).addTo(mapInstance);
+  if (tsunamiData && !tsunamiData.cancelled && geojsonData) {
+    // Filter out features without a valid tsunami grade
+    const filteredGeojsonData = {
+      ...geojsonData,
+      features: geojsonData.features.filter((feature) => {
+        const tsunamiArea = tsunamiData.areas.find(
+          (area) => area.name === feature.properties.name
+        );
+        return tsunamiArea && tsunamiArea.grade;
+      }),
+    };
 
-      const bounds = tsunamiGeojsonLayer.getBounds();
-      if (bounds.isValid()) {
-        updateCamera(bounds);
-      } else {
-        console.warn("Invalid bounds for tsunamiGeojsonLayer");
-      }
+    tsunamiGeojsonLayer = L.geoJSON(filteredGeojsonData, {
+      style: (feature) => {
+        const tsunamiArea = tsunamiData.areas.find(
+          (area) => area.name === feature.properties.name
+        );
+        if (tsunamiArea) {
+          return {
+            color: getTsunamiColor(tsunamiArea.grade),
+            weight: 3,
+            opacity: 0.7,
+            smoothFactor: 0.0,
+            noClip: false,
+          };
+        }
+        // If no valid tsunamiArea or grade is found, this part should be unreachable
+        // due to the filtering above. However, keeping it as a fallback.
+        return {
+          color: "#ccc",
+          weight: 0,
+          opacity: 0,
+          smoothFactor: 999994,
+        };
+      },
+    }).addTo(mapInstance);
+
+    const bounds = tsunamiGeojsonLayer.getBounds();
+    if (bounds.isValid()) {
+      updateCamera(bounds);
+    } else {
+      console.warn("Invalid bounds for tsunamiGeojsonLayer");
     }
   }
 };
@@ -435,7 +446,7 @@ const getTsunamiColor = (grade) => {
     case "Watch":
       return "#ffff00";
     default:
-      return "#1582d6";
+      return "#1c7aff"; // Default color for any other grades or valid but unlisted grades.
   }
 };
 
@@ -554,4 +565,4 @@ setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
 
-setInterval(updateMapWithTsunamiData, 2000);
+setInterval(updateMapWithTsunamiData, 12000);
