@@ -36,32 +36,33 @@
         <div class="map" id="map"></div>
       </div>
     </div>
-    <div class="info-container font-outfit">
+    <div class="info-container font-outfit w-screen pr-5 sm:pl-0 sm:w-fit">
       <div class="justify-center dark:text-white text-black pb-5 pr-5">
         <div
-          class="px-5 py-5 font-outfit rounded-md border-neutral-700 dark:border-neutral-600 border relative backdrop-blur-sm transition-all duration-500 ease-in-out"
+          class="px-2 sm:px-5 py-1 sm:py-5 font-outfit rounded-md border-neutral-700 dark:border-neutral-600 border relative backdrop-blur-[1px] sm:backdrop-blur-sm transition-all duration-500 ease-in-out"
           id="changeBorderHere"
           style="padding-right: 7.25rem !important"
         >
-          <!-- should have added animate-pulse in -->
-          <p class="text-3xl text-balance" id="where">Loading..</p>
-          <br />
-
-          <p class="text-xl" id="time"></p>
-          <p class="text-xl" id="magnitude"></p>
-          <p class="text-xl" id="depth"></p>
+          <p class="sm:text-3xl text-balance text-transition-v1" id="where">
+            Loading..
+          </p>
+          <div class="sm:pt-6 pt-1.5"></div>
+          <div class="dark:text-neutral-400 text-neutral-600">
+            <p class="sm:text-xl text-transition-v1" id="time"></p>
+            <p class="sm:text-xl text-transition-v1" id="magnitude"></p>
+            <p class="sm:text-xl text-transition-v1" id="depth"></p>
+          </div>
           <div
-            class="absolute top-5 right-0 flex flex-col justify-center text-xl pr-5 pt-5 h-full intensity-text nah"
+            class="absolute top-5 right-0 flex flex-col justify-center text-6xl sm:text-[100px] pr-1 pb-2 sm:pr-5 sm:pt-5 h-full intensity-text nah text-transition-v1"
             id="intensity"
-            style="font-size: 100px"
           ></div>
         </div>
       </div>
       <p
-        class="dark:text-neutral-400 text-black block sm:hidden text-balance text-center text-xs"
+        class="dark:text-neutral-400 text-black block sm:hidden text-balance text-center text-xs fadetext"
       >
         This website is best viewed on a larger screen; try decreasing the zoom
-        level on your browser.
+        level on your browser. (5s)
       </p>
     </div>
     <div class="intensity-legend bottom-right px-5 py-5 hidden sm:block">
@@ -233,11 +234,11 @@
     </div>
     <div class="status-text bottom-left px-5 py-5 font-outfit">
       <!-- this is where the status text are being displayed -->
-      <p id="statusText" class=""></p>
+      <p id="statusText" class="text-xs sm:text-base"></p>
       <!-- <a href="https://github.com/pickingname/qualos" id="watermark" class="dark:text-neutral-300 text-neutral-600 underline-offset-2 underline hover:text-blue-500 transition-all ease-in-out duration-300" target="_blank">
         qualos.info
       </a>
-      no this for this for now. -->
+      -->
     </div>
     <div
       class="immediate-warning-text hidden px-5 py-5 bottom-left font-outfit"

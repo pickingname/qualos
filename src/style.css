@@ -4,6 +4,25 @@
 @tailwind components;
 @tailwind utilities;
 
+.text-transition-v1 {
+  transition: font-size 150ms ease-in-out;
+}
+
+.fadetext {
+  animation: fadeOut 5s ease-in-out forwards;
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  83.33% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 body {
   min-width: 430px !important;
 }
