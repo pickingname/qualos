@@ -87,7 +87,6 @@ function returnBorder() {
     .classList.remove("border-amber-400");
 }
 
-// Function to fetch circle data from the API
 const fetchCircleData = async () => {
   var date = new Date();
 
@@ -159,7 +158,6 @@ const renderCircles = (mapInstance, circleData) => {
     isEEW = false;
     isEEWforIndex = false;
 
-    console.log("CHANGE")
     document.getElementById("EEW").classList.remove("flex");
     document.getElementById("EEW").classList.add("hidden");
     return;
@@ -169,7 +167,6 @@ const renderCircles = (mapInstance, circleData) => {
   isEEWforIndex = true;
   const psWaveItem = circleData.psWave.items[0];
 
-  console.log('EEW FLEX')
   document.getElementById("INT").classList.add("hidden");
   document.getElementById("STA").classList.add("hidden");
   document.getElementById("EEW").classList.remove("hidden");
@@ -183,25 +180,15 @@ const renderCircles = (mapInstance, circleData) => {
   let isTraining = circleData.hypoInfo.items[0].isTraining;
   let isFinal = circleData.hypoInfo.items[0].isFinal;
   let calcIntensity = circleData.hypoInfo.items[0].calcintensity;
-  console.log(calcIntensity);
   let expInt;
   let reportText;
 
-  // check if the report is a training report or a final report
-
-  // if (isTraining === 'true') {
-  //    // TODO: make a bottom status text showing that the EEW is training
-  //    document.getElementById("STA").classList.add("text-red-600")
-  //    document.getElementById("statusText").textContent = "This EEW is marked as Training";
-  //  } else {
-  //    document.getElementById("STA").classList.remove("text-red-600")
-  //    document.getElementById("statusText").textContent = "Non training"; // clears the status
-  //  }
-
-  console.log("isfinal? " + isFinal);
+  // TODO: check if the report is a training report or a final report
   if (isFinal === "true") {
+    console.log("Final report");
     reportText = "Final report";
   } else if (isFinal === "false") {
+    console.log("Report #" + reportNum);
     reportText = "Report #" + reportNum;
   }
 

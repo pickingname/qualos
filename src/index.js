@@ -1,7 +1,8 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
-let apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
+let apiEndpoint =
+  "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
 
 let comparisonDataCache = null;
 export let responseCache;
@@ -112,10 +113,7 @@ const fetchData = async () => {
       "Time: " + quakeDetails.issue.time;
   } else {
     if (quakeDetails.earthquake.hypocenter.depth === -1) {
-      if (
-        quakeDetails.issue.type === "Foreign"
-      ) {
-        console.log('what the fuck ')
+      if (quakeDetails.issue.type === "Foreign") {
         document.getElementById(
           "where"
         ).textContent = `Foreign earthquake information`;
@@ -156,7 +154,6 @@ shouldIChangeTheFuckingText();
 
 function shouldIChangeTheFuckingText() {
   if (isEEW === true) {
-    console.log("");
     // it is now possible to change the text.
   } else if (isEEW === false) {
     fetchData();
