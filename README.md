@@ -37,7 +37,6 @@ Please note that this might be changed
 - Cannot display the live data from the stations
 - Cannot display the english name when the EEW is issued
 - Camera movement is not good enough
-- Mobile UI is not good enough, this can be fixed by decrease the zoom value if the screen is too small to display any information
 
 ---
 
