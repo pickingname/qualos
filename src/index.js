@@ -1,6 +1,40 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
+function hideInt(which) {
+  document.getElementById(which).classList.add("hidden");
+}
+
+function showInt(which) {
+  document.getElementById(which).classList.remove("hidden");
+}
+
+function updateInt(intensityDescription) {
+  const levels = ["i1", "i2", "i3", "i4", "i5m", "i5p", "i6m", "i6p", "i7"];
+  const maxIndex = levels.indexOf(intensityDescription.toString());
+
+  levels.forEach((level, index) => {
+    if (index <= maxIndex) {
+      showInt(level);
+    } else {
+      hideInt(level);
+    }
+  });
+}
+
+function updateScale(intensityDescription) {
+  const levels = ["s1", "s2", "s3", "s4", "s5m", "s5p", "s6m", "s6p", "s7"];
+  const maxIndex = levels.indexOf(intensityDescription.toString());
+
+  levels.forEach((level, index) => {
+    if (index <= maxIndex) {
+      showInt(level);
+    } else {
+      hideInt(level);
+    }
+  });
+}
+
 let apiEndpoint =
   "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
 
@@ -82,9 +116,11 @@ const fetchData = async () => {
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "ScalePrompt") {
+    updateScale("s"+intensityDescription);
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.remove("hidden");
   } else if (quakeDetails.issue.type === "DetailScale") {
+    updateInt("i"+intensityDescription);
     document.getElementById("STA").classList.remove("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "Foreign") {
@@ -104,7 +140,7 @@ const fetchData = async () => {
     document.getElementById("intensity").textContent = reportScale;
     document.getElementById(
       "magnitude"
-    ).textContent = `Magnitude: ${magnitude}`;
+    ).textContent = ``;
     document.getElementById("depth").textContent = `Awaiting full report`;
     document.getElementById(
       "where"

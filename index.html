@@ -11,7 +11,7 @@
       name="qualos"
       content="an app that shows the latest earthquake on a map"
     />
-    <meta name="description" content="an earthquake information app">
+    <meta name="description" content="an earthquake information app" />
     <title>qualos</title>
     <link rel="stylesheet" type="text/css" href="src/style.css" />
     <!-- Inject apple standalone device script -->
@@ -67,149 +67,187 @@
       </p>
     </div>
     <div class="intensity-legend bottom-right px-5 py-5 hidden sm:block">
+      <!-- BELOW IS FOR SCALEPROMPT -->
       <div
         id="INT"
         class="hidden dark:text-white text-black font-outfit border border-stone-600 px-3 py-3 rounded-md backdrop-blur-sm"
       >
-        <div id="location1">
+        <div>
           <p class="text-center">Int.</p>
           <div class="pt-2 centeredimage">
-            <img
-              src="https://pickingname.github.io/basemap/icons/scales/70.png"
-              alt="7"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/scales/60.png"
-              alt="6+"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/scales/55.png"
-              alt="6-"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/scales/50.png"
-              alt="5+"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/scales/45.png"
-              alt="5-"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/scales/40.png"
-              alt="4"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/scales/30.png"
-              alt="3"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/scales/20.png"
-              alt="2"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/scales/10.png"
-              alt="1"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
+            <div id="s7">
+              <img
+                src="https://pickingname.github.io/basemap/icons/scales/70.png"
+                alt="7"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="s6p">
+              <img
+                src="https://pickingname.github.io/basemap/icons/scales/60.png"
+                alt="6+"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="s6m">
+              <img
+                src="https://pickingname.github.io/basemap/icons/scales/55.png"
+                alt="6-"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="s5p">
+              <img
+                src="https://pickingname.github.io/basemap/icons/scales/50.png"
+                alt="5+"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="s5m">
+              <img
+                src="https://pickingname.github.io/basemap/icons/scales/45.png"
+                alt="5-"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="s4">
+              <img
+                src="https://pickingname.github.io/basemap/icons/scales/40.png"
+                alt="4"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="s3">
+              <img
+                src="https://pickingname.github.io/basemap/icons/scales/30.png"
+                alt="3"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="s2">
+              <img
+                src="https://pickingname.github.io/basemap/icons/scales/20.png"
+                alt="2"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="s1">
+              <img
+                src="https://pickingname.github.io/basemap/icons/scales/10.png"
+                alt="1"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
           </div>
         </div>
       </div>
+      <!-- BELOW IS FOR DETAILSCALE -->
       <div
         id="STA"
         class="hidden dark:text-white text-black font-outfit border border-stone-600 px-3 py-3 rounded-md backdrop-blur-sm"
       >
-        <div id="location1">
+        <div>
           <p class="text-center">Int.</p>
           <div class="pt-2 centeredimage">
-            <img
-              src="https://pickingname.github.io/basemap/icons/intensities/70.png"
-              alt="7"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/intensities/60.png"
-              alt="6+"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/intensities/55.png"
-              alt="6-"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/intensities/50.png"
-              alt="5+"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/intensities/45.png"
-              alt="5-"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/intensities/40.png"
-              alt="4"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/intensities/30.png"
-              alt="3"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/intensities/20.png"
-              alt="2"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
-            <img
-              src="https://pickingname.github.io/basemap/icons/intensities/10.png"
-              alt="1"
-              width="20"
-              height="20"
-              class="pb-2"
-            />
+            <div id="i7" class="">
+              <img
+                src="https://pickingname.github.io/basemap/icons/intensities/70.png"
+                alt="7"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="i6p" class="">
+              <img
+                src="https://pickingname.github.io/basemap/icons/intensities/60.png"
+                alt="6+"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="i6m">
+              <img
+                src="https://pickingname.github.io/basemap/icons/intensities/55.png"
+                alt="6-"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="i5p">
+              <img
+                src="https://pickingname.github.io/basemap/icons/intensities/50.png"
+                alt="5+"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="i5m">
+              <img
+                src="https://pickingname.github.io/basemap/icons/intensities/45.png"
+                alt="5-"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="i4">
+              <img
+                src="https://pickingname.github.io/basemap/icons/intensities/40.png"
+                alt="4"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="i3">
+              <img
+                src="https://pickingname.github.io/basemap/icons/intensities/30.png"
+                alt="3"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="i2">
+              <img
+                src="https://pickingname.github.io/basemap/icons/intensities/20.png"
+                alt="2"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
+            <div id="i1">
+              <img
+                src="https://pickingname.github.io/basemap/icons/intensities/10.png"
+                alt="1"
+                width="20"
+                height="20"
+                class="pb-2"
+              />
+            </div>
           </div>
         </div>
       </div>
