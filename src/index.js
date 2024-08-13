@@ -1,6 +1,27 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
+function hideInt(which) {
+  document.getElementById(which).classList.add("hidden");
+}
+
+function showInt(which) {
+  document.getElementById(which).classList.remove("hidden");
+}
+
+function updateInt(intensityDescription) {
+  const levels = ["1", "2", "3", "4", "5m", "5p", "6m", "6p", "7"];
+  const maxIndex = levels.indexOf(intensityDescription.toString());
+
+  levels.forEach((level, index) => {
+    if (index <= maxIndex) {
+      showInt(level);
+    } else {
+      hideInt(level);
+    }
+  });
+}
+
 let apiEndpoint =
   "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
 
@@ -85,6 +106,7 @@ const fetchData = async () => {
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.remove("hidden");
   } else if (quakeDetails.issue.type === "DetailScale") {
+    updateInt(intensityDescription);
     document.getElementById("STA").classList.remove("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "Foreign") {
