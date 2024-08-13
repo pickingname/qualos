@@ -10,7 +10,7 @@ function showInt(which) {
 }
 
 function updateInt(intensityDescription) {
-  const levels = ["1", "2", "3", "4", "5m", "5p", "6m", "6p", "7"];
+  const levels = ["i1", "i2", "i3", "i4", "i5m", "i5p", "i6m", "i6p", "i7"];
   const maxIndex = levels.indexOf(intensityDescription.toString());
 
   levels.forEach((level, index) => {
@@ -106,7 +106,7 @@ const fetchData = async () => {
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.remove("hidden");
   } else if (quakeDetails.issue.type === "DetailScale") {
-    updateInt(intensityDescription);
+    updateInt("i"+intensityDescription);
     document.getElementById("STA").classList.remove("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "Foreign") {
