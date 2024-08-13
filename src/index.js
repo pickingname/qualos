@@ -1,6 +1,10 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
+function replaceFormat(input) {
+  return input.replace(/\+/g, 'p').replace(/-/g, 'm');
+}
+
 function hideInt(which) {
   document.getElementById(which).classList.add("hidden");
 }
@@ -116,11 +120,11 @@ const fetchData = async () => {
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "ScalePrompt") {
-    updateScale("s"+intensityDescription);
+    updateScale("s"+replaceFormat(intensityDescription));
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.remove("hidden");
   } else if (quakeDetails.issue.type === "DetailScale") {
-    updateInt("i"+intensityDescription);
+    updateInt("i"+replaceFormat(intensityDescription));
     document.getElementById("STA").classList.remove("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "Foreign") {
