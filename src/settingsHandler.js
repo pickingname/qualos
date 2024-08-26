@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <!-- Dropdown Component -->
-<div class="mt-4">
+<div class="mt-4 text-left">
   <label for="apiEndpoint" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
     Api endpoint
   </label>
@@ -59,8 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
       modalContent.classList.add("scale-100");
     }, 10);
 
-    // Handle dropdown change and update localStorage
+    // Fetch current apiType from localStorage and set it as the selected option
     const apiEndpointDropdown = modalContent.querySelector("#apiEndpoint");
+    const currentApiType = localStorage.getItem("apiType") || "main"; // default to "main" if not set
+    apiEndpointDropdown.value = currentApiType;
+
+    // Handle dropdown change and update localStorage
     apiEndpointDropdown.addEventListener("change", (e) => {
       const selectedEndpoint = e.target.value;
       localStorage.setItem("apiType", selectedEndpoint);
