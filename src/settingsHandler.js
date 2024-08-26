@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </div>
 
-<!-- Dropdown Component -->
 <div class="mt-4 text-left font-outfit">
   <label for="apiEndpoint" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
     P2PQuake API endpoint
