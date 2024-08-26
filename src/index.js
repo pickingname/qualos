@@ -2,7 +2,7 @@ import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
 function replaceFormat(input) {
-  return input.replace(/\+/g, 'p').replace(/-/g, 'm');
+  return input.replace(/\+/g, "p").replace(/-/g, "m");
 }
 
 function hideInt(which) {
@@ -39,9 +39,6 @@ function updateScale(intensityDescription) {
   });
 }
 
-let apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
-
 let comparisonDataCache = null;
 export let responseCache;
 
@@ -59,7 +56,7 @@ const fetchComparisonData = async () => {
     console.error("Error fetching comparison data:", error);
     // document.getElementById("statusText").classList.add("text-red-600");
     // document.getElementById("statusText").textContent =
-      "Error fetching comparison data, " + error;
+    "Error fetching comparison data, " + error;
     return [];
   }
 };
@@ -70,6 +67,18 @@ const findEnglishName = (comparisonData, japaneseName) => {
 };
 
 const fetchData = async () => {
+  let apiType = localStorage.getItem("apiType");
+  let apiEndpoint;
+  if (apiType === "main") {
+    apiEndpoint =
+      "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
+  } else if (apiType === "sandbox") {
+    apiEndpoint =
+      "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
+  } else {
+    apiEndpoint =
+      "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
+  }
   const response = await axios.get(apiEndpoint);
   responseCache = response;
   const quakeData = response.data;
@@ -120,11 +129,11 @@ const fetchData = async () => {
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "ScalePrompt") {
-    updateScale("s"+replaceFormat(intensityDescription));
+    updateScale("s" + replaceFormat(intensityDescription));
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.remove("hidden");
   } else if (quakeDetails.issue.type === "DetailScale") {
-    updateInt("i"+replaceFormat(intensityDescription));
+    updateInt("i" + replaceFormat(intensityDescription));
     document.getElementById("STA").classList.remove("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "Foreign") {
@@ -142,9 +151,7 @@ const fetchData = async () => {
     console.info("Earthquake intensity report received");
     let reportScale = getIntensityDescription(maxScale);
     document.getElementById("intensity").textContent = reportScale;
-    document.getElementById(
-      "magnitude"
-    ).textContent = ``;
+    document.getElementById("magnitude").textContent = ``;
     document.getElementById("depth").textContent = `Awaiting full report`;
     document.getElementById(
       "where"
