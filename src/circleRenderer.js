@@ -8,6 +8,9 @@ let isThisTheFirstTime = false;
 
 console.info("psWave listener started");
 
+var EEW = new Audio("https://pickingname.github.io/datastores/EEW.mp3");
+EEW.volume = 0.5;
+
 function borderYellow() {
   document
     .getElementById("changeBorderHere")
@@ -274,6 +277,7 @@ const renderCircles = (mapInstance, circleData) => {
 
   const bounds = L.latLngBounds([latitude, longitude]);
   if (isThisTheFirstTime === false) {
+    EEW.play();
     updateEpicenterLocationOnce();
     fitCircleBounds();
   }
