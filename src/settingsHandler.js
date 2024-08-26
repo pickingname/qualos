@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // modal text creation
     modalContent.innerHTML = `
             <h2 class="text-xl font-outfit mb-4 text-neutral-800 dark:text-white">application config</h2>
-            <p class="text-orange-500 animate-pulse">You are on the beta version</p>
-            <p class="text-neutral-600 dark:text-neutral-300 mb-4">this feature is still being actively worked on, please check back soon.</p>
+            <p class="font-outfit text-orange-500 animate-pulse">You are on the beta version</p>
+            <p class="font-outfit text-neutral-600 dark:text-neutral-300 mb-4">this feature is still being actively worked on, please check back soon.</p>
             <button id="closeSettings" class="bg-blue-500 hover:bg-blue-600 text-white font-outfit py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
               ok
             </button>
