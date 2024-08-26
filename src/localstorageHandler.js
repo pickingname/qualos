@@ -1,6 +1,7 @@
 function isFirstRun() {
     const firstRunKey = 'isFirstRun';
     const apiType = 'main';
+    const themeSetting = "system";
 
     try {
         // localstorage feature check
@@ -11,6 +12,7 @@ function isFirstRun() {
 
         // key check
         if (!localStorage.getItem(firstRunKey)) {
+            localStorage.setItem(themeSetting, 'system'); // can be "light", "dark", or "system", use system on first start
             localStorage.setItem(firstRunKey, 'false');
             localStorage.setItem(apiType, 'main'); // can be "main" or "sandbox", use "main" for the default endpoint, let the user change it to "sandbox" if they want
             return true;

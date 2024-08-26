@@ -41,6 +41,21 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <div class="mt-4 text-left font-outfit">
+  <label for="themeSetting" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
+    Theme
+  </label>
+  <p class="text-xs text-neutral-500 dark:text-neutral-400">
+    Changing this will refresh the page
+  </p>
+  <select id="themeSetting"
+    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none sm:text-sm rounded-md">
+    <option value="system">System</option>
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+  </select>
+</div>
+
+<div class="mt-4 text-left font-outfit">
   <label for="apiEndpoint" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
     P2PQuake API endpoint
   </label>
@@ -81,6 +96,19 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log(`API endpoint set to: ${selectedEndpoint}`);
     });
 
+    // fetch current theme from localStorage and set it as the selected option
+    const themeDropdown = modalContent.querySelector("#themeSetting");
+    const currentTheme = localStorage.getItem("theme") || "system"; // default to "system" if not set
+    themeDropdown.value = currentTheme;
+
+    // dropdown handler for theme
+    themeDropdown.addEventListener("change", (e) => {
+      const selectedTheme = e.target.value;
+      localStorage.setItem("theme", selectedTheme);
+      console.log(`Theme set to: ${selectedTheme}`);
+      location.reload();
+    });
+
     // close modal func
     const closeModal = () => {
       modalContainer.classList.remove("opacity-100");
@@ -90,10 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
         modalContainer.remove();
       }, 300);
     };
-
-    // close button is unused
-    // const closeButton = modalContent.querySelector("#closeSettings");
-    // closeButton.addEventListener("click", closeModal);
 
     // close on clicking outside the modal
     modalContainer.addEventListener("click", (e) => {
