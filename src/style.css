@@ -3,11 +3,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 html {
   min-height: 100vh;
   background-color: #262626 !important;
   overflow: hidden;
 }
+
 .text-transition-v1 {
   transition: font-size 150ms ease-in-out;
 }
@@ -15,6 +17,7 @@ html {
 .fadetext {
   animation: fadeOut 5s ease-in-out forwards;
 }
+
 @keyframes fadeOut {
   0% {
     opacity: 1;
