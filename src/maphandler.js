@@ -16,6 +16,7 @@ const geojsonUrl =
   "https://pickingname.github.io/basemap/tsunami_areas.geojson";
 
 let userTheme = "light";
+let themeSetting = localStorage.getItem("theme");
 let isApiCallSuccessful = true;
 let isMapDataChanged = false;
 let isPreviouslyScalePrompt = false;
@@ -41,11 +42,23 @@ let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
 
-if (
-  window.matchMedia &&
-  window.matchMedia("(prefers-color-scheme: dark)").matches
-) {
+if (themeSetting === "system") {
+  if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
+    userTheme = "dark";
+    document.body.classList.add("dark");
+  }
+} else if (themeSetting === "dark") {
   userTheme = "dark";
+  document.body.classList.add("dark");
+} else if (themeSetting === "light") {
+  userTheme = "light";
+  document.body.classList.remove("dark");
+} else {
+  userTheme = "dark";
+  document.body.classList.add("dark");
 }
 
 window
