@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // modal text and dropdown creation
     modalContent.innerHTML = `
-<div class="inline-flex items-center space-x-2 mb-4">
+<div class="inline-flex items-center space-x-2">
   <img src="https://pickingname.github.io/basemap/icons/epicenter.png" alt="Icon" class="h-7 w-7 mt-[4px] rounded-md" />
   <div class="font-outfit">
     <div class="text-black dark:text-white">qualos.info</div>
@@ -30,48 +30,54 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <!-- Dropdown Component -->
-<div class="mt-4 text-left">
-  <label for="apiEndpoint" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
-    Api endpoint
+<div class="mt-4 text-left font-outfit">
+  <label for="apiEndpoint" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
+    P2PQuake API endpoint
   </label>
-  <p class="text-xs text-gray-500 dark:text-gray-400">
-    Please do not tinker if you don't know what this is.
+  <p class="text-xs text-neutral-500 dark:text-neutral-400">
+    Selecting "main" will shows the latest data. Selecting sandbox shows historical data with the 30 seconds update interval.
   </p>
-  <select id="apiEndpoint" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-neutral-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+  <select id="apiEndpoint" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
     <option value="main">main</option>
     <option value="sandbox">sandbox</option>
   </select>
 </div>
 
-<button id="closeSettings" class="font-outfit focus:shadow-outline rounded bg-blue-500 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-blue-600 focus:outline-none mt-4">ok</button>
+<div class="flex justify-center mt-4">
+    <a href="https://github.com/pickingname/qualos" target="_blank" class="w-full">
+        <button class="bg-neutral-300 hover:bg-neutral-200 text-black dark:text-white dark:bg-neutral-700 dark:hover:bg-neutral-600 transition-colors duration-150 ease-in-out bg-opacity-50 font-outfit py-2 px-4 rounded w-full">
+            visit the GitHub repository
+        </button>
+    </a>
+</div>
         `;
 
-    // Append modal content to container
+    // append content
     modalContainer.appendChild(modalContent);
 
-    // Append modal to body
+    // append modal
     body.appendChild(modalContainer);
 
-    // Trigger animations
+    // open func
     setTimeout(() => {
       modalContainer.classList.add("opacity-100");
       modalContent.classList.remove("scale-95");
       modalContent.classList.add("scale-100");
     }, 10);
 
-    // Fetch current apiType from localStorage and set it as the selected option
+    // fetch current apiType from localStorage and set it as the selected option
     const apiEndpointDropdown = modalContent.querySelector("#apiEndpoint");
     const currentApiType = localStorage.getItem("apiType") || "main"; // default to "main" if not set
     apiEndpointDropdown.value = currentApiType;
 
-    // Handle dropdown change and update localStorage
+    // dropdown handler and localstorage fetch
     apiEndpointDropdown.addEventListener("change", (e) => {
       const selectedEndpoint = e.target.value;
       localStorage.setItem("apiType", selectedEndpoint);
       console.log(`API endpoint set to: ${selectedEndpoint}`);
     });
 
-    // Close modal function
+    // close modal func
     const closeModal = () => {
       modalContainer.classList.remove("opacity-100");
       modalContent.classList.remove("scale-100");
@@ -81,18 +87,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 300);
     };
 
-    // Add event listener to close button
-    const closeButton = modalContent.querySelector("#closeSettings");
-    closeButton.addEventListener("click", closeModal);
+    // close button is unused 
+    // const closeButton = modalContent.querySelector("#closeSettings");
+    // closeButton.addEventListener("click", closeModal);
 
-    // Close modal when clicking outside
+    // close on clicking outside the modal
     modalContainer.addEventListener("click", (e) => {
       if (e.target === modalContainer) {
         closeModal();
       }
     });
 
-    // Close modal on Escape key press
+    // close on esc key
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         closeModal();
