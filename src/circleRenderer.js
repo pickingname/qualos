@@ -136,14 +136,13 @@ const fetchCircleData = async () => {
   }
 };
 
-// Function to render P wave, S wave circles, and epicenter icon on the map
 const renderCircles = (mapInstance, circleData) => {
   function fitCircleBounds() {
     bounds.extend(pCircle.getBounds());
     bounds.extend(sCircle.getBounds());
     mapInstance.fitBounds(bounds.pad(0.002));
   }
-  // Remove previous layers if they exist
+  // remove previous layers if they exist
   if (mapInstance.psSGroup) {
     mapInstance.removeLayer(mapInstance.psSGroup);
     returnBorder();
@@ -228,8 +227,6 @@ const renderCircles = (mapInstance, circleData) => {
     borderBlue();
   }
 
-  // update the EEW data in the index.html
-
   document.getElementById("intensity").textContent = expInt;
   document.getElementById("magnitude").textContent = "Magnitude: " + magnitude;
   document.getElementById("depth").textContent = "Depth: " + depth;
@@ -245,10 +242,10 @@ const renderCircles = (mapInstance, circleData) => {
     document.getElementById("intensity").textContent = expInt;
   }
 
-  // Create a layer group for P wave, S wave, and epicenter
+  // create a layer group for P wave, S wave, and epicenter
   mapInstance.psSGroup = L.layerGroup().addTo(mapInstance);
 
-  // Create and add the P wave circle (blue)
+  // P wave circle (blue)
   const pCircle = L.circle([latitude, longitude], {
     weight: 2,
     color: "#35b4fb",
@@ -257,7 +254,7 @@ const renderCircles = (mapInstance, circleData) => {
     radius: pRadius * 1000, // convert to meters if the radius is in kilometers
   }).addTo(mapInstance.psSGroup);
 
-  // Create and add the S wave circle (red)
+  // S wave circle (red)
   const sCircle = L.circle([latitude, longitude], {
     weight: 2,
     color: "#f6521f",
@@ -266,7 +263,6 @@ const renderCircles = (mapInstance, circleData) => {
     radius: sRadius * 1000, // convert to meters if the radius is in kilometers
   }).addTo(mapInstance.psSGroup);
 
-  // Add the epicenter icon at the center of the circles
   const epicenterIcon = L.icon({
     iconUrl: "https://pickingname.github.io/basemap/icons/epicenter.png",
     iconSize: [30, 30],
@@ -276,7 +272,6 @@ const renderCircles = (mapInstance, circleData) => {
     icon: epicenterIcon,
   }).addTo(mapInstance.psSGroup);
 
-  // Fit the map to the bounds of the P and S wave circles
   const bounds = L.latLngBounds([latitude, longitude]);
   if (isThisTheFirstTime === false) {
     updateEpicenterLocationOnce();
@@ -286,17 +281,14 @@ const renderCircles = (mapInstance, circleData) => {
   isThisTheFirstTime = true;
 };
 
-// Function to update map with circle data
 const updateMapWithCircleData = async (mapInstance) => {
   const circleData = await fetchCircleData();
   renderCircles(mapInstance, circleData);
 };
 
-// Initialize circle rendering on the map
 export const initCircleRendering = (mapInstance) => {
   updateMapWithCircleData(mapInstance);
 
-  // Update circles every 1 second
   setInterval(() => {
     updateMapWithCircleData(mapInstance);
   }, 1000);
