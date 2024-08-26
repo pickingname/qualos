@@ -19,19 +19,31 @@ document.addEventListener("DOMContentLoaded", () => {
     modalContent.className =
       "bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-xl transform scale-95 transition-transform duration-300 mx-20 max-w-2xl w-full"; // Increased max-width to max-w-2xl
 
-    // modal text creation, 
-    // unused but, use "border border-neutral-700 dark:border-neutral-600 rounded-md p-2" for the border
+    // modal text and dropdown creation
     modalContent.innerHTML = `
-<div class="inline-flex items-center space-x-2">
+<div class="inline-flex items-center space-x-2 mb-4">
   <img src="https://pickingname.github.io/basemap/icons/epicenter.png" alt="Icon" class="h-7 w-7 mt-[4px] rounded-md" />
   <div class="font-outfit">
     <div class="text-black dark:text-white">qualos.info</div>
     <div class="text-sm text-neutral-500">application settings</div>
   </div>
 </div>
-<p class="font-outfit animate-pulse text-orange-500">You are on the beta version</p>
-<p class="font-outfit mb-4 text-neutral-600 dark:text-neutral-300">this feature is still being actively worked on, please check back soon.</p>
-<button id="closeSettings" class="font-outfit focus:shadow-outline rounded bg-blue-500 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-blue-600 focus:outline-none">ok</button>
+
+<!-- Dropdown Component -->
+<div class="mt-4">
+  <label for="apiEndpoint" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+    Api endpoint
+  </label>
+  <p class="text-xs text-gray-500 dark:text-gray-400">
+    Please do not tinker if you don't know what this is.
+  </p>
+  <select id="apiEndpoint" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-neutral-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+    <option value="main">main</option>
+    <option value="sandbox">sandbox</option>
+  </select>
+</div>
+
+<button id="closeSettings" class="font-outfit focus:shadow-outline rounded bg-blue-500 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-blue-600 focus:outline-none mt-4">ok</button>
         `;
 
     // Append modal content to container
@@ -46,6 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
       modalContent.classList.remove("scale-95");
       modalContent.classList.add("scale-100");
     }, 10);
+
+    // Handle dropdown change and update localStorage
+    const apiEndpointDropdown = modalContent.querySelector("#apiEndpoint");
+    apiEndpointDropdown.addEventListener("change", (e) => {
+      const selectedEndpoint = e.target.value;
+      localStorage.setItem("apiType", selectedEndpoint);
+      console.log(`API endpoint set to: ${selectedEndpoint}`);
+    });
 
     // Close modal function
     const closeModal = () => {

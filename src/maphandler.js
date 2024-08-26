@@ -11,7 +11,7 @@ let domeTs = false;
 let tsMag, tsInt, tsDepth;
 let doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
 
-const apiEndpoint =
+// const apiEndpoint =
   "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
 const tsunamiApiEndpoint =
   "https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=0";
@@ -485,6 +485,17 @@ const updateMapWithTsunamiData = async () => {
 
 const fetchAndUpdateData = async () => {
   try {
+    let apiType = localStorage.getItem("apiType")
+    console.log(apiType)
+    let apiEndpoint;
+    if (apiType === "main") {
+      apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
+    } else if (apiType === "sandbox") {
+      apiEndpoint = "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
+    } else {
+      apiEndpoint = "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
+    }
+
     const response = await axios.get(apiEndpoint);
     responseCache = response;
 
