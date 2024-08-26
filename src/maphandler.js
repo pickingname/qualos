@@ -10,9 +10,6 @@ let foreTs = false;
 let domeTs = false;
 let tsMag, tsInt, tsDepth;
 let doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
-
-const apiEndpoint =
-  "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
 const tsunamiApiEndpoint =
   "https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=0";
 const geojsonUrl =
@@ -66,9 +63,9 @@ const fetchComparisonData = async (url) => {
     return parsedData;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
-    document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent =
-      "Error fetching comparison data, " + error;
+    // document.getElementById("statusText").classList.add("text-red-600");
+    // document.getElementById("statusText").textContent =
+    "Error fetching comparison data, " + error;
     return [];
   }
 };
@@ -485,6 +482,19 @@ const updateMapWithTsunamiData = async () => {
 
 const fetchAndUpdateData = async () => {
   try {
+    let apiType = localStorage.getItem("apiType");
+    let apiEndpoint;
+    if (apiType === "main") {
+      apiEndpoint =
+        "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
+    } else if (apiType === "sandbox") {
+      apiEndpoint =
+        "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
+    } else {
+      apiEndpoint =
+        "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
+    }
+
     const response = await axios.get(apiEndpoint);
     responseCache = response;
 
@@ -542,8 +552,8 @@ const fetchAndUpdateData = async () => {
     }
   } catch (error) {
     console.error("API call failed:", error);
-    document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent = "Map error: " + error;
+    // document.getElementById("statusText").classList.add("text-red-600");
+    // document.getElementById("statusText").textContent = "Map error: " + error;
     isApiCallSuccessful = false;
   }
 
