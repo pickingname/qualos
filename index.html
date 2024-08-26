@@ -54,7 +54,7 @@
             <p class="sm:text-xl text-transition-v1" id="depth"></p>
           </div>
           <div
-            class="absolute top-2 sm:top-5 right-2 sm:right-3 flex flex-col justify-center text-6xl sm:text-[100px] h-full "
+            class="absolute top-2 sm:top-5 right-2 sm:right-3 flex flex-col justify-center text-6xl sm:text-[100px] h-full"
             id="intensity"
           ></div>
         </div>
@@ -289,14 +289,29 @@
         </div>
       </div>
     </div>
-    <div class="status-text bottom-left px-5 py-5 font-outfit">
-      <!-- this is where the status text are being displayed -->
-      <p id="statusText" class="text-xs sm:text-base"></p>
-      <!-- <a href="https://github.com/pickingname/qualos" id="watermark" class="dark:text-neutral-300 text-neutral-600 underline-offset-2 underline hover:text-blue-500 transition-all ease-in-out duration-300" target="_blank">
-        qualos.info
-      </a>
-      -->
-    </div>
+    <button
+      class="status-text bottom-left mx-5 my-5 font-outfit h-10 w-10 border border-neutral-700 dark:border-neutral-600 rounded-md hover:border-neutral-500 transition-colors duration-200 ease-in-out" 
+    >
+      <div class="flex justify-center items-center h-full">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="text-black dark:text-white dark:hover:text-neutral-400 hover:text-neutral-800 transition-colors duration-200 ease-in-out"
+        >
+          <path d="M20 7h-9" />
+          <path d="M14 17H5" />
+          <circle cx="17" cy="17" r="3" />
+          <circle cx="7" cy="7" r="3" />
+        </svg>
+      </div>
+    </button>
     <div
       class="immediate-warning-text hidden px-5 py-5 bottom-left font-outfit"
       id="emergWarnTextContainer"
@@ -332,7 +347,6 @@
         </p>
       </div>
     </div>
-
     <script src="src/circleRenderer.js" type="module"></script>
     <script src="src/index.js" type="module"></script>
     <script src="src/maphandler.js" type="module"></script>

@@ -66,8 +66,8 @@ const fetchComparisonData = async (url) => {
     return parsedData;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
-    document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent =
+    // document.getElementById("statusText").classList.add("text-red-600");
+    // document.getElementById("statusText").textContent =
       "Error fetching comparison data, " + error;
     return [];
   }
@@ -542,8 +542,8 @@ const fetchAndUpdateData = async () => {
     }
   } catch (error) {
     console.error("API call failed:", error);
-    document.getElementById("statusText").classList.add("text-red-600");
-    document.getElementById("statusText").textContent = "Map error: " + error;
+    // document.getElementById("statusText").classList.add("text-red-600");
+    // document.getElementById("statusText").textContent = "Map error: " + error;
     isApiCallSuccessful = false;
   }
 
