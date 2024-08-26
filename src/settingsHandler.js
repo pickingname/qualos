@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="text-sm text-neutral-500">application settings</div>
     </div>
   </div>
-  <a href="https://github.com/your-repo-url" target="_blank"
+  <a href="https://github.com/pickingname/qualos" target="_blank"
     class="dark:bg-neutral-700 bg-neutral-200 hover:bg-neutral-300 transition-colors duration-150 ease-in-out dark:hover:bg-neutral-600 dark:text-white font-bold p-2 rounded">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github">
