@@ -2,6 +2,17 @@
 
 console.log("settingsHandler.js is loaded");
 
+if (localStorage.getItem("hideLegend") === "hide") {
+  document.getElementById("hideTheIntensityLegendHere").classList.add("hidden");
+} else if (localStorage.getItem("hideLegend") === "show") {
+  document
+    .getElementById("hideTheIntensityLegendHere")
+    .classList.remove("hidden");
+} else {
+  console.log("intensityHide value is not the correct one, defulting it.");
+  localStorage.setItem("hideLegend", "show");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const settingsButton = document.getElementById("settings");
   const body = document.body;
@@ -56,6 +67,20 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <div class="mt-4 text-left font-outfit">
+  <label for="hideLegendSetting" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
+    Hide Intensity Legend
+  </label>
+  <p class="text-xs text-neutral-500 dark:text-neutral-400">
+    Hides the bottom right legend
+  </p>
+  <select id="hideLegendSetting"
+    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none sm:text-sm rounded-md">
+    <option value="show">Show</option>
+    <option value="hide">Hide</option>
+  </select>
+</div>
+
+<div class="mt-4 text-left font-outfit">
   <label for="apiEndpoint" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
     P2PQuake API endpoint
   </label>
@@ -106,7 +131,27 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedTheme = e.target.value;
       localStorage.setItem("theme", selectedTheme);
       console.log(`Theme set to: ${selectedTheme}`);
-      location.reload();
+      location.reload(); // Refresh the page to apply the new theme
+    });
+
+    // fetch current hideLegend setting from localStorage and set it as the selected option
+    const hideLegendDropdown = modalContent.querySelector("#hideLegendSetting");
+    const currentHideLegend = localStorage.getItem("hideLegend") || "show"; // default to "show" if not set
+    hideLegendDropdown.value = currentHideLegend;
+
+    // dropdown handler for hide legend
+    hideLegendDropdown.addEventListener("change", (e) => {
+      const selectedHideLegend = e.target.value;
+      localStorage.setItem("hideLegend", selectedHideLegend);
+      if (selectedHideLegend === "hide") {
+        document
+          .getElementById("hideTheIntensityLegendHere")
+          .classList.add("hidden");
+      } else if (selectedHideLegend === "show") {
+        document
+          .getElementById("hideTheIntensityLegendHere")
+          .classList.remove("hidden");
+      }
     });
 
     // close modal func
