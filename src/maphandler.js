@@ -42,7 +42,10 @@ let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
 
-console.log(themeSetting)
+if(localStorage.getItem("theme") === null) {
+  console.log("localstorage theme is null, defaulting to system.")
+  localStorage.setItem("theme", "system")
+}
 
 if (themeSetting === "system") {
   if (
@@ -70,8 +73,10 @@ window
   .matchMedia("(prefers-color-scheme: dark)")
   .addEventListener("change", (event) => {
     userTheme = event.matches ? "dark" : "light";
-    console.info("User theme changed, refreshing...");
-    location.reload();
+    if (localStorage.getItem("theme") === "system") {
+      console.info("User theme changed and the setting is system, refreshing...");
+      location.reload();
+    }
   });
 
 const fetchComparisonData = async (url) => {
