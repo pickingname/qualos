@@ -42,6 +42,8 @@ let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
 
+console.log(themeSetting)
+
 if (themeSetting === "system") {
   if (
     window.matchMedia &&
@@ -49,6 +51,9 @@ if (themeSetting === "system") {
   ) {
     userTheme = "dark";
     document.body.classList.add("dark");
+  } else {
+    userTheme = "light";
+    document.body.classList.remove("dark");
   }
 } else if (themeSetting === "dark") {
   userTheme = "dark";

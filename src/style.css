@@ -65,15 +65,14 @@ body {
   pointer-events: none !important;
 }
 
-#map {
+.dark #map {
   background-color: #262626 !important;
 }
 
-@media (prefers-color-scheme: light) {
-  #map {
-    background-color: #d4dadc !important;
-  }
+#map {
+  background-color: #d4dadc !important;
 }
+
 .centeredimage img {
   margin-left: auto;
   margin-right: auto;
