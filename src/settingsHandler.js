@@ -1,5 +1,12 @@
 console.log("settingsHandler.js is loaded");
 
+if (localStorage.getItem("apiType") === "sandbox") {
+  document.getElementById("isUsingSandboxAPI").textContent =
+    "Using Sandbox API";
+} else {
+  document.getElementById("isUsingSandboxAPI").textContent = "";
+}
+
 if (localStorage.getItem("hideLegend") === "hide") {
   document.getElementById("hideTheIntensityLegendHere").classList.add("hidden");
 } else if (localStorage.getItem("hideLegend") === "show") {
@@ -142,6 +149,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedEndpoint = e.target.value;
       localStorage.setItem("apiType", selectedEndpoint);
       console.log(`API endpoint set to: ${selectedEndpoint}`);
+
+      if (selectedEndpoint === "sandbox") {
+        document.getElementById("isUsingSandboxAPI").textContent =
+          "Using Sandbox API";
+      } else {
+        document.getElementById("isUsingSandboxAPI").textContent = "";
+      }
     });
 
     // fetch current theme from localStorage and set it as the selected option
