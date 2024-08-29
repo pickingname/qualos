@@ -252,12 +252,12 @@ const updateMapWithData = async (earthquakeData) => {
       tap: mapPan,
       touchZoom: mapPan,
       dragging: mapPan,
-      scrollWheelZoom: mapPan,
-      maxBoundsViscosity: 1.0,
-      maxBounds: [
-        [-90, -180],
-        [90, 180],
-      ],
+      scrollWheelZoom: mapPan
+      // maxBoundsViscosity: 1.0,
+      // maxBounds: [
+      //   [-90, -180],
+      //   [90, 180],
+      // ],
     });
 
     L.tileLayer(
