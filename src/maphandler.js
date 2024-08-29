@@ -22,6 +22,7 @@ let isMapDataChanged = false;
 let isPreviouslyScalePrompt = false;
 let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
+let mapPan;
 
 var newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
 var intensityReport = new Audio(
@@ -42,9 +43,9 @@ let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
 
-if(localStorage.getItem("theme") === null) {
-  console.log("localstorage theme is null, defaulting to system.")
-  localStorage.setItem("theme", "system")
+if (localStorage.getItem("theme") === null) {
+  console.log("localstorage theme is null, defaulting to system.");
+  localStorage.setItem("theme", "system");
 }
 
 if (themeSetting === "system") {
@@ -69,12 +70,23 @@ if (themeSetting === "system") {
   document.body.classList.add("dark");
 }
 
+if (localStorage.getItem("movableMap") === "true") {
+  mapPan = true;
+} else if (localStorage.getItem("movableMap") === "false") {
+  mapPan = false;
+} else {
+  console.log("movableMap is not set, defaulting to false");
+  localStorage.setItem("movableMap", "false");
+}
+
 window
   .matchMedia("(prefers-color-scheme: dark)")
   .addEventListener("change", (event) => {
     userTheme = event.matches ? "dark" : "light";
     if (localStorage.getItem("theme") === "system") {
-      console.info("User theme changed and the setting is system, refreshing...");
+      console.info(
+        "User theme changed and the setting is system, refreshing..."
+      );
       location.reload();
     }
   });
@@ -152,10 +164,13 @@ const findStationCoordinates = (comparisonData, stationName) => {
 const updateCamera = (bounds) => {
   if (bounds && bounds.isValid()) {
     if (doNotUpdateBondBecauseThereIsAFuckingTsunami === false) {
+      const originalMaxZoom = mapInstance.options.maxZoom;
+      mapInstance.options.maxZoom = 8;
       mapInstance.flyToBounds(bounds.pad(iconPadding), {
         duration: 0.15,
         easeLinearity: 0.15,
       });
+      mapInstance.options.maxZoom = originalMaxZoom;
     }
   } else {
     console.warn("No valid bounds for updating camera");
@@ -228,17 +243,21 @@ const updateMapWithData = async (earthquakeData) => {
     mapInstance = L.map("map", {
       center: [35.689487, 139.691711],
       zoom: 5,
-      maxZoom: 8,
       minZoom: 2,
       zoomControl: false,
       attributionControl: false,
       keyboard: false,
-      boxZoom: false,
-      doubleClickZoom: false,
-      tap: false,
-      touchZoom: false,
-      dragging: false,
-      scrollWheelZoom: false,
+      boxZoom: mapPan,
+      doubleClickZoom: mapPan,
+      tap: mapPan,
+      touchZoom: mapPan,
+      dragging: mapPan,
+      scrollWheelZoom: mapPan,
+      maxBoundsViscosity: 1.0,
+      maxBounds: [
+        [-90, -180],
+        [90, 180],
+      ],
     });
 
     L.tileLayer(
@@ -586,19 +605,6 @@ const fetchAndUpdateData = async () => {
 };
 
 fetchAndUpdateData();
-
-setInterval(() => {
-  if (isEEWforIndex === false) {
-    const bounds = markersLayerGroup
-      ? markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds())
-      : null;
-    if (bounds && bounds.isValid()) {
-      updateCamera(bounds);
-    } else {
-      console.info("No valid bounds for interval camera update");
-    }
-  }
-}, 3000);
 
 setTimeout(function () {
   setInterval(fetchAndUpdateData, 2000);

@@ -3,6 +3,7 @@ function isFirstRun() {
   const apiTypeKey = "apiType";
   const themeSettingKey = "themeSetting";
   const hideLegendKey = "hideLegend";
+  const canMapBeMovedKey = "canMapBeMoved";
 
   // def values
   const defaultSettings = {
@@ -10,6 +11,7 @@ function isFirstRun() {
     [apiTypeKey]: "main",
     [themeSettingKey]: "system",
     [hideLegendKey]: "false",
+    [canMapBeMovedKey]: "false",
   };
 
   try {
@@ -33,12 +35,4 @@ function isFirstRun() {
     console.error("An error occurred while accessing localStorage:", error);
     return false;
   }
-}
-
-if (isFirstRun()) {
-  console.log(
-    "Hello! It appears this is your first visit to our website. If you encounter any bugs, please report them on our GitHub repository. You can find the link to the repo at the bottom of the settings page."
-  );
-} else {
-  console.log("Welcome back.");
 }
