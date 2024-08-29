@@ -267,12 +267,12 @@ const updateMapWithData = async (earthquakeData) => {
           const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
     
           layer.setStyle({
-            color: '#ffffff', // Border color
-            weight: 1,       // Border weight
+            color: '#ffffff',
+            weight: 1,
             smoothFactor: 0.0,
             fill: true,
-            fillColor: randomColor, // Set the fill color to the random color
-            fillOpacity: 0.7        // Set the fill opacity
+            fillColor: randomColor,
+            fillOpacity: 0.5
           });
         });
       })
