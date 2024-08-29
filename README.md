@@ -1,4 +1,4 @@
-# qualos MINIMAL
+# qualos MINIMAL (showcase)
 ---
 
 #### minimal build are different from the normal builds
