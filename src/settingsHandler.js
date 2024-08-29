@@ -1,5 +1,3 @@
-// settingsHandler.js
-
 console.log("settingsHandler.js is loaded");
 
 if (localStorage.getItem("hideLegend") === "hide") {
@@ -28,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // modal content creation
     const modalContent = document.createElement("div");
     modalContent.className =
-      "bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-xl transform scale-95 transition-transform duration-300 mx-20 max-w-2xl w-full"; // Increased max-width to max-w-2xl
+      "bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-xl transform scale-95 transition-transform duration-300 mx-20 max-w-2xl w-full";
 
     // modal text and dropdown creation
     modalContent.innerHTML = `
@@ -88,6 +86,20 @@ document.addEventListener("DOMContentLoaded", () => {
     class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none sm:text-sm rounded-md">
     <option value="show">Show</option>
     <option value="hide">Hide</option>
+  </select>
+</div>
+
+<div class="mt-4 text-left font-outfit">
+  <label for="movableMapSetting" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
+    Movable Map
+  </label>
+  <p class="text-xs text-neutral-500 dark:text-neutral-400">
+    Enable panning and zooming on the map, Changing this will refresh the page
+  </p>
+  <select id="movableMapSetting"
+    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none sm:text-sm rounded-md">
+    <option value="false">Disable</option>
+    <option value="true">Enable</option>
   </select>
 </div>
 
@@ -163,6 +175,20 @@ document.addEventListener("DOMContentLoaded", () => {
           .getElementById("hideTheIntensityLegendHere")
           .classList.remove("hidden");
       }
+    });
+
+    // fetch current movableMap setting from localStorage and set it as the selected option
+    const movableMapDropdown = modalContent.querySelector("#movableMapSetting");
+    const currentMovableMap = localStorage.getItem("movableMap") || "false"; // default to "false" if not set
+    movableMapDropdown.value = currentMovableMap;
+
+    // dropdown handler for movable map
+    movableMapDropdown.addEventListener("change", (e) => {
+      const selectedMovableMap = e.target.value;
+      localStorage.setItem("movableMap", selectedMovableMap);
+      console.log(`Movable Map set to: ${selectedMovableMap}`);
+
+      location.reload();
     });
 
     // close modal func
