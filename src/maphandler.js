@@ -260,12 +260,23 @@ const updateMapWithData = async (earthquakeData) => {
       // ],
     });
 
-    L.tileLayer(
-      `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
-      {
-        maxZoom: 24,
-      }
-    ).addTo(mapInstance);
+    omnivore.topojson('https://pickingname.github.io/basemap/subPrefsTopo.json')
+      .on('ready', function() {
+        this.eachLayer(function(layer) {
+          // Generate a random color
+          const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    
+          layer.setStyle({
+            color: '#ffffff', // Border color
+            weight: 1,       // Border weight
+            smoothFactor: 0.0,
+            fill: true,
+            fillColor: randomColor, // Set the fill color to the random color
+            fillOpacity: 0.7        // Set the fill opacity
+          });
+        });
+      })
+      .addTo(mapInstance);
 
     initCircleRendering(mapInstance);
   }
