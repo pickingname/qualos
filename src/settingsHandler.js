@@ -1,5 +1,3 @@
-console.log("settingsHandler.js is loaded");
-
 if (localStorage.getItem("apiType") === "sandbox") {
   document.getElementById("isUsingSandboxAPI").textContent =
     "Using Sandbox API";

@@ -84,7 +84,7 @@ window
   .addEventListener("change", (event) => {
     userTheme = event.matches ? "dark" : "light";
     if (localStorage.getItem("theme") === "system") {
-      console.info(
+      console.log(
         "User theme changed and the setting is system, refreshing..."
       );
       location.reload();
@@ -126,7 +126,7 @@ const getTrueIntensity = (maxScale) => {
     case 70:
       return "7";
     default:
-      console.log("intensity isnt on the list, " + maxScale);
+      console.log("intensity isnt on the list: " + maxScale);
       return "--";
   }
 };
@@ -370,14 +370,14 @@ const updateMapWithData = async (earthquakeData) => {
     );
 
     earthquakeData.points.forEach((point) => {
-      console.log(`Processing point with address: ${point.addr}`);
+      console.log(`processing point with address: ${point.addr}`);
       const stationCoordinates = findStationCoordinates(
         comparisonData,
         point.addr
       );
       if (stationCoordinates) {
         console.log(
-          `Found coordinates for ${point.addr}: `,
+          `found coordinates for ${point.addr}: `,
           stationCoordinates
         );
         const marker = L.marker(
@@ -403,7 +403,7 @@ const updateMapWithData = async (earthquakeData) => {
   if (bounds.isValid() && shouldIUpdate) {
     updateCamera(bounds);
   } else if (!bounds.isValid()) {
-    console.info("No valid bounds for markersLayerGroup");
+    console.log("No valid bounds for markersLayerGroup");
   }
 };
 
@@ -578,7 +578,7 @@ const fetchAndUpdateData = async () => {
         JSON.stringify(previousEarthquakeData)
     ) {
       isMapDataChanged = true;
-      console.log("Data has changed, updating map.");
+      console.log("data has changed, updating map.");
       if (isPreviouslyUpdated === false) {
         intensityReport.play();
         isPreviouslyUpdated = true;

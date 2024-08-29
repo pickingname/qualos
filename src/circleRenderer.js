@@ -185,10 +185,8 @@ const renderCircles = (mapInstance, circleData) => {
 
   // TODO: check if the report is a training report or a final report
   if (isFinal === "true") {
-    console.log("Final report");
     reportText = "Final report";
   } else if (isFinal === "false") {
-    console.log("Report #" + reportNum);
     reportText = "Report #" + reportNum;
   }
 

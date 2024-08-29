@@ -54,8 +54,6 @@ const fetchComparisonData = async () => {
     return comparisonDataCache;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
-    // document.getElementById("statusText").classList.add("text-red-600");
-    // document.getElementById("statusText").textContent =
     "Error fetching comparison data, " + error;
     return [];
   }
@@ -148,7 +146,6 @@ const fetchData = async () => {
     quakeDetails.earthquake.hypocenter.depth === -1 &&
     quakeDetails.issue.type === "ScalePrompt"
   ) {
-    console.info("Earthquake intensity report received");
     let reportScale = getIntensityDescription(maxScale);
     document.getElementById("intensity").textContent = reportScale;
     document.getElementById("magnitude").textContent = ``;
@@ -182,7 +179,7 @@ const fetchData = async () => {
 
         document.getElementById("where").textContent = `${englishName}`;
       } else {
-        console.info("invalid data");
+        console.log("invalid data");
         document.getElementById("where").textContent = `Invalid data received`;
       }
     } else {
