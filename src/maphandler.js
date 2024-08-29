@@ -263,9 +263,7 @@ const updateMapWithData = async (earthquakeData) => {
     omnivore.topojson('https://pickingname.github.io/basemap/subPrefsTopo.json')
       .on('ready', function() {
         this.eachLayer(function(layer) {
-          // Generate a random color
           const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    
           layer.setStyle({
             color: '#ffffff',
             weight: 1,
@@ -277,6 +275,27 @@ const updateMapWithData = async (earthquakeData) => {
         });
       })
       .addTo(mapInstance);
+    
+    // world geojson
+    fetch('https://pickingname.github.io/basemap/world.geojson')
+      .then(response => response.json())
+      .then(data => {
+        L.geoJSON(data, {
+          style: function() {
+            return {
+              color: '#5e5e5e',
+              weight: 1,
+              smoothFactor: 0.0,
+              fill: true,
+              fillColor: "#121212",
+              fillOpacity: 0.5
+            };
+          }
+        }).addTo(mapInstance);
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
+
+
 
     initCircleRendering(mapInstance);
   }
