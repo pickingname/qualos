@@ -30,6 +30,7 @@
     <link rel="stylesheet" type="text/css" href="src/style.css" />
     <!-- Inject apple standalone device script -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src="https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
     <!-- START OF LEAFLET IMPORT -->
     <link
       rel="stylesheet"
@@ -311,7 +312,7 @@
       id="settings"
       class="status-text bottom-left mx-5 my-5 font-outfit h-10 w-10 border border-neutral-700 dark:border-neutral-600 rounded-md hover:border-neutral-500 transition-colors duration-200 ease-in-out"
     >
-      <div class="flex justify-center items-center h-full">
+      <div class="backdrop-blur-sm flex justify-center items-center h-full">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -366,9 +367,11 @@
         </p>
       </div>
     </div>
-    <div id="topLeftText" class="top-right p-5 font-outfit dark:text-white text-black opacity-20 transition-all duration-200 ease-in-out">
+    <div
+      id="topLeftText"
+      class="top-right p-5 font-outfit dark:text-white text-black opacity-20 transition-all duration-200 ease-in-out"
+    >
       <p id="isUsingSandboxAPI"></p>
-    </div>
     </div>
     <script src="src/localstorageHandler.js" type="module"></script>
     <script src="src/circleRenderer.js" type="module"></script>

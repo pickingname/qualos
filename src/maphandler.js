@@ -24,6 +24,19 @@ let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
 let mapPan;
 
+// /// main line cols
+// let lightThemeMainLineCol;
+// let darkThemeMainLineCol;
+// let secLightThemeMainLineCol;
+// let secDarkThemeMainLineCol;
+
+// // main fill cols
+// let darkMainFill;
+// let lightMainFill;
+
+// let secDarkMainFill;
+// let secLightMainFill;
+
 var newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
 var intensityReport = new Audio(
   "https://pickingname.github.io/datastores/update.mp3"
@@ -42,6 +55,16 @@ let mapInstance = null;
 let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
+let usegeojson;
+
+if (localStorage.getItem("geoJsonMap") === "true") {
+  usegeojson = true;
+} else if (localStorage.getItem("geoJsonMap") === "false") {
+  usegeojson = false;
+} else {
+  console.log("geoJsonMap is not set, defaulting to false");
+  localStorage.setItem("geoJsonMap", "false");
+}
 
 if (localStorage.getItem("theme") === null) {
   console.log("localstorage theme is null, defaulting to system.");
@@ -252,7 +275,7 @@ const updateMapWithData = async (earthquakeData) => {
       tap: mapPan,
       touchZoom: mapPan,
       dragging: mapPan,
-      scrollWheelZoom: mapPan
+      scrollWheelZoom: mapPan,
       // maxBoundsViscosity: 1.0,
       // maxBounds: [
       //   [-90, -180],
@@ -260,12 +283,58 @@ const updateMapWithData = async (earthquakeData) => {
       // ],
     });
 
-    L.tileLayer(
-      `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
-      {
-        maxZoom: 24,
-      }
-    ).addTo(mapInstance);
+    
+
+    if (usegeojson === true) {
+      omnivore
+        .topojson("https://pickingname.github.io/basemap/subPrefsTopo.json")
+        .on("ready", function () {
+          this.eachLayer(function (layer) {
+            layer.setStyle({
+              color: userTheme === "dark" ? "#bebebe" : "#969e9e",
+              weight: 1,
+              smoothFactor: 0.0,
+              fill: true,
+              fillColor: userTheme === "dark" ? "#FFFFFF" : "#95999b",
+              fillOpacity: 0.1,
+            });
+          });
+        })
+        .addTo(mapInstance);
+
+      // world geojson
+      fetch("https://pickingname.github.io/basemap/world.geojson")
+        .then((response) => response.json())
+        .then((data) => {
+          L.geoJSON(data, {
+            style: function () {
+              return {
+                color: userTheme === "dark" ? "#5e5e5e" : "#c2cbcc",
+                weight: 1,
+                smoothFactor: 0.0,
+                fill: true,
+                fillColor: userTheme === "dark" ? "#121212" : "#969e9e",
+                fillOpacity: 0.5,
+              };
+            },
+          }).addTo(mapInstance);
+        })
+        .catch((error) => console.error("Error loading GeoJSON:", error));
+    } else if (usegeojson === false) {
+      L.tileLayer(
+        `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
+        {
+          maxZoom: 24,
+        }
+      ).addTo(mapInstance);
+    } else {
+      L.tileLayer(
+        `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
+        {
+          maxZoom: 24,
+        }
+      ).addTo(mapInstance);
+    }
 
     initCircleRendering(mapInstance);
   }
