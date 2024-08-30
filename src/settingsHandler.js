@@ -109,6 +109,20 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <div class="mt-4 text-left font-outfit">
+  <label for="geoJsonDropdown" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
+    Use GeoJSON map
+  </label>
+  <p class="text-xs text-neutral-500 dark:text-neutral-400">
+    Use GeoJSON instead of CartoCDN tiles map, changing this will refresh the page
+  </p>
+  <select id="geoJsonDropdown"
+    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none sm:text-sm rounded-md">
+    <option value="false">Disable</option>
+    <option value="true">Enable</option>
+  </select>
+</div>
+
+<div class="mt-4 text-left font-outfit">
   <label for="apiEndpoint" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
     P2PQuake API endpoint
   </label>
@@ -199,6 +213,21 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedMovableMap = e.target.value;
       localStorage.setItem("movableMap", selectedMovableMap);
       console.log(`Movable Map set to: ${selectedMovableMap}`);
+
+      location.reload();
+    });
+
+    // fetch current geojson setting from localStorage and set it as the selected option
+    const geojsonMapDropdown = modalContent.querySelector("#geoJsonDropdown");
+    const currentGeoJsonMap = localStorage.getItem("geoJsonMap");
+    console.log(currentGeoJsonMap);
+    geojsonMapDropdown.value = currentGeoJsonMap || "false"; // defaults to false
+
+    // dropdown handler for geojson map
+    geojsonMapDropdown.addEventListener("change", (e) => {
+      const selectedGeoJsonMap = e.target.value;
+      localStorage.setItem("geoJsonMap", selectedGeoJsonMap);
+      console.log(`geoJson style set to: ${selectedGeoJsonMap}`);
 
       location.reload();
     });

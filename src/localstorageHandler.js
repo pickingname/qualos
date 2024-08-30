@@ -4,14 +4,16 @@ function isFirstRun() {
   const themeSettingKey = "themeSetting";
   const hideLegendKey = "hideLegend";
   const canMapBeMovedKey = "canMapBeMoved";
+  const geoJsonMapKey = "geoJsonMap";
 
-  // def values
+  // Default values
   const defaultSettings = {
     [firstRunKey]: "false",
     [apiTypeKey]: "main",
     [themeSettingKey]: "system",
     [hideLegendKey]: "false",
     [canMapBeMovedKey]: "false",
+    [geoJsonMapKey]: "false",
   };
 
   try {
