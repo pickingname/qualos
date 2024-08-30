@@ -274,15 +274,13 @@ const updateMapWithData = async (earthquakeData) => {
       .topojson("https://pickingname.github.io/basemap/subPrefsTopo.json")
       .on("ready", function () {
         this.eachLayer(function (layer) {
-          const randomColor =
-            "#" + Math.floor(Math.random() * 16777215).toString(16);
           layer.setStyle({
-            color: "#ffffff",
+            color: "#bebebe",
             weight: 1,
             smoothFactor: 0.0,
             fill: true,
-            fillColor: randomColor,
-            fillOpacity: 0.5,
+            fillColor: "#FFFFFF",
+            fillOpacity: 0.1,
           });
         });
       })
