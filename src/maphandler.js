@@ -42,6 +42,16 @@ let mapInstance = null;
 let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
+let usegeojson;
+
+if (localStorage.getItem("geoJsonMap") === "true") {
+  usegeojson = true;
+} else if (localStorage.getItem("geoJsonMap") === "false") {
+  usegeojson = false;
+} else {
+  console.log("geoJsonMap is not set, defaulting to false");
+  localStorage.setItem("geoJsonMap", "false");
+}
 
 if (localStorage.getItem("theme") === null) {
   console.log("localstorage theme is null, defaulting to system.");
@@ -252,7 +262,7 @@ const updateMapWithData = async (earthquakeData) => {
       tap: mapPan,
       touchZoom: mapPan,
       dragging: mapPan,
-      scrollWheelZoom: mapPan
+      scrollWheelZoom: mapPan,
       // maxBoundsViscosity: 1.0,
       // maxBounds: [
       //   [-90, -180],
@@ -260,42 +270,42 @@ const updateMapWithData = async (earthquakeData) => {
       // ],
     });
 
-    omnivore.topojson('https://pickingname.github.io/basemap/subPrefsTopo.json')
-      .on('ready', function() {
-        this.eachLayer(function(layer) {
-          const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    omnivore
+      .topojson("https://pickingname.github.io/basemap/subPrefsTopo.json")
+      .on("ready", function () {
+        this.eachLayer(function (layer) {
+          const randomColor =
+            "#" + Math.floor(Math.random() * 16777215).toString(16);
           layer.setStyle({
-            color: '#ffffff',
+            color: "#ffffff",
             weight: 1,
             smoothFactor: 0.0,
             fill: true,
             fillColor: randomColor,
-            fillOpacity: 0.5
+            fillOpacity: 0.5,
           });
         });
       })
       .addTo(mapInstance);
-    
+
     // world geojson
-    fetch('https://pickingname.github.io/basemap/world.geojson')
-      .then(response => response.json())
-      .then(data => {
+    fetch("https://pickingname.github.io/basemap/world.geojson")
+      .then((response) => response.json())
+      .then((data) => {
         L.geoJSON(data, {
-          style: function() {
+          style: function () {
             return {
-              color: '#5e5e5e',
+              color: "#5e5e5e",
               weight: 1,
               smoothFactor: 0.0,
               fill: true,
               fillColor: "#121212",
-              fillOpacity: 0.5
+              fillOpacity: 0.5,
             };
-          }
+          },
         }).addTo(mapInstance);
       })
-      .catch(error => console.error('Error loading GeoJSON:', error));
-
-
+      .catch((error) => console.error("Error loading GeoJSON:", error));
 
     initCircleRendering(mapInstance);
   }
