@@ -220,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // fetch current geojson setting from localStorage and set it as the selected option
     const geojsonMapDropdown = modalContent.querySelector("#geoJsonDropdown");
     const currentGeoJsonMap = localStorage.getItem("geoJsonMap");
-    console.log(currentGeoJsonMap);
     geojsonMapDropdown.value = currentGeoJsonMap || "false"; // defaults to false
 
     // dropdown handler for geojson map
