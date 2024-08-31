@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Use GeoJSON map
   </label>
   <p class="text-xs text-neutral-500 dark:text-neutral-400">
-    Use GeoJSON instead of CartoCDN tiles map, changing this will refresh the page
+  For slower connections, This option uses a simplified JSON map instead of image tiles, which may improve loading times but offers less detail
   </p>
   <select id="geoJsonDropdown"
     class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none sm:text-sm rounded-md">
