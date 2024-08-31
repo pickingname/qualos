@@ -116,7 +116,6 @@ const fetchData = async () => {
       case 70:
         return "7";
       default:
-        console.log("default intensity recieved");
         return "--";
     }
   };

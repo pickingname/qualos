@@ -12,7 +12,7 @@ if (localStorage.getItem("hideLegend") === "hide") {
     .getElementById("hideTheIntensityLegendHere")
     .classList.remove("hidden");
 } else {
-  console.log("intensityHide value is not the correct one, defulting it.");
+  console.log("intensityHide value is null, defaulting to true.");
   localStorage.setItem("hideLegend", "show");
 }
 
@@ -54,9 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
   </a>
 </div>
 
-<div class="hidden mt-4 font-outfit items-center p-2 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
-  <svg class="ml-2 flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+<div
+  class="hidden mt-4 font-outfit items-center p-2 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
+  role="alert">
+  <svg class="ml-2 flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor" viewBox="0 0 20 20">
+    <path
+      d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
   </svg>
   <span class="sr-only">Info</span>
   <div>
@@ -113,7 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
     Use GeoJSON map
   </label>
   <p class="text-xs text-neutral-500 dark:text-neutral-400">
-  For slower connections, This option uses a simplified JSON map instead of image tiles, which may improve loading times but offers less detail
+    For slower connections, This option uses a simplified JSON map instead of image tiles, which may improve loading
+    times but offers less detail
   </p>
   <select id="geoJsonDropdown"
     class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none sm:text-sm rounded-md">
