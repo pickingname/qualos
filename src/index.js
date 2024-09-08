@@ -1,8 +1,8 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
-function convertToLocalTime(gmtPlus9TimeString) {
-  const [datePart, timePart] = gmtPlus9TimeString.split(' ');
+function convertToLocalTime(unformattedString) {
+  const [datePart, timePart] = unformattedString.split(' ');
   const [year, month, day] = datePart.split('/');
   const [hour, minute, second] = timePart.split(':');
 
