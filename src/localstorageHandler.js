@@ -5,8 +5,9 @@ function isFirstRun() {
   const hideLegendKey = "hideLegend";
   const canMapBeMovedKey = "canMapBeMoved";
   const geoJsonMapKey = "geoJsonMap";
+  const timeConversionKey = "timeConversion";
 
-  // Default values
+  // default values
   const defaultSettings = {
     [firstRunKey]: "false",
     [apiTypeKey]: "main",
@@ -14,6 +15,7 @@ function isFirstRun() {
     [hideLegendKey]: "false",
     [canMapBeMovedKey]: "false",
     [geoJsonMapKey]: "false",
+    [timeConversionKey]: "true",
   };
 
   try {

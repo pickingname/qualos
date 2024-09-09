@@ -1,32 +1,57 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
+let timeConversion;
+
+if (localStorage.getItem("timeConversion") === "true") {
+  timeConversion = true;
+} else if (localStorage.getItem("timeConversion") === "false") {
+  timeConversion = false;
+} else {
+  console.log(
+    `timeConversion is ${localStorage.getItem(
+      "timeConversion"
+    )}, defaulting to true`
+  );
+  timeConversion = true;
+  localStorage.setItem("timeConversion", true);
+}
+
+function formatDate(dateString) {
+  let [datePart, timePart] = dateString.split(" ");
+
+  let [year, month, day] = datePart.split("/");
+
+  return `${day}/${month}/${year}, ${timePart}`;
+}
+
 function convertToLocalTime(unformattedString) {
-  const [datePart, timePart] = unformattedString.split(' ');
-  const [year, month, day] = datePart.split('/');
-  const [hour, minute, second] = timePart.split(':');
+  const [datePart, timePart] = unformattedString.split(" ");
+  const [year, month, day] = datePart.split("/");
+  const [hour, minute, second] = timePart.split(":");
 
-  const gmtPlus9Date = new Date(Date.UTC(
-    parseInt(year),
-    parseInt(month) - 1,
-    parseInt(day),
-    parseInt(hour) - 9,
-    parseInt(minute),
-    parseInt(second)
-  ));
+  const unformattedDate = new Date(
+    Date.UTC(
+      parseInt(year),
+      parseInt(month) - 1,
+      parseInt(day),
+      parseInt(hour) - 9,
+      parseInt(minute),
+      parseInt(second)
+    )
+  );
 
-
-  const localDate = new Date(gmtPlus9Date.toLocaleString());
+  const localDate = new Date(unformattedDate.toLocaleString());
 
   // output formatting
   const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
   };
 
   return localDate.toLocaleString(undefined, options);
@@ -118,9 +143,17 @@ const fetchData = async () => {
   ).toFixed(1);
   const maxScale = quakeDetails.earthquake.maxScale;
   let time = quakeDetails.earthquake.time;
-  console.log(time)
-  time = convertToLocalTime(time);
-  console.log(time + " : converted")
+
+  if (localStorage.getItem("timeConversion") === "true") {
+    time = convertToLocalTime(time);
+  } else if (localStorage.getItem("timeConversion") === "false") {
+    time = formatDate(time);
+  } else {
+    // probably isnt even possible unless localstorage is resetted while the webpage is running
+    console.error("timeConversion is false, not converting time");
+    location.reload();
+  }
+
   const depth =
     quakeDetails.earthquake.hypocenter.depth === -1
       ? "unknown"

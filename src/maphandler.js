@@ -49,12 +49,16 @@ if (localStorage.getItem("geoJsonMap") === "true") {
 } else if (localStorage.getItem("geoJsonMap") === "false") {
   usegeojson = false;
 } else {
-  console.log("geoJsonMap is not set, defaulting to false");
+  console.log(
+    `geoJsonMap is ${localStorage.getItem(
+      "geoJsonMap"
+    )}, defaulting to false`
+  );
   localStorage.setItem("geoJsonMap", "false");
 }
 
 if (localStorage.getItem("theme") === null) {
-  console.log("localstorage theme is null, defaulting to system.");
+  console.log(`localstorage theme is ${localStorage.getItem("theme")}, defaulting to system.`);
   localStorage.setItem("theme", "system");
 }
 
@@ -85,7 +89,7 @@ if (localStorage.getItem("movableMap") === "true") {
 } else if (localStorage.getItem("movableMap") === "false") {
   mapPan = false;
 } else {
-  console.log("movableMap is not set, defaulting to false");
+  console.log(`movableMap is ${localStorage.getItem("movableMap")}, defaulting to false`);
   localStorage.setItem("movableMap", "false");
 }
 
@@ -269,8 +273,6 @@ const updateMapWithData = async (earthquakeData) => {
       //   [90, 180],
       // ],
     });
-
-    
 
     if (usegeojson === true) {
       omnivore
@@ -489,7 +491,6 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
   }
 
   if (tsunamiData && !tsunamiData.cancelled && geojsonData) {
-    // Filter out features without a valid tsunami grade
     const filteredGeojsonData = {
       ...geojsonData,
       features: geojsonData.features.filter((feature) => {
@@ -523,7 +524,6 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
       },
     }).addTo(mapInstance);
 
-    // Combine bounds of tsunamiGeojsonLayer and other layers
     let bounds = tsunamiGeojsonLayer.getBounds();
     if (markersLayerGroup && markersLayerGroup.getBounds().isValid()) {
       bounds = bounds.extend(markersLayerGroup.getBounds());
