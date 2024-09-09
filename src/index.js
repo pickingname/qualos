@@ -1,6 +1,37 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
+function convertToLocalTime(unformattedString) {
+  const [datePart, timePart] = unformattedString.split(' ');
+  const [year, month, day] = datePart.split('/');
+  const [hour, minute, second] = timePart.split(':');
+
+  const gmtPlus9Date = new Date(Date.UTC(
+    parseInt(year),
+    parseInt(month) - 1,
+    parseInt(day),
+    parseInt(hour) - 9,
+    parseInt(minute),
+    parseInt(second)
+  ));
+
+
+  const localDate = new Date(gmtPlus9Date.toLocaleString());
+
+  // output formatting
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
+
+  return localDate.toLocaleString(undefined, options);
+}
+
 function replaceFormat(input) {
   return input.replace(/\+/g, "p").replace(/-/g, "m");
 }
@@ -86,7 +117,10 @@ const fetchData = async () => {
     quakeDetails.earthquake.hypocenter.magnitude
   ).toFixed(1);
   const maxScale = quakeDetails.earthquake.maxScale;
-  const time = quakeDetails.earthquake.time;
+  let time = quakeDetails.earthquake.time;
+  console.log(time)
+  time = convertToLocalTime(time);
+  console.log(time + " : converted")
   const depth =
     quakeDetails.earthquake.hypocenter.depth === -1
       ? "unknown"
