@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const convertTimeDropdown = modalContent.querySelector(
       "#convertTimeSetting"
     );
-    const currentConvertTime = localStorage.getItem("timeConversion");
+    let currentConvertTime = localStorage.getItem("timeConversion");
     if (!currentConvertTime) {
       currentConvertTime = "true";
       localStorage.setItem("timeConversion", "true");
