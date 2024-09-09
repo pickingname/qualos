@@ -118,9 +118,7 @@ const fetchData = async () => {
   ).toFixed(1);
   const maxScale = quakeDetails.earthquake.maxScale;
   let time = quakeDetails.earthquake.time;
-  console.log(time)
   time = convertToLocalTime(time);
-  console.log(time + " : converted")
   const depth =
     quakeDetails.earthquake.hypocenter.depth === -1
       ? "unknown"
