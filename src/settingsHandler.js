@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-xl transform scale-95 transition-transform duration-300 mx-20 max-w-2xl w-full";
 
     // modal text and dropdown creation
-    modalContent.innerHTML = `
+    modalContent.innerHTML = /*html*/`
 <div class="flex items-center justify-between mb-2">
   <div class="inline-flex items-center space-x-2">
     <img src="https://pickingname.github.io/basemap/icons/epicenter.png" alt="Icon"
