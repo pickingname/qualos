@@ -8,13 +8,13 @@ if (localStorage.getItem("timeConversion") === "true") {
 } else if (localStorage.getItem("timeConversion") === "false") {
   timeConversion = false;
 } else {
-  timeConversion = true;
-  localStorage.setItem("timeConversion", true);
   console.log(
     `timeConversion is ${localStorage.getItem(
       "timeConversion"
     )}, defaulting to true`
   );
+  timeConversion = true;
+  localStorage.setItem("timeConversion", true);
 }
 
 function formatDate(dateString) {

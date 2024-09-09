@@ -12,7 +12,7 @@ if (localStorage.getItem("hideLegend") === "hide") {
     .getElementById("hideTheIntensityLegendHere")
     .classList.remove("hidden");
 } else {
-  console.log("intensityHide value is null, defaulting to true.");
+  console.log(`intensityHide value is ${localStorage.getItem("hideLegend")}, defaulting to show.`);
   localStorage.setItem("hideLegend", "show");
 }
 
