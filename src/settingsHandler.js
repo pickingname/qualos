@@ -106,8 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     This converts the reported time [GMT+9] to your browser time through <code class="pl-0.5"><span
         class="dark:text-purple-400 text-purple-500">var</span> Date: <span
         class="dark:text-purple-300 text-purple-700">DateConstructor</span></code>. We do not use your IP address
-    to determine your location, check the source code <a target="_blank" class="underline"
-      href="https://github.com/pickingname/qualos/blob/core/src/index.js#L44">here</a>.
+    to determine your location.
   </p>
   <select id="convertTimeSetting"
     class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none sm:text-sm rounded-md">
