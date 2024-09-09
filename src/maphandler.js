@@ -24,19 +24,6 @@ let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
 let mapPan;
 
-// /// main line cols
-// let lightThemeMainLineCol;
-// let darkThemeMainLineCol;
-// let secLightThemeMainLineCol;
-// let secDarkThemeMainLineCol;
-
-// // main fill cols
-// let darkMainFill;
-// let lightMainFill;
-
-// let secDarkMainFill;
-// let secLightMainFill;
-
 var newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
 var intensityReport = new Audio(
   "https://pickingname.github.io/datastores/update.mp3"
