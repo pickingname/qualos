@@ -24,19 +24,6 @@ let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
 let mapPan;
 
-// /// main line cols
-// let lightThemeMainLineCol;
-// let darkThemeMainLineCol;
-// let secLightThemeMainLineCol;
-// let secDarkThemeMainLineCol;
-
-// // main fill cols
-// let darkMainFill;
-// let lightMainFill;
-
-// let secDarkMainFill;
-// let secLightMainFill;
-
 var newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
 var intensityReport = new Audio(
   "https://pickingname.github.io/datastores/update.mp3"
@@ -283,8 +270,6 @@ const updateMapWithData = async (earthquakeData) => {
       // ],
     });
 
-    
-
     if (usegeojson === true) {
       omnivore
         .topojson("https://pickingname.github.io/basemap/subPrefsTopo.json")
@@ -502,7 +487,6 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
   }
 
   if (tsunamiData && !tsunamiData.cancelled && geojsonData) {
-    // Filter out features without a valid tsunami grade
     const filteredGeojsonData = {
       ...geojsonData,
       features: geojsonData.features.filter((feature) => {
@@ -536,7 +520,6 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
       },
     }).addTo(mapInstance);
 
-    // Combine bounds of tsunamiGeojsonLayer and other layers
     let bounds = tsunamiGeojsonLayer.getBounds();
     if (markersLayerGroup && markersLayerGroup.getBounds().isValid()) {
       bounds = bounds.extend(markersLayerGroup.getBounds());

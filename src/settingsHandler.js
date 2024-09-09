@@ -99,6 +99,24 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <div class="mt-4 text-left font-outfit">
+  <label for="convertTimeSetting" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
+    Convert Time
+  </label>
+  <p class="text-xs text-neutral-500 dark:text-neutral-400">
+    This converts the reported time [GMT+9] to your browser time through <code class="pl-0.5"><span
+        class="dark:text-purple-400 text-purple-500">var</span> Date: <span
+        class="dark:text-purple-300 text-purple-700">DateConstructor</span></code>. We do not use your IP address
+    to determine your location, check the source code <a target="_blank" class="underline"
+      href="https://github.com/pickingname/qualos/blob/core/src/index.js#L36">here</a>.
+  </p>
+  <select id="convertTimeSetting"
+    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white font-outfit focus:outline-none sm:text-sm rounded-md">
+    <option value="false">Disable</option>
+    <option value="true">Enable</option>
+  </select>
+</div>
+
+<div class="mt-4 text-left font-outfit">
   <label for="movableMapSetting" class="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
     Movable Map
   </label>
@@ -234,6 +252,22 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log(`geoJson style set to: ${selectedGeoJsonMap}`);
 
       location.reload();
+    });
+
+    const convertTimeDropdown = modalContent.querySelector(
+      "#convertTimeSetting"
+    );
+    const currentConvertTime = localStorage.getItem("timeConversion");
+    if (!currentConvertTime) {
+      currentConvertTime = "true";
+      localStorage.setItem("timeConversion", "true");
+    }
+    convertTimeDropdown.value = currentConvertTime;
+
+    convertTimeDropdown.addEventListener("change", (e) => {
+      const selectedConvertTime = e.target.value;
+      localStorage.setItem("timeConversion", selectedConvertTime);
+      console.log(`Convert Time setting set to: ${selectedConvertTime}`);
     });
 
     // close modal func
