@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // modal content creation
     const modalContent = document.createElement("div");
     modalContent.className =
-      "bg-white/50 dark:bg-neutral-800 backdrop-blur-sm py-6 rounded-lg shadow-xl transform scale-95 transition-transform duration-300 mx-20 max-w-2xl w-full";
+      "bg-white dark:bg-neutral-800 backdrop-blur-sm py-6 rounded-lg shadow-xl transform scale-95 transition-transform duration-300 mx-20 max-w-2xl w-full";
 
     // modal text and dropdown creation
     modalContent.innerHTML = /*html*/ `
