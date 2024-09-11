@@ -7,7 +7,9 @@ let iconPadding = 0.0;
 let currentTW = false;
 let foreTs = false;
 let domeTs = false;
-let tsMag, tsInt, tsDepth;
+let tsMag = "--";
+let tsInt = "--";
+let tsDepth = "--";
 let shouldIUpdate = true;
 let doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
 const tsunamiApiEndpoint =
@@ -22,7 +24,7 @@ let isMapDataChanged = false;
 let isPreviouslyScalePrompt = false;
 let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
-let mapPan = 'false'; // defaults to false
+let mapPan = "false"; // defaults to false
 
 // skipcq: JS-0125 uses leaflet now since leaflet should also be ignore cause it is fetched fron a cdn
 const leaflet = L;
@@ -106,7 +108,7 @@ window
       console.log(
         "User theme changed and the setting is system, refreshing..."
       );
-      dimScreenAndReload('user changed system theme');
+      dimScreenAndReload("user changed system theme");
     }
   });
 
