@@ -97,7 +97,6 @@ function updateScale(intensityDescription) {
 }
 
 let comparisonDataCache = null;
-export let responseCache;
 
 const fetchComparisonData = async () => {
   if (comparisonDataCache) {
@@ -111,7 +110,6 @@ const fetchComparisonData = async () => {
     return comparisonDataCache;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
-    "Error fetching comparison data, " + error;
     return [];
   }
 };
@@ -135,7 +133,6 @@ const fetchData = async () => {
       "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
   }
   const response = await axios.get(apiEndpoint);
-  responseCache = response;
   const quakeData = response.data;
   const quakeDetails = quakeData[0];
 

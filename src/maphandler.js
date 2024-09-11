@@ -35,8 +35,6 @@ var tsunamiWarning = new Audio(
   "https://pickingname.github.io/datastores/eq/E4.mp3"
 );
 
-export let responseCache;
-
 let previousEarthquakeData = null;
 let mapInstance = null;
 let markersLayerGroup = null;
@@ -598,7 +596,6 @@ const fetchAndUpdateData = async () => {
     }
 
     const response = await axios.get(apiEndpoint);
-    responseCache = response;
 
     if (!isApiCallSuccessful) {
       console.log("API call successful with response code:", response.status);
