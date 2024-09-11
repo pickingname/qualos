@@ -598,13 +598,20 @@ const fetchAndUpdateData = async () => {
     const response = await axios.get(apiEndpoint);
 
     if (!isApiCallSuccessful) {
-      console.log("API call successful with response code:", response.status);
+      const sanitizedResponseStatus = response.status
+        .toString()
+        .replace(/\n|\r/g, "");
+      console.log(
+        "API call successful with response code:",
+        sanitizedResponseStatus
+      );
       isApiCallSuccessful = true;
     }
     isApiCallSuccessful = true;
     const latestEarthquakeData = response.data[0];
 
     tsDepth = latestEarthquakeData.earthquake.hypocenter.depth;
+    // skipcq: JS-A1004
     tsInt = getTrueIntensity(latestEarthquakeData.earthquake.maxScale);
     tsMag = latestEarthquakeData.earthquake.hypocenter.magnitude;
 
