@@ -37,12 +37,14 @@
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
+      rel="preload"
     />
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
+      rel="preload"
     ></script>
     <!-- END OF LEAFLET IMPORT -->
   </head>
@@ -318,7 +320,9 @@
       id="settings"
       class="status-text bottom-left mx-5 my-5 font-outfit h-10 w-10 border border-neutral-700 dark:border-neutral-600 rounded-md hover:border-neutral-500 transition-colors duration-200 ease-in-out"
     >
-      <div class="backdrop-blur-sm rounded-md flex justify-center items-center h-full">
+      <div
+        class="backdrop-blur-sm rounded-md flex justify-center items-center h-full"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -382,13 +386,14 @@
     <script src="src/localstorageHandler.js" type="module"></script>
     <script src="src/circleRenderer.js" type="module"></script>
     <script src="src/index.js" type="module"></script>
-    <script src="src/maphandler.js" type="module"></script>
-    <script src="src/settingsHandler.js" type="module"></script>
-    <script src="src/reloadHandler.js" type="module"></script>
+    <script src="src/maphandler.js" type="module" rel="preload"></script>
+    <script src="src/settingsHandler.js" type="module" defer></script>
+    <script src="src/reloadHandler.js" type="module" defer></script>
     <script
       src="https://pickingname.github.io/basemap/js/clustering.js"
       charset="utf-8"
       type="module"
+      rel="preload"
     ></script>
   </body>
 </html>

@@ -98,6 +98,12 @@ function updateScale(intensityDescription) {
 
 let comparisonDataCache = null;
 
+/**
+ * This is the function to fetches the comparison data from the github page.
+ * The comparision data is for to translate the japanese location names to english.
+ *
+ * @returns {Promise<Array>} comparisonData as a json
+ */
 const fetchComparisonData = async () => {
   if (comparisonDataCache) {
     return comparisonDataCache;
@@ -114,14 +120,28 @@ const fetchComparisonData = async () => {
   }
 };
 
+/**
+ * Finds the English epicenter location name corresponding to a given Japanese name from the comparison data.
+ * And translates the Japanese epicenter name to English.
+ *
+ * @function findEnglishName
+ * @param {Object[]} comparisonData - An array of objects containing Japanese and English name pairs. which is fetched by the fetchComparisonData function.
+ * @param {string} japaneseName - The Japanese name of the epicenter
+ * @returns {string} The English name if a match is found, otherwise returns the original Japanese name.
+ */
 const findEnglishName = (comparisonData, japaneseName) => {
   const match = comparisonData.find((entry) => entry.jp === japaneseName);
   return match ? match.en : japaneseName;
 };
 
+/**
+ * Fetches the actual p2pquake data to displays on the card, not the map.
+ *
+ */
 const fetchData = async () => {
-  let apiType = localStorage.getItem("apiType");
-  let apiEndpoint;
+  const apiType = localStorage.getItem("apiType");
+  let apiEndpoint =
+    "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0"; //
   if (apiType === "main") {
     apiEndpoint =
       "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
@@ -160,6 +180,13 @@ const fetchData = async () => {
       : `${quakeDetails.earthquake.hypocenter.depth}km`;
   const locationName = quakeDetails.earthquake.hypocenter.name;
 
+  /**
+   * Translates the original intensity scale to a more human readable format.
+   *
+   * @param {String} maxScale
+   * @returns {String} The translated intensity description for human eyes
+   */
+  // skipcq: JS-0123
   const getIntensityDescription = (maxScale) => {
     switch (maxScale) {
       case 10:
@@ -191,11 +218,11 @@ const fetchData = async () => {
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "ScalePrompt") {
-    updateScale("s" + replaceFormat(intensityDescription));
+    updateScale(`s${replaceFormat(intensityDescription)}`); // uses the text "s" to tell the upper function that this is a scalePrompt and to uses the scale icon
     document.getElementById("STA").classList.add("hidden");
     document.getElementById("INT").classList.remove("hidden");
   } else if (quakeDetails.issue.type === "DetailScale") {
-    updateInt("i" + replaceFormat(intensityDescription));
+    updateInt(`i${replaceFormat(intensityDescription)}`); // uses the text "i" to tell the upper function that this is a detailScale and to uses the rounded intensity icon
     document.getElementById("STA").classList.remove("hidden");
     document.getElementById("INT").classList.add("hidden");
   } else if (quakeDetails.issue.type === "Foreign") {
@@ -210,21 +237,20 @@ const fetchData = async () => {
     quakeDetails.earthquake.hypocenter.depth === -1 &&
     quakeDetails.issue.type === "ScalePrompt"
   ) {
-    let reportScale = getIntensityDescription(maxScale);
+    const reportScale = getIntensityDescription(maxScale);
     document.getElementById("intensity").textContent = reportScale;
-    document.getElementById("magnitude").textContent = ``;
-    document.getElementById("depth").textContent = `Awaiting full report`;
+    document.getElementById("magnitude").textContent = "";
+    document.getElementById("depth").textContent = "Awaiting full report";
+    document.getElementById("where").textContent =
+      "Earthquake intensity report received";
     document.getElementById(
-      "where"
-    ).textContent = `Earthquake intensity report received`;
-    document.getElementById("time").textContent =
-      "Time: " + quakeDetails.issue.time;
+      "time"
+    ).textContent = `Time: ${quakeDetails.issue.time}`;
   } else {
     if (quakeDetails.earthquake.hypocenter.depth === -1) {
       if (quakeDetails.issue.type === "Foreign") {
-        document.getElementById(
-          "where"
-        ).textContent = `Foreign earthquake information`;
+        document.getElementById("where").textContent =
+          "Foreign earthquake information";
         if (intensityDescription === "--") {
           document.getElementById("intensity").textContent = "";
         } else {
@@ -236,15 +262,14 @@ const fetchData = async () => {
         } else {
           document.getElementById("depth").textContent = `Depth: ${depth}`;
         }
-        document.getElementById(
-          "magnitude"
-        ).textContent = `Foreign, No mag. data`;
+        document.getElementById("magnitude").textContent =
+          "Foreign, No mag. data";
         document.getElementById("time").textContent = `Time: ${time}`;
 
         document.getElementById("where").textContent = `${englishName}`;
       } else {
         console.log("invalid data");
-        document.getElementById("where").textContent = `Invalid data received`;
+        document.getElementById("where").textContent = "Invalid data received";
       }
     } else {
       document.getElementById("intensity").textContent = intensityDescription;
@@ -260,6 +285,10 @@ const fetchData = async () => {
 
 shouldIChangeTheFuckingText();
 
+/**
+ * This is for the EEW so that they can change the text or not, not having this will make the EEW text change flashes because both EEW report and the regular Intensity report text
+ * are overriding the same card
+ */
 function shouldIChangeTheFuckingText() {
   if (isEEW === true) {
     // it is now possible to change the text.
@@ -268,6 +297,6 @@ function shouldIChangeTheFuckingText() {
   }
 }
 
-setTimeout(function () {
+setTimeout(() => {
   setInterval(shouldIChangeTheFuckingText, 2000);
 }, 2000);

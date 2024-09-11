@@ -9,6 +9,7 @@ let currentTW = false;
 let foreTs = false;
 let domeTs = false;
 let tsMag, tsInt, tsDepth;
+let shouldIUpdate = true;
 let doNotUpdateBondBecauseThereIsAFuckingTsunami = false;
 const tsunamiApiEndpoint =
   "https://api.p2pquake.net/v2/jma/tsunami?limit=1&offset=0";
@@ -24,14 +25,17 @@ let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
 let mapPan;
 
-var newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
-var intensityReport = new Audio(
+// skipcq: JS-0125 uses leaflet now since leaflet should also be ignore cause it is fetched fron a cdn
+const leaflet = L;
+
+const newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
+const intensityReport = new Audio(
   "https://pickingname.github.io/datastores/update.mp3"
 );
-var distantArea = new Audio(
+const distantArea = new Audio(
   "https://pickingname.github.io/datastores/alert.mp3"
 );
-var tsunamiWarning = new Audio(
+const tsunamiWarning = new Audio(
   "https://pickingname.github.io/datastores/eq/E4.mp3"
 );
 
@@ -40,7 +44,7 @@ let mapInstance = null;
 let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
-let usegeojson;
+let usegeojson = "false"; // needs init on exec anyway and needs to be false on default
 
 if (localStorage.getItem("geoJsonMap") === "true") {
   usegeojson = true;
@@ -107,6 +111,15 @@ window
     }
   });
 
+/**
+ * Fetches comparison data from a specified URL and parses it using PapaParse.
+ *
+ * @async
+ * @function fetchComparisonData
+ * @param {string} url - The URL to fetch the comparison data from.
+ * @returns {Promise<Object[]>} A promise that resolves to an array of parsed data objects.
+ * @throws {Error} If the API call fails.
+ */
 const fetchComparisonData = async (url) => {
   try {
     const response = await axios.get(url);
@@ -114,13 +127,17 @@ const fetchComparisonData = async (url) => {
     return parsedData;
   } catch (error) {
     console.error("Error fetching comparison data:", error);
-    // document.getElementById("statusText").classList.add("text-red-600");
-    // document.getElementById("statusText").textContent =
-    "Error fetching comparison data, " + error;
     return [];
   }
 };
 
+/**
+ * Converts a given maximum seismic intensity scale to its corresponding intensity level.
+ *
+ * @function getTrueIntensity
+ * @param {number} maxScale - The maximum seismic intensity scale.
+ * @returns {string} The corresponding intensity level as a string. If the scale is not recognized, returns "--".
+ */
 const getTrueIntensity = (maxScale) => {
   switch (maxScale) {
     case 10:
@@ -142,34 +159,68 @@ const getTrueIntensity = (maxScale) => {
     case 70:
       return "7";
     default:
-      console.log("intensity isnt on the list: " + maxScale);
       return "--";
   }
 };
 
+/**
+ * Handles the display and audio for a tsunami warning.
+ * Will display the warning card and play the warning audio.
+ *
+ * @function handleTsunamiWarning
+ * @param {string} type - The type of tsunami warning.
+ */
 function handleTsunamiWarning(type) {
   tsunamiWarning.play();
   document.getElementById("emergWarnTextContainer").classList.remove("hidden");
   document.getElementById("tsType").textContent = type;
 }
 
+/**
+ * Updates the tsunami warning origin type text.
+ *
+ * @function handleTsunamiOriginType
+ * @param {string} type - The origin type of the tsunami warning.
+ */
 function handleTsunamiOriginType(type) {
   document.getElementById("warnOrigin").textContent =
     type.charAt(0).toUpperCase() + type.slice(1);
 }
 
+/**
+ * Sets the tsunami warning texts for magnitude, intensity, and depth.
+ * PROBLEM: this will only displays the latest earthquake data, which might not be the one that causes the tsunami warning in the first place.
+ *
+ * @function setTsWarningTexts
+ * @param {string} mag - The magnitude of the tsunami.
+ * @param {string} int - The intensity of the tsunami.
+ * @param {string} depth - The depth of the tsunami.
+ */
 function setTsWarningTexts(mag, int, depth) {
   document.getElementById("tsMag").textContent = mag;
   document.getElementById("tsInt").textContent = int;
   document.getElementById("tsDepth").textContent = depth;
 }
 
+/**
+ * Removes the tsunami warning display and pauses the warning audio.
+ *
+ * @function removeTsunamiWarning
+ */
 function removeTsunamiWarning() {
   tsunamiWarning.pause();
   document.getElementById("emergWarnTextContainer").classList.add("hidden");
   document.getElementById("tsType").textContent = "";
 }
 
+/**
+ * Finds the coordinates of a station given its name from the comparison data.
+ *
+ * @function findStationCoordinates
+ * @param {Object[]} comparisonData - An array of objects containing station data.
+ * @param {string} stationName - The name of the station to find.
+ * @returns {Object|null} An object containing the latitude and longitude of the station, or null if the station is not found.
+ */
 const findStationCoordinates = (comparisonData, stationName) => {
   const station = comparisonData.find((entry) => entry.name === stationName);
   return station
@@ -177,8 +228,15 @@ const findStationCoordinates = (comparisonData, stationName) => {
     : null;
 };
 
+/**
+ * Updates the camera view on the map to fit the given intensity points bounds or whatever is given.
+ *
+ * @function updateCamera
+ * @param {Object} bounds - The bounds to fit the camera view to. Must have an `isValid` method.
+ * @returns {void}
+ */
 const updateCamera = (bounds) => {
-  if (bounds && bounds.isValid()) {
+  if (bounds?.isValid()) {
     if (doNotUpdateBondBecauseThereIsAFuckingTsunami === false) {
       const originalMaxZoom = mapInstance.options.maxZoom;
       mapInstance.options.maxZoom = 8;
@@ -195,6 +253,14 @@ const updateCamera = (bounds) => {
 
 let deflatedIconColors = {};
 
+/**
+ * Returns the color associated with a given seismic intensity scale based on the users selected theme
+ * This is only for the deflated intensity icons
+ *
+ * @function getScaleColor
+ * @param {number} scale - The seismic intensity scale.
+ * @returns {string} The color corresponding to the seismic intensity scale.
+ */
 const getScaleColor = (scale) => {
   if (userTheme === "dark") {
     deflatedIconColors = {
@@ -224,8 +290,17 @@ const getScaleColor = (scale) => {
   return deflatedIconColors[scale] || "#CCCCCC50";
 };
 
+/**
+ * Creates a deflated icon for a given seismic intensity scale.
+ * Deflated icon only appears when the cluster of a station is too close
+ * This will be a semi-transparent circle with the color of the scale
+ *
+ * @function createDeflatedIcon
+ * @param {number} scale - The seismic intensity scale.
+ * @returns {Object} A Leaflet divIcon object with the appropriate color and size.
+ */
 const createDeflatedIcon = (scale) => {
-  return L.divIcon({
+  return leaflet.divIcon({
     html: `<div style="background-color: ${getScaleColor(
       scale
     )}; width: 10px; height: 10px; border-radius: 50%;"></div>`,
@@ -234,6 +309,16 @@ const createDeflatedIcon = (scale) => {
   });
 };
 
+/**
+ * Creates an inflated icon for a given seismic intensity scale.
+ * Inflated icon only appears when the cluster of a station is far enough
+ * Will uses a icon based on the scale
+ * The icon is served from github pages
+ *
+ * @function createInflatedIcon
+ * @param {number} scale - The seismic intensity scale.
+ * @returns {Object} A Leaflet divIcon object with the appropriate icon URL and size.
+ */
 const createInflatedIcon = (scale) => {
   let iconScale = scale.toString().replace("+", "p").replace("-", "m");
   const validScales = [10, 20, 30, 40, 45, 50, 55, 60, 70];
@@ -247,16 +332,27 @@ const createInflatedIcon = (scale) => {
     ? `https://pickingname.github.io/basemap/icons/scales/${iconScale}.png`
     : `https://pickingname.github.io/basemap/icons/intensities/${iconScale}.png`;
 
-  return L.divIcon({
+  return leaflet.divIcon({
     html: `<img src="${iconUrl}" style="width: 20px; height: 20px;">`,
     className: "inflated-marker",
     iconSize: [20, 20],
   });
 };
 
+/**
+ * Updates the map with the provided earthquake data.
+ * Initializes the map instance if it does not already exist.
+ * Adds various layers and markers to the map based on the earthquake data.
+ * Handles tsunami warnings and updates the camera view to fit the bounds of the markers.
+ *
+ * @async
+ * @function updateMapWithData
+ * @param {Object} earthquakeData - The data related to the earthquake, including points and tsunami information.
+ * @returns {Promise<void>} A promise that resolves when the map has been updated.
+ */
 const updateMapWithData = async (earthquakeData) => {
   if (!mapInstance) {
-    mapInstance = L.map("map", {
+    mapInstance = leaflet.map("map", {
       center: [35.689487, 139.691711],
       zoom: 5,
       minZoom: 2,
@@ -277,10 +373,11 @@ const updateMapWithData = async (earthquakeData) => {
     });
 
     if (usegeojson === true) {
+      // skipcq: JS-0125 ignore this because it is fetched from a cdn
       omnivore
         .topojson("https://pickingname.github.io/basemap/subPrefsTopo.json")
         .on("ready", function () {
-          this.eachLayer(function (layer) {
+          this.eachLayer((layer) => {
             layer.setStyle({
               color: userTheme === "dark" ? "#bebebe" : "#969e9e",
               weight: 1,
@@ -297,34 +394,40 @@ const updateMapWithData = async (earthquakeData) => {
       fetch("https://pickingname.github.io/basemap/world.geojson")
         .then((response) => response.json())
         .then((data) => {
-          L.geoJSON(data, {
-            style: function () {
-              return {
-                color: userTheme === "dark" ? "#5e5e5e" : "#c2cbcc",
-                weight: 1,
-                smoothFactor: 0.0,
-                fill: true,
-                fillColor: userTheme === "dark" ? "#121212" : "#969e9e",
-                fillOpacity: 0.5,
-              };
-            },
-          }).addTo(mapInstance);
+          leaflet
+            .geoJSON(data, {
+              style() {
+                return {
+                  color: userTheme === "dark" ? "#5e5e5e" : "#c2cbcc",
+                  weight: 1,
+                  smoothFactor: 0.0,
+                  fill: true,
+                  fillColor: userTheme === "dark" ? "#121212" : "#969e9e",
+                  fillOpacity: 0.5,
+                };
+              },
+            })
+            .addTo(mapInstance);
         })
         .catch((error) => console.error("Error loading GeoJSON:", error));
     } else if (usegeojson === false) {
-      L.tileLayer(
-        `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
-        {
-          maxZoom: 24,
-        }
-      ).addTo(mapInstance);
+      leaflet
+        .tileLayer(
+          `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
+          {
+            maxZoom: 24,
+          }
+        )
+        .addTo(mapInstance);
     } else {
-      L.tileLayer(
-        `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
-        {
-          maxZoom: 24,
-        }
-      ).addTo(mapInstance);
+      leaflet
+        .tileLayer(
+          `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
+          {
+            maxZoom: 24,
+          }
+        )
+        .addTo(mapInstance);
     }
 
     initCircleRendering(mapInstance);
@@ -333,17 +436,19 @@ const updateMapWithData = async (earthquakeData) => {
   if (markersLayerGroup) {
     markersLayerGroup.clearLayers();
   } else if (isEEWforIndex === false) {
-    markersLayerGroup = L.featureGroup().addTo(mapInstance);
+    markersLayerGroup = leaflet.featureGroup().addTo(mapInstance);
   }
 
   if (stationMarkersGroup) {
     stationMarkersGroup.clearLayers();
   } else {
-    stationMarkersGroup = L.inflatableMarkersGroup({
-      iconCreateFunction: function (marker) {
-        return createDeflatedIcon(marker.options.scale);
-      },
-    }).addTo(mapInstance);
+    stationMarkersGroup = leaflet
+      .inflatableMarkersGroup({
+        iconCreateFunction(marker) {
+          return createDeflatedIcon(marker.options.scale);
+        },
+      })
+      .addTo(mapInstance);
   }
 
   if (
@@ -379,9 +484,18 @@ const updateMapWithData = async (earthquakeData) => {
 
   if (earthquakeData.issue.type === "Foreign") {
     prevForeign = true;
-    L.marker([24.444243, 122.927329]).setOpacity(0.0).addTo(markersLayerGroup);
-    L.marker([45.65552, 141.92889]).setOpacity(0.0).addTo(markersLayerGroup);
-    L.marker([44.538807, 147.777433]).setOpacity(0.0).addTo(markersLayerGroup);
+    leaflet
+      .marker([24.444243, 122.927329])
+      .setOpacity(0.0)
+      .addTo(markersLayerGroup);
+    leaflet
+      .marker([45.65552, 141.92889])
+      .setOpacity(0.0)
+      .addTo(markersLayerGroup);
+    leaflet
+      .marker([44.538807, 147.777433])
+      .setOpacity(0.0)
+      .addTo(markersLayerGroup);
     iconPadding = 0.1;
   } else {
     prevForeign = false;
@@ -390,18 +504,22 @@ const updateMapWithData = async (earthquakeData) => {
 
   if (earthquakeData.issue.type !== "ScalePrompt") {
     isScalePrompt = false;
-    const epicenterIcon = L.icon({
+    // tempskip
+    const epicenterIcon = leaflet.icon({
       iconUrl: "https://pickingname.github.io/basemap/icons/oldEpicenter.png",
       iconSize: [30, 30],
     });
 
-    L.marker(
-      [
-        earthquakeData.earthquake.hypocenter.latitude,
-        earthquakeData.earthquake.hypocenter.longitude,
-      ],
-      { icon: epicenterIcon }
-    ).addTo(markersLayerGroup);
+    // tempskip
+    leaflet
+      .marker(
+        [
+          earthquakeData.earthquake.hypocenter.latitude,
+          earthquakeData.earthquake.hypocenter.longitude,
+        ],
+        { icon: epicenterIcon }
+      )
+      .addTo(markersLayerGroup);
 
     const comparisonData = await fetchComparisonData(
       "https://pickingname.github.io/basemap/compare_points.csv"
@@ -413,7 +531,8 @@ const updateMapWithData = async (earthquakeData) => {
         point.addr
       );
       if (stationCoordinates) {
-        const marker = L.marker(
+        // tempskip
+        const marker = leaflet.marker(
           [stationCoordinates.lat, stationCoordinates.lng],
           {
             icon: createInflatedIcon(point.scale),
@@ -440,7 +559,8 @@ const updateMapWithData = async (earthquakeData) => {
           `found coordinates for ${point.addr}: `,
           stationCoordinates
         );
-        const marker = L.marker(
+        // tempskip
+        const marker = leaflet.marker(
           [stationCoordinates.lat, stationCoordinates.lng],
           {
             icon: createInflatedIcon(point.scale),
@@ -457,9 +577,7 @@ const updateMapWithData = async (earthquakeData) => {
   const bounds = markersLayerGroup
     .getBounds()
     .extend(stationMarkersGroup.getBounds());
-
-  var shouldIUpdate = isEEWforIndex || true;
-
+  shouldIUpdate = isEEWforIndex || true;
   if (bounds.isValid() && shouldIUpdate) {
     updateCamera(bounds);
   } else if (!bounds.isValid()) {
@@ -467,6 +585,14 @@ const updateMapWithData = async (earthquakeData) => {
   }
 };
 
+/**
+ * Fetches tsunami data from the API and returns the first entry in the response data.
+ *
+ * @async
+ * @function fetchTsunamiData
+ * @returns {Promise<Object|null>} A promise that resolves to the fetched tsunami data, or null if an error occurs.
+ * @throws {Error} If the API call fails.
+ */
 const fetchTsunamiData = async () => {
   try {
     const response = await axios.get(tsunamiApiEndpoint);
@@ -477,6 +603,14 @@ const fetchTsunamiData = async () => {
   }
 };
 
+/**
+ * Fetches GeoJSON data from a specified URL (https://pickingname.github.io/basemap/tsunami_areas.geojson).
+ *
+ * @async
+ * @function fetchGeojsonData
+ * @returns {Promise<Object|null>} A promise that resolves to the fetched GeoJSON data, or null if an error occurs.
+ * @throws {Error} If the API call fails.
+ */
 const fetchGeojsonData = async () => {
   try {
     const response = await axios.get(geojsonUrl);
@@ -487,7 +621,33 @@ const fetchGeojsonData = async () => {
   }
 };
 
-const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
+/**
+ * Returns the color associated with a given tsunami warning grade. Returns blue for unknown grades.
+ *
+ * @param {string} grade - The tsunami warning grade. Can be "Warning", "Watch", or any other string.
+ * @returns {string} The color corresponding to the tsunami warning grade. (Red for "Warning", yellow for "Watch", blue for unknown grades.)
+ */
+const getTsunamiColor = (grade) => {
+  switch (grade) {
+    case "Warning":
+      return "#ff0000";
+    case "Watch":
+      return "#ffff00";
+    default:
+      return "#1c7aff";
+  }
+};
+
+/**
+ * Updates the tsunami layer on the map with the provided tsunami and geojson data.
+ *
+ * @async
+ * @function updateTsunamiLayer
+ * @param {Object} tsunamiData - The data related to the tsunami, including areas and their grades.
+ * @param {Object} geojsonData - The GeoJSON data to be displayed on the map.
+ * @returns {Promise<void>} A promise that resolves when the tsunami layer has been updated.
+ */
+const updateTsunamiLayer = (tsunamiData, geojsonData) => {
   if (tsunamiGeojsonLayer) {
     mapInstance.removeLayer(tsunamiGeojsonLayer);
   }
@@ -499,32 +659,35 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
         const tsunamiArea = tsunamiData.areas.find(
           (area) => area.name === feature.properties.name
         );
-        return tsunamiArea && tsunamiArea.grade;
+        return tsunamiArea?.grade;
       }),
     };
 
-    tsunamiGeojsonLayer = L.geoJSON(filteredGeojsonData, {
-      style: (feature) => {
-        const tsunamiArea = tsunamiData.areas.find(
-          (area) => area.name === feature.properties.name
-        );
-        if (tsunamiArea) {
+    // tempskip since leaflet is imported from cdn
+    tsunamiGeojsonLayer = leaflet
+      .geoJSON(filteredGeojsonData, {
+        style: (feature) => {
+          const tsunamiArea = tsunamiData.areas.find(
+            (area) => area.name === feature.properties.name
+          );
+          if (tsunamiArea) {
+            return {
+              color: getTsunamiColor(tsunamiArea.grade),
+              weight: 3,
+              opacity: 0.7,
+              smoothFactor: 0.0,
+              noClip: false,
+            };
+          }
           return {
-            color: getTsunamiColor(tsunamiArea.grade),
-            weight: 3,
-            opacity: 0.7,
-            smoothFactor: 0.0,
-            noClip: false,
+            color: "#ccc",
+            weight: 0,
+            opacity: 0,
+            smoothFactor: 999994,
           };
-        }
-        return {
-          color: "#ccc",
-          weight: 0,
-          opacity: 0,
-          smoothFactor: 999994,
-        };
-      },
-    }).addTo(mapInstance);
+        },
+      })
+      .addTo(mapInstance);
 
     let bounds = tsunamiGeojsonLayer.getBounds();
     if (markersLayerGroup && markersLayerGroup.getBounds().isValid()) {
@@ -544,17 +707,16 @@ const updateTsunamiLayer = async (tsunamiData, geojsonData) => {
   }
 };
 
-const getTsunamiColor = (grade) => {
-  switch (grade) {
-    case "Warning":
-      return "#ff0000";
-    case "Watch":
-      return "#ffff00";
-    default:
-      return "#1c7aff";
-  }
-};
-
+/**
+ * This updates the page if theres a tsunami warnind data from the API
+ * This outputs a line on the map
+ * This function is not responsible for the sound and the card.
+ * And if theres a data, the bounds will be updated to the tsunami area and only that area.
+ *
+ * @async
+ * @function updateMapWithTsunamiData
+ * @throws {Error} If the API call fails.
+ */
 const updateMapWithTsunamiData = async () => {
   try {
     const tsunamiData = await fetchTsunamiData();
@@ -580,10 +742,21 @@ const updateMapWithTsunamiData = async () => {
   }
 };
 
+/**
+ * Fetches the latest earthquake data from the API and updates the map accordingly.
+ * The API endpoint is determined based on the value stored in localStorage under the key "apiType".
+ * If the API call is successful, it updates various global variables and triggers certain actions based on the data.
+ * If the API call fails, it logs the error and sets the isApiCallSuccessful flag to false.
+ *
+ * @async
+ * @function fetchAndUpdateData
+ * @throws {error} If the API call fails.
+ */
 const fetchAndUpdateData = async () => {
   try {
-    let apiType = localStorage.getItem("apiType");
-    let apiEndpoint;
+    const apiType = localStorage.getItem("apiType");
+    let apiEndpoint =
+      "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0"; // will be init on exec since this should be the default anyway
     if (apiType === "main") {
       apiEndpoint =
         "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
@@ -670,7 +843,7 @@ const fetchAndUpdateData = async () => {
 
 fetchAndUpdateData();
 
-setTimeout(function () {
+setTimeout(() => {
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
 
