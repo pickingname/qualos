@@ -582,8 +582,9 @@ const updateMapWithTsunamiData = async () => {
 
 const fetchAndUpdateData = async () => {
   try {
-    let apiType = localStorage.getItem("apiType");
-    let apiEndpoint;
+    const apiType = localStorage.getItem("apiType");
+    let apiEndpoint =
+      "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0"; // will be init on exec since this should be the default anyway
     if (apiType === "main") {
       apiEndpoint =
         "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
@@ -670,7 +671,7 @@ const fetchAndUpdateData = async () => {
 
 fetchAndUpdateData();
 
-setTimeout(function () {
+setTimeout(() => {
   setInterval(fetchAndUpdateData, 2000);
 }, 2000);
 
