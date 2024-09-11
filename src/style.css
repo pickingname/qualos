@@ -4,6 +4,43 @@
 @tailwind components;
 @tailwind utilities;
 
+.reloadingText, .bottomText, loadingSpinner {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.reloadingText.show, .bottomText.show, loadingSpinner.show {
+  opacity: 1;
+}
+
+.dim-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.5s ease-out;
+  z-index: 52320;
+}
+
+.dimmed {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.content-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 34343425;
+}
+
 html {
   min-height: 100vh;
   background-color: #262626 !important;

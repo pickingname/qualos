@@ -1,3 +1,5 @@
+import { dimScreenAndReload } from "./reloadHandler";
+
 if (localStorage.getItem("apiType") === "sandbox") {
   document.getElementById("isUsingSandboxAPI").textContent =
     "Using Sandbox API";
@@ -35,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // modal content creation
     const modalContent = document.createElement("div");
     modalContent.className =
-      "bg-white dark:bg-neutral-800 backdrop-blur-sm py-6 rounded-lg shadow-xl transform scale-95 transition-transform duration-300 mx-20 max-w-2xl w-full";
+      "bg-white dark:bg-neutral-800 backdrop-blur-sm py-6 rounded-lg transform scale-95 transition-transform duration-300 mx-20 max-w-2xl w-full";
 
     // modal text and dropdown creation
     modalContent.innerHTML = /*html*/ `
@@ -227,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedTheme = e.target.value;
       localStorage.setItem("theme", selectedTheme);
       console.log(`Theme set to: ${selectedTheme}`);
-      location.reload(); // Refresh the page to apply the new theme
+      dimScreenAndReload();
     });
 
     // fetch current hideLegend setting from localStorage and set it as the selected option
@@ -260,8 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedMovableMap = e.target.value;
       localStorage.setItem("movableMap", selectedMovableMap);
       console.log(`Movable Map set to: ${selectedMovableMap}`);
-
-      location.reload();
+      dimScreenAndReload();
     });
 
     // fetch current geojson setting from localStorage and set it as the selected option
@@ -274,8 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedGeoJsonMap = e.target.value;
       localStorage.setItem("geoJsonMap", selectedGeoJsonMap);
       console.log(`geoJson style set to: ${selectedGeoJsonMap}`);
-
-      location.reload();
+      dimScreenAndReload();
     });
 
     const convertTimeDropdown = modalContent.querySelector(
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("logButton").addEventListener("click", () => {
       console.log("resetting everything");
       localStorage.clear();
-      location.reload();
+      dimScreenAndReload();
     });
 
     // close on clicking outside the modal

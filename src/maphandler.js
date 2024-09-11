@@ -1,5 +1,6 @@
 import axios from "axios";
 import Papa from "papaparse";
+import { dimScreenAndReload } from "./reloadHandler";
 import { initCircleRendering, isEEW } from "./circleRenderer";
 import { isEEWforIndex } from "./circleRenderer";
 let isScalePrompt = false;
@@ -101,7 +102,7 @@ window
       console.log(
         "User theme changed and the setting is system, refreshing..."
       );
-      location.reload();
+      dimScreenAndReload();
     }
   });
 
