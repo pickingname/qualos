@@ -1,8 +1,7 @@
 import axios from "axios";
 import Papa from "papaparse";
 import { dimScreenAndReload } from "./reloadHandler";
-import { initCircleRendering, isEEW } from "./circleRenderer";
-import { isEEWforIndex } from "./circleRenderer";
+import { initCircleRendering, isEEWforIndex } from "./circleRenderer";
 let isScalePrompt = false;
 let iconPadding = 0.0;
 let prevForeign = false;
@@ -51,15 +50,17 @@ if (localStorage.getItem("geoJsonMap") === "true") {
   usegeojson = false;
 } else {
   console.log(
-    `geoJsonMap is ${localStorage.getItem(
-      "geoJsonMap"
-    )}, defaulting to false`
+    `geoJsonMap is ${localStorage.getItem("geoJsonMap")}, defaulting to false`
   );
   localStorage.setItem("geoJsonMap", "false");
 }
 
 if (localStorage.getItem("theme") === null) {
-  console.log(`localstorage theme is ${localStorage.getItem("theme")}, defaulting to system.`);
+  console.log(
+    `localstorage theme is ${localStorage.getItem(
+      "theme"
+    )}, defaulting to system.`
+  );
   localStorage.setItem("theme", "system");
 }
 
@@ -90,7 +91,9 @@ if (localStorage.getItem("movableMap") === "true") {
 } else if (localStorage.getItem("movableMap") === "false") {
   mapPan = false;
 } else {
-  console.log(`movableMap is ${localStorage.getItem("movableMap")}, defaulting to false`);
+  console.log(
+    `movableMap is ${localStorage.getItem("movableMap")}, defaulting to false`
+  );
   localStorage.setItem("movableMap", "false");
 }
 
