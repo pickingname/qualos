@@ -1,12 +1,13 @@
 import axios from "axios";
 
+// skipcq: JS-0239, JS-E1009
 export var isEEW, isEEWforIndex;
 isEEW = false;
 isEEWforIndex = false;
 let reportNum;
 let isThisTheFirstTime = false;
 
-var EEW = new Audio("https://pickingname.github.io/datastores/EEW.mp3");
+const EEW = new Audio("https://pickingname.github.io/datastores/EEW.mp3");
 EEW.volume = 0.5;
 
 function borderYellow() {
@@ -89,7 +90,7 @@ function returnBorder() {
 }
 
 const fetchCircleData = async () => {
-  var date = new Date();
+  let date = new Date();
 
   // convert to UTC 0
   date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
@@ -99,22 +100,16 @@ const fetchCircleData = async () => {
   date.setMinutes(date.getMinutes() - 0);
   date.setSeconds(date.getSeconds() - 2); // offset to prevent 404 error
   const NowTime =
-    date.getFullYear() +
-    "" +
+    String(date.getFullYear()) +
     ("0" + (date.getMonth() + 1)).slice(-2) +
-    "" +
     ("0" + date.getDate()).slice(-2) +
-    "" +
     ("0" + date.getHours()).slice(-2) +
-    "" +
     ("0" + date.getMinutes()).slice(-2) +
-    "" +
     ("0" + date.getSeconds()).slice(-2);
+
   const NowDay =
-    date.getFullYear() +
-    "" +
+    String(date.getFullYear()) +
     ("0" + (date.getMonth() + 1)).slice(-2) +
-    "" +
     ("0" + date.getDate()).slice(-2);
 
   const url =
@@ -183,7 +178,7 @@ const renderCircles = (mapInstance, circleData) => {
   let expInt;
   let reportText;
 
-  // TODO: check if the report is a training report or a final report
+  // need to do: check if the report is a training report or a final report
   if (isFinal === "true") {
     reportText = "Final report";
   } else if (isFinal === "false") {
