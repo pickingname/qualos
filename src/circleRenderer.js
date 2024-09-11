@@ -18,7 +18,7 @@ EEW.volume = 0.5;
  * I am too lazy to write the same docs multiple times
  *
  *
- * @function border...
+ * @function borderYellow
  * @returns {void}
  */
 function borderYellow() {
@@ -36,7 +36,7 @@ function borderYellow() {
  * I am too lazy to write the same docs multiple times
  *
  *
- * @function border...
+ * @function borderOrange
  * @returns {void}
  */
 function borderOrange() {
@@ -56,7 +56,7 @@ function borderOrange() {
  * I am too lazy to write the same docs multiple times
  *
  *
- * @function border...
+ * @function borderRed
  * @returns {void}
  */
 function borderRed() {
@@ -74,7 +74,7 @@ function borderRed() {
  * I am too lazy to write the same docs multiple times
  *
  *
- * @function border...
+ * @function borderPurple
  * @returns {void}
  */
 function borderPurple() {
@@ -94,7 +94,7 @@ function borderPurple() {
  * I am too lazy to write the same docs multiple times
  *
  *
- * @function border...
+ * @function borderBlue
  * @returns {void}
  */
 function borderBlue() {
@@ -111,7 +111,7 @@ function borderBlue() {
 /**
  * Returns border to the defalt theme color
  *
- * @function border...
+ * @function returnBorder
  * @returns {void}
  */
 function returnBorder() {

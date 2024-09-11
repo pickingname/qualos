@@ -4,12 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.reloadingText, .bottomText, loadingSpinner {
+.reloadingText, .bottomText, .loadingSpinner, .reasonText {
   opacity: 0;
   transition: opacity 0.5s ease-out;
 }
 
-.reloadingText.show, .bottomText.show, loadingSpinner.show {
+.reloadingText.show, .bottomText.show, .loadingSpinner.show, .reasonText.show {
   opacity: 1;
 }
 

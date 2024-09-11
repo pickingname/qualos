@@ -1,6 +1,5 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
-import { dimScreenAndReload } from "./reloadHandler";
 
 let timeConversion;
 
@@ -167,9 +166,8 @@ const fetchData = async () => {
   } else if (localStorage.getItem("timeConversion") === "false") {
     time = formatDate(time);
   } else {
-    // probably isnt even possible unless localstorage is resetted while the webpage is running
-    console.error("timeConversion is false, not converting time");
-    dimScreenAndReload();
+    // will displays this when the user resets the settings
+    console.log("timeConversion is false, not converting time");
   }
 
   const depth =

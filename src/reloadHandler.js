@@ -1,4 +1,11 @@
-export function dimScreenAndReload() {
+/**
+ * Function to dim the screen and reload the page
+ * Creates a better 'app-like' experience for the user
+ * And also tells the user that the leaflet map might stuck at like zoom level 0 when reloaded using location.reload();
+ * 
+ * @param {String} reason Reason for the reload, will be displayed on the screen also
+ */
+export function dimScreenAndReload(reason) {
   setTimeout(() => {
     const overlay = document.createElement("div");
     overlay.classList.add("dim-overlay");
@@ -36,12 +43,26 @@ export function dimScreenAndReload() {
       "This might cause map rendering issues. For a better way, reload the website manually.";
     contentWrapper.appendChild(bottomText);
 
+    const reasonText = document.createElement("p");
+    reasonText.classList.add(
+      "text-white",
+      "mt-4",
+      "px-2",
+      'font-mono',
+      'rounded-md',
+      'bg-stone-800',
+      'reasonText'
+    );
+    reasonText.textContent = `debug reason: ${reason}`;
+    contentWrapper.appendChild(reasonText);
+    
     document.body.appendChild(contentWrapper);
 
     setTimeout(() => {
       document.querySelector(".reloadingText").classList.add("show");
       document.querySelector(".bottomText").classList.add("show");
       document.querySelector(".loadingSpinner").classList.add("show");
+      document.querySelector(".reasonText").classList.add("show");
     }, 50);
 
     setTimeout(() => {

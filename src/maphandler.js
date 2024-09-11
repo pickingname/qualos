@@ -17,13 +17,13 @@ const geojsonUrl =
   "https://pickingname.github.io/basemap/tsunami_areas.geojson";
 
 let userTheme = "light";
-let themeSetting = localStorage.getItem("theme");
+const themeSetting = localStorage.getItem("theme");
 let isApiCallSuccessful = true;
 let isMapDataChanged = false;
 let isPreviouslyScalePrompt = false;
 let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
-let mapPan;
+let mapPan = 'false'; // defaults to false
 
 // skipcq: JS-0125 uses leaflet now since leaflet should also be ignore cause it is fetched fron a cdn
 const leaflet = L;
@@ -107,7 +107,7 @@ window
       console.log(
         "User theme changed and the setting is system, refreshing..."
       );
-      dimScreenAndReload();
+      dimScreenAndReload('user changed system theme');
     }
   });
 
