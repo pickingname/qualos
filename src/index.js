@@ -1,30 +1,26 @@
 import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
-let timeConversion;
-
-if (localStorage.getItem("timeConversion") === "true") {
-  timeConversion = true;
-} else if (localStorage.getItem("timeConversion") === "false") {
-  timeConversion = false;
-} else {
-  console.log(
-    `timeConversion is ${localStorage.getItem(
-      "timeConversion"
-    )}, defaulting to true`
-  );
-  timeConversion = true;
-  localStorage.setItem("timeConversion", true);
-}
-
+/**
+ * formats the date so that the function below can convert the date to the user's browser time
+ *
+ * @param {String} dateString the date string to format
+ * @returns formatted date string, the time is still the same, this is just to format the date to the correct format
+ */
 function formatDate(dateString) {
-  let [datePart, timePart] = dateString.split(" ");
+  const [datePart, timePart] = dateString.split(" ");
 
-  let [year, month, day] = datePart.split("/");
+  const [year, month, day] = datePart.split("/");
 
   return `${day}/${month}/${year}, ${timePart}`;
 }
 
+/**
+ * converts the p2pquake reported time into the user's browser time
+ *
+ * @param {String} unformattedString the unformatted date string (gmt+9)
+ * @returns the formatted date string in the user's browser time
+ */
 function convertToLocalTime(unformattedString) {
   const [datePart, timePart] = unformattedString.split(" ");
   const [year, month, day] = datePart.split("/");
@@ -57,18 +53,39 @@ function convertToLocalTime(unformattedString) {
   return localDate.toLocaleString(undefined, options);
 }
 
+/**
+ * Replaces the + and - with p and m for the intensity description
+ * 
+ * @param {String} input String to replace the + and - with p and m
+ * @returns 
+ */
 function replaceFormat(input) {
   return input.replace(/\+/g, "p").replace(/-/g, "m");
 }
 
+/**
+ * Hides the intensity icon for better visibility
+ * 
+ * @param {String} which Which intensity to hide, lower thna {which} will be hidden
+ */
 function hideInt(which) {
   document.getElementById(which).classList.add("hidden");
 }
 
+/**
+ * Show intensity back after being hidden
+ * 
+ * @param {String} which Which intensity to show
+ */
 function showInt(which) {
   document.getElementById(which).classList.remove("hidden");
 }
 
+/**
+ * Updates the intensity icon for Detailscale reports
+ * 
+ * @param {String} intensityDescription 
+ */
 function updateInt(intensityDescription) {
   const levels = ["i1", "i2", "i3", "i4", "i5m", "i5p", "i6m", "i6p", "i7"];
   const maxIndex = levels.indexOf(intensityDescription.toString());
@@ -82,6 +99,11 @@ function updateInt(intensityDescription) {
   });
 }
 
+/**
+ * Updates the scale icon for scalePrompt reports
+ * 
+ * @param {String} intensityDescription 
+ */
 function updateScale(intensityDescription) {
   const levels = ["s1", "s2", "s3", "s4", "s5m", "s5p", "s6m", "s6p", "s7"];
   const maxIndex = levels.indexOf(intensityDescription.toString());
@@ -167,7 +189,8 @@ const fetchData = async () => {
     time = formatDate(time);
   } else {
     // will displays this when the user resets the settings
-    console.log("timeConversion is false, not converting time");
+    console.log("time conversion setting is invalid, defaulting to true");
+    localStorage.setItem("timeConversion", true);
   }
 
   const depth =
