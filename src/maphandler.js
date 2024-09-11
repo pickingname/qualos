@@ -4,7 +4,6 @@ import { dimScreenAndReload } from "./reloadHandler";
 import { initCircleRendering, isEEWforIndex } from "./circleRenderer";
 let isScalePrompt = false;
 let iconPadding = 0.0;
-let prevForeign = false;
 let currentTW = false;
 let foreTs = false;
 let domeTs = false;
@@ -483,7 +482,6 @@ const updateMapWithData = async (earthquakeData) => {
   }
 
   if (earthquakeData.issue.type === "Foreign") {
-    prevForeign = true;
     leaflet
       .marker([24.444243, 122.927329])
       .setOpacity(0.0)
@@ -498,7 +496,6 @@ const updateMapWithData = async (earthquakeData) => {
       .addTo(markersLayerGroup);
     iconPadding = 0.1;
   } else {
-    prevForeign = false;
     iconPadding = 0;
   }
 
