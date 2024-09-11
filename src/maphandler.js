@@ -444,7 +444,7 @@ const updateMapWithData = async (earthquakeData) => {
   } else {
     stationMarkersGroup = leaflet
       .inflatableMarkersGroup({
-        iconCreateFunction: function (marker) {
+        iconCreateFunction(marker) {
           return createDeflatedIcon(marker.options.scale);
         },
       })
