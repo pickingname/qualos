@@ -64,7 +64,8 @@ function replaceFormat(input) {
 }
 
 /**
- * Hides the intensity icon for better visibility
+ * Hides the intensity icon for better visibility.
+ * This is used primary by the settings UI to call and hide the Intensity legend
  * 
  * @param {String} which Which intensity to hide, lower thna {which} will be hidden
  */
