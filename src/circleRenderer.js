@@ -168,7 +168,7 @@ const fetchCircleData = async () => {
   // i know it is a very aggressive way to ignore but it works
   // skipcq: JS-0246
   const NowTime = `${date.getFullYear()}${("0" + (date.getMonth() + 1)).slice(
-    -2
+    -2,
     // skipcq: JS-0246
   )}${("0" + date.getDate()).slice(-2)}${("0" + date.getHours()).slice(-2)}${
     // skipcq: JS-0246
@@ -259,7 +259,7 @@ const renderCircles = (mapInstance, circleData) => {
   // EEW data for parsing in the index.html
   const epicenterName = circleData.hypoInfo.items[0].regionName;
   const magnitude = parseFloat(circleData.hypoInfo.items[0].magnitude).toFixed(
-    1
+    1,
   );
   reportNum = circleData.hypoInfo.items[0].reportNum;
   const depth = circleData.hypoInfo.items[0].depth;
