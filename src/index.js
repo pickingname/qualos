@@ -2,7 +2,9 @@ import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
 /**
- * formats the date so that the function below can convert the date to the user's browser time
+ * Format the time from the p2pquake api to the correct format.
+ * This is used with the timeConversion setting to convert the time to the user's browser time
+ * So both are in the correct format.
  *
  * @param {String} dateString the date string to format
  * @returns formatted date string, the time is still the same, this is just to format the date to the correct format
@@ -10,7 +12,7 @@ import { isEEW } from "./circleRenderer";
 function formatDate(dateString) {
   const [datePart, timePart] = dateString.split(" ");
 
-  const [year, month, day] = datePart.split("/");
+  const [year, day, month] = datePart.split("/");
 
   return `${day}/${month}/${year}, ${timePart}`;
 }
@@ -33,8 +35,8 @@ function convertToLocalTime(unformattedString) {
       parseInt(day),
       parseInt(hour) - 9,
       parseInt(minute),
-      parseInt(second)
-    )
+      parseInt(second),
+    ),
   );
 
   const localDate = new Date(unformattedDate.toLocaleString());
@@ -55,7 +57,7 @@ function convertToLocalTime(unformattedString) {
 
 /**
  * Replaces the + and - with p and m for the intensity description
- * 
+ *
  * @param {String} input String to replace the + and - with p and m
  * @returns {String} formatted date
  */
@@ -66,7 +68,7 @@ function replaceFormat(input) {
 /**
  * Hides the intensity icon for better visibility.
  * This is used primary by the settings UI to call and hide the Intensity legend
- * 
+ *
  * @param {String} which Which intensity to hide, lower thna {which} will be hidden
  */
 function hideInt(which) {
@@ -75,7 +77,7 @@ function hideInt(which) {
 
 /**
  * Show intensity back after being hidden
- * 
+ *
  * @param {String} which Which intensity to show
  */
 function showInt(which) {
@@ -84,8 +86,8 @@ function showInt(which) {
 
 /**
  * Updates the intensity icon for Detailscale reports
- * 
- * @param {String} intensityDescription 
+ *
+ * @param {String} intensityDescription
  */
 function updateInt(intensityDescription) {
   const levels = ["i1", "i2", "i3", "i4", "i5m", "i5p", "i6m", "i6p", "i7"];
@@ -102,8 +104,8 @@ function updateInt(intensityDescription) {
 
 /**
  * Updates the scale icon for scalePrompt reports
- * 
- * @param {String} intensityDescription 
+ *
+ * @param {String} intensityDescription
  */
 function updateScale(intensityDescription) {
   const levels = ["s1", "s2", "s3", "s4", "s5m", "s5p", "s6m", "s6p", "s7"];
@@ -132,7 +134,7 @@ const fetchComparisonData = async () => {
   }
   try {
     const response = await axios.get(
-      "https://pickingname.github.io/basemap/compare.json"
+      "https://pickingname.github.io/basemap/compare.json",
     );
     comparisonDataCache = response.data;
     return comparisonDataCache;
@@ -179,7 +181,7 @@ const fetchData = async () => {
   const quakeDetails = quakeData[0];
 
   const magnitude = parseFloat(
-    quakeDetails.earthquake.hypocenter.magnitude
+    quakeDetails.earthquake.hypocenter.magnitude,
   ).toFixed(1);
   const maxScale = quakeDetails.earthquake.maxScale;
   let time = quakeDetails.earthquake.time;
@@ -198,8 +200,8 @@ const fetchData = async () => {
     quakeDetails.earthquake.hypocenter.depth === -1
       ? "unknown"
       : quakeDetails.earthquake.hypocenter.depth === 0
-      ? "Very shallow"
-      : `${quakeDetails.earthquake.hypocenter.depth}km`;
+        ? "Very shallow"
+        : `${quakeDetails.earthquake.hypocenter.depth}km`;
   const locationName = quakeDetails.earthquake.hypocenter.name;
 
   /**
@@ -265,9 +267,8 @@ const fetchData = async () => {
     document.getElementById("depth").textContent = "Awaiting full report";
     document.getElementById("where").textContent =
       "Earthquake intensity report received";
-    document.getElementById(
-      "time"
-    ).textContent = `Time: ${quakeDetails.issue.time}`;
+    document.getElementById("time").textContent =
+      `Time: ${quakeDetails.issue.time}`;
   } else {
     if (quakeDetails.earthquake.hypocenter.depth === -1) {
       if (quakeDetails.issue.type === "Foreign") {
@@ -295,9 +296,8 @@ const fetchData = async () => {
       }
     } else {
       document.getElementById("intensity").textContent = intensityDescription;
-      document.getElementById(
-        "magnitude"
-      ).textContent = `Magnitude: ${magnitude}`;
+      document.getElementById("magnitude").textContent =
+        `Magnitude: ${magnitude}`;
       document.getElementById("time").textContent = `Time: ${time}`;
       document.getElementById("depth").textContent = `Depth: ${depth}`;
       document.getElementById("where").textContent = `${englishName}`;
