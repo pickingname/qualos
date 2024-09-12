@@ -28,7 +28,6 @@ try {
       localStorage.setItem(key, defaultSettings[key]);
     }
   }
-
 } catch (error) {
   console.error("An error occurred while accessing localStorage:", error);
 }
