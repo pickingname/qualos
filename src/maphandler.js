@@ -785,6 +785,8 @@ const fetchAndUpdateData = async () => {
     isApiCallSuccessful = true;
     const latestEarthquakeData = response.data[0];
 
+    currentID = latestEarthquakeData.id;
+
     tsDepth = latestEarthquakeData.earthquake.hypocenter.depth;
     // skipcq: JS-A1004
     tsInt = getTrueIntensity(latestEarthquakeData.earthquake.maxScale);
