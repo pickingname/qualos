@@ -307,7 +307,7 @@ const renderCircles = (mapInstance, circleData) => {
 
   document.getElementById("intensity").textContent = expInt;
   document.getElementById("magnitude").textContent = `Magnitude: ${magnitude}`;
-  document.getElementById("depth").textContent = `Depth:  + ${depth}`;
+  document.getElementById("depth").textContent = `Depth: ${depth}`;
   document.getElementById("time").textContent = reportText;
   document.getElementById("where").textContent = epicenterName;
 

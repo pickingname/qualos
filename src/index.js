@@ -2,7 +2,9 @@ import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
 /**
- * formats the date so that the function below can convert the date to the user's browser time
+ * Format the time from the p2pquake api to the correct format.
+ * This is used with the timeConversion setting to convert the time to the user's browser time
+ * So both are in the correct format.
  *
  * @param {String} dateString the date string to format
  * @returns formatted date string, the time is still the same, this is just to format the date to the correct format
@@ -10,7 +12,7 @@ import { isEEW } from "./circleRenderer";
 function formatDate(dateString) {
   const [datePart, timePart] = dateString.split(" ");
 
-  const [year, month, day] = datePart.split("/");
+  const [year, day, month] = datePart.split("/");
 
   return `${day}/${month}/${year}, ${timePart}`;
 }
@@ -64,7 +66,8 @@ function replaceFormat(input) {
 }
 
 /**
- * Hides the intensity icon for better visibility
+ * Hides the intensity icon for better visibility.
+ * This is used primary by the settings UI to call and hide the Intensity legend
  *
  * @param {String} which Which intensity to hide, lower thna {which} will be hidden
  */
