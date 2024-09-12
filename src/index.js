@@ -10,7 +10,7 @@ import { isEEW } from "./circleRenderer";
 function formatDate(dateString) {
   const [datePart, timePart] = dateString.split(" ");
 
-  const [year, month, day] = datePart.split("/");
+  const [year, day, month] = datePart.split("/");
 
   return `${day}/${month}/${year}, ${timePart}`;
 }
@@ -55,7 +55,7 @@ function convertToLocalTime(unformattedString) {
 
 /**
  * Replaces the + and - with p and m for the intensity description
- * 
+ *
  * @param {String} input String to replace the + and - with p and m
  * @returns {String} formatted date
  */
@@ -66,7 +66,7 @@ function replaceFormat(input) {
 /**
  * Hides the intensity icon for better visibility.
  * This is used primary by the settings UI to call and hide the Intensity legend
- * 
+ *
  * @param {String} which Which intensity to hide, lower thna {which} will be hidden
  */
 function hideInt(which) {
@@ -75,7 +75,7 @@ function hideInt(which) {
 
 /**
  * Show intensity back after being hidden
- * 
+ *
  * @param {String} which Which intensity to show
  */
 function showInt(which) {
@@ -84,8 +84,8 @@ function showInt(which) {
 
 /**
  * Updates the intensity icon for Detailscale reports
- * 
- * @param {String} intensityDescription 
+ *
+ * @param {String} intensityDescription
  */
 function updateInt(intensityDescription) {
   const levels = ["i1", "i2", "i3", "i4", "i5m", "i5p", "i6m", "i6p", "i7"];
@@ -102,8 +102,8 @@ function updateInt(intensityDescription) {
 
 /**
  * Updates the scale icon for scalePrompt reports
- * 
- * @param {String} intensityDescription 
+ *
+ * @param {String} intensityDescription
  */
 function updateScale(intensityDescription) {
   const levels = ["s1", "s2", "s3", "s4", "s5m", "s5p", "s6m", "s6p", "s7"];
