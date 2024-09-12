@@ -2,7 +2,9 @@ import axios from "axios";
 import { isEEW } from "./circleRenderer";
 
 /**
- * formats the date so that the function below can convert the date to the user's browser time
+ * Format the time from the p2pquake api to the correct format.
+ * This is used with the timeConversion setting to convert the time to the user's browser time
+ * So both are in the correct format.
  *
  * @param {String} dateString the date string to format
  * @returns formatted date string, the time is still the same, this is just to format the date to the correct format
