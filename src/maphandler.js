@@ -1,7 +1,13 @@
 import axios from "axios";
 import Papa from "papaparse";
 import { dimScreenAndReload } from "./reloadHandler";
-import { initCircleRendering, isEEWforIndex } from "./circleRenderer";
+import {
+  initCircleRendering,
+  isEEWforIndex,
+  fitCircleBounds,
+  pCircle,
+  sCircle,
+} from "./circleRenderer";
 let isScalePrompt = false;
 let iconPadding = 0.0;
 let currentTW = false;
@@ -26,8 +32,9 @@ let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
 let mapPan = "false"; // defaults to false
 let isThereEEWNow = "true";
-// skipcq: JS-0239, JS-0119, JS-E1009
-export var currentID;
+let currentID = "x";
+let compareID = "x";
+let firstEewReport = false;
 
 // skipcq: JS-0125 uses leaflet now since leaflet should also be ignore cause it is fetched fron a cdn
 const leaflet = L;
@@ -207,7 +214,7 @@ function setTsWarningTexts(mag, int, depth) {
 }
 
 /**
- * Removes the tsunami warning display and pauses the warning audio.
+ * Removes the tsunami warning display and stops the warning audio.
  *
  * @function removeTsunamiWarning
  */
@@ -785,7 +792,10 @@ const fetchAndUpdateData = async () => {
     isApiCallSuccessful = true;
     const latestEarthquakeData = response.data[0];
 
+    currentID = latestEarthquakeData.id;
+
     tsDepth = latestEarthquakeData.earthquake.hypocenter.depth;
+
     // skipcq: JS-A1004
     tsInt = getTrueIntensity(latestEarthquakeData.earthquake.maxScale);
     tsMag = latestEarthquakeData.earthquake.hypocenter.magnitude;
@@ -848,6 +858,15 @@ fetchAndUpdateData();
 setInterval(() => {
   if (isEEWforIndex === true) {
     isThereEEWNow = true;
+
+    if (firstEewReport === false) {
+      firstEewReport = true;
+      compareID = currentID;
+    }
+
+    if (currentID === compareID) {
+      fitCircleBounds(mapInstance, pCircle, sCircle);
+    }
   } else if (isEEWforIndex === false) {
     if (isThereEEWNow === true) {
       console.log("maphandler eew ended check pass");
@@ -861,6 +880,9 @@ setInterval(() => {
       }
     }
     isThereEEWNow = false;
+    currentID = "x";
+    compareID = "x";
+    firstEewReport = false;
   }
 }, 1000);
 

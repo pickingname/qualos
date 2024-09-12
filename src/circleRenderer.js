@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // skipcq: JS-E1009, JS-0119, JS-0239
-export var isEEW, isEEWforIndex;
+export var isEEW, isEEWforIndex, pCircle, sCircle;
 isEEW = false;
 isEEWforIndex = false;
 let reportNum = "1";
@@ -199,6 +199,24 @@ const fetchCircleData = async () => {
 };
 
 /**
+ * Adjust the camera bounds to fit the P and S wave circles on the map.
+ *
+ * @function fitCircleBounds
+ * @param {Object} mapInstance - The Leaflet map instance to render the circles on.
+ * @param {Object} pCircle - The P wave circle.
+ * @param {Object} sCircle - The S wave circle.
+ * @returns {void}
+ */
+
+// skipcq: JS-0123
+export function fitCircleBounds(mapInstance, pCircle, sCircle) {
+  const bounds = leaflet.latLngBounds();
+  bounds.extend(pCircle.getBounds());
+  bounds.extend(sCircle.getBounds());
+  mapInstance.fitBounds(bounds.pad(0.5));
+}
+
+/**
  * Renders circles on the map to represent P wave and S wave data from an earthquake if the API is responsed with one
  * Updates the map with the epicenter location and adjusts the view to fit the bounds of the circles.
  * Handles the display of earthquake early warning (EEW) information and updates the UI accordingly.
@@ -209,17 +227,6 @@ const fetchCircleData = async () => {
  * @returns {void}
  */
 const renderCircles = (mapInstance, circleData) => {
-  /**
-   * Adjust the camera bounds to fit the P and S wave circles on the map.
-   */
-  function fitCircleBounds() {
-    // skipcq: JS-0129
-    bounds.extend(pCircle.getBounds());
-    // skipcq: JS-0129
-    bounds.extend(sCircle.getBounds());
-    // skipcq: JS-0129
-    mapInstance.fitBounds(bounds.pad(0.002));
-  }
   // remove previous layers if they exist
   if (mapInstance.psSGroup) {
     mapInstance.removeLayer(mapInstance.psSGroup);
@@ -339,7 +346,7 @@ const renderCircles = (mapInstance, circleData) => {
   mapInstance.psSGroup = leaflet.layerGroup().addTo(mapInstance);
 
   // P wave circle (blue)
-  const pCircle = leaflet
+  pCircle = leaflet
     .circle([latitude, longitude], {
       weight: 2,
       color: "#35b4fb",
@@ -350,7 +357,7 @@ const renderCircles = (mapInstance, circleData) => {
     .addTo(mapInstance.psSGroup);
 
   // S wave circle (red)
-  const sCircle = leaflet
+  sCircle = leaflet
     .circle([latitude, longitude], {
       weight: 2,
       color: "#f6521f",
@@ -372,11 +379,10 @@ const renderCircles = (mapInstance, circleData) => {
     })
     .addTo(mapInstance.psSGroup);
 
-  const bounds = leaflet.latLngBounds([latitude, longitude]);
   if (isThisTheFirstTime === false) {
     EEW.play();
     updateEpicenterLocationOnce();
-    fitCircleBounds();
+    fitCircleBounds(mapInstance, pCircle, sCircle);
   }
 
   isThisTheFirstTime = true;
