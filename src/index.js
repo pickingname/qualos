@@ -57,7 +57,7 @@ function convertToLocalTime(unformattedString) {
  * Replaces the + and - with p and m for the intensity description
  * 
  * @param {String} input String to replace the + and - with p and m
- * @returns 
+ * @returns {String} formatted date
  */
 function replaceFormat(input) {
   return input.replace(/\+/g, "p").replace(/-/g, "m");

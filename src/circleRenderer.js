@@ -15,7 +15,8 @@ EEW.volume = 0.5;
 
 /**
  * Change the border the the color specified in the function
- * I am too lazy to write the same docs multiple times
+ * Change the card border color to Yellow(tailwindcss) in case of a EEW report
+ * Applied to the EEW intensity 1, 2
  *
  *
  * @function borderYellow
@@ -33,7 +34,8 @@ function borderYellow() {
 
 /**
  * Change the border the the color specified in the function
- * I am too lazy to write the same docs multiple times
+ * Change the card border (tailwindcss) to Orange
+ * Applied to the EEW intensity 3, 4
  *
  *
  * @function borderOrange
@@ -53,7 +55,8 @@ function borderOrange() {
 
 /**
  * Change the border the the color specified in the function
- * I am too lazy to write the same docs multiple times
+ * Change the card border to red (tailwindcss) in case of EEW
+ * Applied to the EEW intensity 5-, 5+
  *
  *
  * @function borderRed
@@ -71,7 +74,8 @@ function borderRed() {
 
 /**
  * Change the border the the color specified in the function
- * I am too lazy to write the same docs multiple times
+ * Change the border to the Purple (tailwindcss) color
+ * Applied to the EEW intensity 6-, 6+, 7
  *
  *
  * @function borderPurple
@@ -91,8 +95,9 @@ function borderPurple() {
 
 /**
  * Change the border the the color specified in the function
- * I am too lazy to write the same docs multiple times
- *
+ * Change the border color to blue (tailwindcss)
+ * This will be applied if the reported EEW intensity is 0 or not in the number lists
+ * After this is triggered the int on the card element will be '--'
  *
  * @function borderBlue
  * @returns {void}
