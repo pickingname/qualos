@@ -35,8 +35,8 @@ function convertToLocalTime(unformattedString) {
       parseInt(day),
       parseInt(hour) - 9,
       parseInt(minute),
-      parseInt(second)
-    )
+      parseInt(second),
+    ),
   );
 
   const localDate = new Date(unformattedDate.toLocaleString());
@@ -134,7 +134,7 @@ const fetchComparisonData = async () => {
   }
   try {
     const response = await axios.get(
-      "https://pickingname.github.io/basemap/compare.json"
+      "https://pickingname.github.io/basemap/compare.json",
     );
     comparisonDataCache = response.data;
     return comparisonDataCache;
@@ -181,7 +181,7 @@ const fetchData = async () => {
   const quakeDetails = quakeData[0];
 
   const magnitude = parseFloat(
-    quakeDetails.earthquake.hypocenter.magnitude
+    quakeDetails.earthquake.hypocenter.magnitude,
   ).toFixed(1);
   const maxScale = quakeDetails.earthquake.maxScale;
   let time = quakeDetails.earthquake.time;
@@ -200,8 +200,8 @@ const fetchData = async () => {
     quakeDetails.earthquake.hypocenter.depth === -1
       ? "unknown"
       : quakeDetails.earthquake.hypocenter.depth === 0
-      ? "Very shallow"
-      : `${quakeDetails.earthquake.hypocenter.depth}km`;
+        ? "Very shallow"
+        : `${quakeDetails.earthquake.hypocenter.depth}km`;
   const locationName = quakeDetails.earthquake.hypocenter.name;
 
   /**
@@ -267,9 +267,8 @@ const fetchData = async () => {
     document.getElementById("depth").textContent = "Awaiting full report";
     document.getElementById("where").textContent =
       "Earthquake intensity report received";
-    document.getElementById(
-      "time"
-    ).textContent = `Time: ${quakeDetails.issue.time}`;
+    document.getElementById("time").textContent =
+      `Time: ${quakeDetails.issue.time}`;
   } else {
     if (quakeDetails.earthquake.hypocenter.depth === -1) {
       if (quakeDetails.issue.type === "Foreign") {
@@ -297,9 +296,8 @@ const fetchData = async () => {
       }
     } else {
       document.getElementById("intensity").textContent = intensityDescription;
-      document.getElementById(
-        "magnitude"
-      ).textContent = `Magnitude: ${magnitude}`;
+      document.getElementById("magnitude").textContent =
+        `Magnitude: ${magnitude}`;
       document.getElementById("time").textContent = `Time: ${time}`;
       document.getElementById("depth").textContent = `Depth: ${depth}`;
       document.getElementById("where").textContent = `${englishName}`;
