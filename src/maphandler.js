@@ -26,8 +26,6 @@ let isPreviouslyUpdated = true;
 let isPreviouslyForeign = false;
 let mapPan = "false"; // defaults to false
 let isThereEEWNow = "true";
-// skipcq: JS-0239, JS-0119, JS-E1009
-export var currentID;
 
 // skipcq: JS-0125 uses leaflet now since leaflet should also be ignore cause it is fetched fron a cdn
 const leaflet = L;
@@ -784,8 +782,6 @@ const fetchAndUpdateData = async () => {
     }
     isApiCallSuccessful = true;
     const latestEarthquakeData = response.data[0];
-
-    currentID = latestEarthquakeData.id;
 
     tsDepth = latestEarthquakeData.earthquake.hypocenter.depth;
     // skipcq: JS-A1004
