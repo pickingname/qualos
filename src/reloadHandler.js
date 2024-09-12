@@ -2,7 +2,7 @@
  * Function to dim the screen and reload the page
  * Creates a better 'app-like' experience for the user
  * And also tells the user that the leaflet map might stuck at like zoom level 0 when reloaded using location.reload();
- * 
+ *
  * @param {String} reason Reason for the reload, will be displayed on the screen also
  */
 export function dimScreenAndReload(reason) {
@@ -20,14 +20,15 @@ export function dimScreenAndReload(reason) {
       "text-white",
       "text-4xl",
       "mb-4",
-      "reloadingText"
+      "reloadingText",
     );
     reloadingText.textContent = "Reloading this application";
     contentWrapper.appendChild(reloadingText);
 
     const spinner = document.createElement("div");
     spinner.classList.add("mx-auto");
-    spinner.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-white animate-spin loadingSpinner"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
+    spinner.innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-white animate-spin loadingSpinner"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
     contentWrapper.appendChild(spinner);
 
     const bottomText = document.createElement("p");
@@ -37,7 +38,7 @@ export function dimScreenAndReload(reason) {
       "text-lg",
       "mt-4",
       "px-2",
-      "bottomText"
+      "bottomText",
     );
     bottomText.textContent =
       "This might cause map rendering issues. For a better way, reload the website manually.";
@@ -48,14 +49,14 @@ export function dimScreenAndReload(reason) {
       "text-white",
       "mt-4",
       "px-2",
-      'font-mono',
-      'rounded-md',
-      'bg-stone-800',
-      'reasonText'
+      "font-mono",
+      "rounded-md",
+      "bg-stone-800",
+      "reasonText",
     );
     reasonText.textContent = `debug reason: ${reason}`;
     contentWrapper.appendChild(reasonText);
-    
+
     document.body.appendChild(contentWrapper);
 
     setTimeout(() => {

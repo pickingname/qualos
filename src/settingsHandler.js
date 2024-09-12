@@ -16,8 +16,8 @@ if (localStorage.getItem("hideLegend") === "hide") {
 } else {
   console.log(
     `intensityHide value is ${localStorage.getItem(
-      "hideLegend"
-    )}, defaulting to show.`
+      "hideLegend",
+    )}, defaulting to show.`,
   );
   localStorage.setItem("hideLegend", "show");
 }
@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedTheme = e.target.value;
       localStorage.setItem("theme", selectedTheme);
       console.log(`Theme set to: ${selectedTheme}`);
-      dimScreenAndReload('user changed settings theme');
+      dimScreenAndReload("user changed settings theme");
     });
 
     // fetch current hideLegend setting from localStorage and set it as the selected option
@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedMovableMap = e.target.value;
       localStorage.setItem("movableMap", selectedMovableMap);
       console.log(`Movable Map set to: ${selectedMovableMap}`);
-      dimScreenAndReload('user changed movable map setting');
+      dimScreenAndReload("user changed movable map setting");
     });
 
     // fetch current geojson setting from localStorage and set it as the selected option
@@ -275,11 +275,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedGeoJsonMap = e.target.value;
       localStorage.setItem("geoJsonMap", selectedGeoJsonMap);
       console.log(`geoJson style set to: ${selectedGeoJsonMap}`);
-      dimScreenAndReload('user changed geojson setting');
+      dimScreenAndReload("user changed geojson setting");
     });
 
     const convertTimeDropdown = modalContent.querySelector(
-      "#convertTimeSetting"
+      "#convertTimeSetting",
     );
     let currentConvertTime = localStorage.getItem("timeConversion");
     if (!currentConvertTime) {
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("logButton").addEventListener("click", () => {
       console.log("resetting everything");
       localStorage.clear();
-      dimScreenAndReload('user resetted all settings');
+      dimScreenAndReload("user resetted all settings");
     });
 
     // close on clicking outside the modal
