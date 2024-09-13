@@ -16,8 +16,8 @@ if (localStorage.getItem("hideLegend") === "hide") {
 } else {
   console.log(
     `intensityHide value is ${localStorage.getItem(
-      "hideLegend"
-    )}, defaulting to show.`
+      "hideLegend",
+    )}, defaulting to show.`,
   );
   localStorage.setItem("hideLegend", "show");
 }
@@ -36,7 +36,7 @@ async function setCurrentVersionToLocalstorage() {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(
-        `Error fetching the latest release: ${response.statusText}`
+        `Error fetching the latest release: ${response.statusText}`,
       );
     }
     const data = await response.json();
@@ -232,11 +232,8 @@ document.addEventListener("DOMContentLoaded", () => {
       modalContent.classList.add("scale-100");
 
       if (localStorage.getItem("appVersion")) {
-        document.getElementById(
-          "appVersionText"
-        ).textContent = `application setting | ${localStorage.getItem(
-          "appVersion"
-        )}`;
+        document.getElementById("appVersionText").textContent =
+          `application setting | ${localStorage.getItem("appVersion")}`;
       }
     }, 10);
 
@@ -319,7 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const convertTimeDropdown = modalContent.querySelector(
-      "#convertTimeSetting"
+      "#convertTimeSetting",
     );
     let currentConvertTime = localStorage.getItem("timeConversion");
     if (!currentConvertTime) {
