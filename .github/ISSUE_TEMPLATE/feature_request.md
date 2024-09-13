@@ -4,7 +4,6 @@ about: Suggest an idea for this repo
 title: "[FEAT]"
 labels: new feature
 assignees: pickingname
-
 ---
 
 **Is your feature request related to a problem? Please describe.**
