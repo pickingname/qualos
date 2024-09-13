@@ -1,6 +1,6 @@
 # qualos
 
-[unused logo]: <> (<img align="right" width="285" height="71" src="https://pickingname.github.io/icons/qualos/qualos_logo.png">)
+[unused logo]: <> (<img align="right" width="285" height="71" src="https://github.com/user-attachments/assets/85827092-099e-405d-8f99-f10ff1c85e37">)
 
 A website that shows the most recent earthquake in a map using p2pquake API.
 
@@ -10,7 +10,7 @@ A website that shows the most recent earthquake in a map using p2pquake API.
 
 ##### [https://qualos.info](https://qualos.info)
 
-![appPreview](https://github.com/user-attachments/assets/b19336e8-e2f6-4c7a-ae20-7f8a596b5343)
+![banner](https://github.com/user-attachments/assets/a5c70cf9-7c08-44a3-8837-3f542c705c40)
 
 ---
 
