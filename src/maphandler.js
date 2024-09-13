@@ -843,8 +843,6 @@ const fetchAndUpdateData = async () => {
     }
   } catch (error) {
     console.error("API call failed:", error);
-    // document.getElementById("statusText").classList.add("text-red-600");
-    // document.getElementById("statusText").textContent = "Map error: " + error;
     isApiCallSuccessful = false;
   }
 
@@ -868,15 +866,28 @@ setInterval(() => {
       fitCircleBounds(mapInstance, pCircle, sCircle);
     }
   } else if (isEEWforIndex === false) {
-    if (isThereEEWNow === true) {
-      console.log("maphandler eew ended check pass");
+    if (localStorage.getItem("movableMap") === "false") {
       const bounds = markersLayerGroup
         ? markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds())
         : null;
       if (bounds?.isValid()) {
         updateCamera(bounds);
       } else {
-        console.info("No valid bounds for interval camera update");
+        console.warn(
+          "[fn () setinterval, maphandler.js] No valid bounds for interval camera update",
+        );
+      }
+    }
+    if (isThereEEWNow === true) {
+      const bounds = markersLayerGroup
+        ? markersLayerGroup.getBounds().extend(stationMarkersGroup.getBounds())
+        : null;
+      if (bounds?.isValid()) {
+        updateCamera(bounds);
+      } else {
+        console.warn(
+          "[fn eewcheck, maphandler.js] No valid bounds for interval camera update",
+        );
       }
     }
     isThereEEWNow = false;

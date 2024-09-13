@@ -22,6 +22,38 @@ if (localStorage.getItem("hideLegend") === "hide") {
   localStorage.setItem("hideLegend", "show");
 }
 
+/**
+ * Fetches the latest release from a GitHub repository.
+ *
+ * @param {string} owner - The owner of the repository.
+ * @param {string} repo - The name of the repository.
+ * @returns {Promise<Object>} - A promise that resolves to the latest release data.
+ */
+async function setCurrentVersionToLocalstorage() {
+  const url = "https://api.github.com/repos/pickingname/qualos/releases/latest";
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(
+        `Error fetching the latest release: ${response.statusText}`,
+      );
+    }
+    const data = await response.json();
+
+    const sanitizedTagName = data.tag_name.replace(/[<>]/g, "");
+    console.log(`running on version: ${sanitizedTagName}`);
+    localStorage.setItem("appVersion", sanitizedTagName);
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching the latest release:", error);
+    throw error;
+  }
+}
+
+setCurrentVersionToLocalstorage();
+
 document.addEventListener("DOMContentLoaded", () => {
   const settingsButton = document.getElementById("settings");
   const body = document.body;
@@ -49,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
               class="h-7 w-7 mt-[4px] rounded-md" />
             <div class="font-outfit">
               <div class="text-black dark:text-white">qualos.info</div>
-              <div class="text-sm text-neutral-500">application settings</div>
+              <p id="appVersionText" class="text-sm text-neutral-500">application settings</p>
             </div>
           </div>
           <a href="https://github.com/pickingname/qualos" target="_blank"
@@ -198,6 +230,11 @@ document.addEventListener("DOMContentLoaded", () => {
       modalContainer.classList.add("opacity-100");
       modalContent.classList.remove("scale-95");
       modalContent.classList.add("scale-100");
+
+      if (localStorage.getItem("appVersion")) {
+        document.getElementById("appVersionText").textContent =
+          `application setting | ${localStorage.getItem("appVersion")}`;
+      }
     }, 10);
 
     // fetch current apiType from localStorage and set it as the selected option
