@@ -7,6 +7,9 @@ version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
+    reviewers: 
+      - "pickingname"
+    target-branch: "dev"
     schedule:
       interval: "weekly"
       day: "sunday"
