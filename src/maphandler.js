@@ -59,6 +59,7 @@ let tsunamiGeojsonLayer = null;
 let usegeojson = "false"; // needs init on exec anyway and needs to be false on default
 
 const intensityColors = {
+  0: "#3c3c3c",
   1: "#8e979780",
   2: "#119a4c80",
   3: "#136ca580",
@@ -70,7 +71,15 @@ const intensityColors = {
   7: "#96009690",
 };
 
-// Function to calculate JMA intensity
+const config = {
+  maxDepth: 1000,
+  magnitudeScale: 1.5,
+  baseIntensity: 0.5,
+  distanceDecay: 1.84, // distance decay (more will decay faster)
+  distanceScale: 0.005, // scaling factor for distance in PGA calculation
+  intensityThresholds: [0.008, 0.025, 0.08, 0.25, 0.5, 0.8, 1.4, 2.5],
+};
+
 function calculateJMAIntensity(
   epicenterLat,
   epicenterLon,
@@ -79,36 +88,38 @@ function calculateJMAIntensity(
   pointLat,
   pointLon
 ) {
-  // Calculate distance between epicenter and point
   const distance = turf.distance(
+    // skipcq: JS-E1007
     turf.point([epicenterLon, epicenterLat]),
+    // skipcq: JS-E1007
     turf.point([pointLon, pointLat]),
     { units: "kilometers" }
   );
 
-  // Calculate hypocentral distance
   const hypocentralDistance = Math.sqrt(
     Math.pow(distance, 2) + Math.pow(depth, 2)
   );
 
-  // Calculate ground motion using an attenuation relationship
-  // This is a simplified version and may not be entirely accurate
+  const depthFactor = Math.max(0, 1 - depth / config.maxDepth);
+  const adjustedMagnitude = magnitude * depthFactor;
+
   const pga = Math.exp(
-    0.58 * magnitude -
-      1.83 * Math.log10(hypocentralDistance) -
-      0.0036 * hypocentralDistance
+    config.magnitudeScale * adjustedMagnitude +
+      config.baseIntensity -
+      config.distanceDecay * Math.log10(hypocentralDistance) -
+      config.distanceScale * hypocentralDistance
   );
 
-  // Convert PGA to JMA intensity (simplified conversion)
-  let intensity;
-  if (pga < 0.008) intensity = "1";
-  else if (pga < 0.025) intensity = "2";
-  else if (pga < 0.08) intensity = "3";
-  else if (pga < 0.25) intensity = "4";
-  else if (pga < 0.8) intensity = "5-";
-  else if (pga < 1.4) intensity = "5+";
-  else if (pga < 2.5) intensity = "6-";
-  else if (pga < 4.0) intensity = "6+";
+  let intensity = "0";
+  if (pga < config.intensityThresholds[0]) intensity = "0";
+  else if (pga < config.intensityThresholds[1]) intensity = "1";
+  else if (pga < config.intensityThresholds[2]) intensity = "2";
+  else if (pga < config.intensityThresholds[3]) intensity = "3";
+  else if (pga < config.intensityThresholds[4]) intensity = "4";
+  else if (pga < config.intensityThresholds[5]) intensity = "5-";
+  else if (pga < config.intensityThresholds[6]) intensity = "5+";
+  else if (pga < config.intensityThresholds[7]) intensity = "6-";
+  else if (pga < config.intensityThresholds[8]) intensity = "6+";
   else intensity = "7";
 
   return intensity;
@@ -853,7 +864,7 @@ const fetchAndUpdateData = async () => {
       "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0"; // will be init on exec since this should be the default anyway
     if (apiType === "main") {
       apiEndpoint =
-        "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=69";
+        "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=111";
     } else if (apiType === "sandbox") {
       apiEndpoint =
         "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
