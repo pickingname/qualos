@@ -1,6 +1,6 @@
 import axios from "axios";
 import Papa from "papaparse";
-import * as turf from '@turf/turf';
+import * as turf from "@turf/turf";
 import { dimScreenAndReload } from "./reloadHandler";
 import {
   initCircleRendering,
@@ -58,39 +58,58 @@ let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
 let usegeojson = "false"; // needs init on exec anyway and needs to be false on default
 
-const intensityColors = { // temp colors
-  '1': '#ffffff',
-  '2': '#b2ffff',
-  '3': '#00ffff',
-  '4': '#ffd700',
-  '5-': '#ffa500',
-  '5+': '#ff8c00',
-  '6-': '#ff4500',
-  '6+': '#ff0000',
-  '7': '#8b0000'
+const intensityColors = {
+  1: "#8e979780",
+  2: "#119a4c80",
+  3: "#136ca580",
+  4: "#c99c0090",
+  "5-": "#f18a2d90",
+  "5+": "#d16a0c90",
+  "6-": "#eb190090",
+  "6+": "#b7130090",
+  7: "#96009690",
 };
 
-function calculateJMAIntensity(epicenterLat, epicenterLon, depth, magnitude, pointLat, pointLon) {
+// Function to calculate JMA intensity
+function calculateJMAIntensity(
+  epicenterLat,
+  epicenterLon,
+  depth,
+  magnitude,
+  pointLat,
+  pointLon
+) {
+  // Calculate distance between epicenter and point
   const distance = turf.distance(
     turf.point([epicenterLon, epicenterLat]),
     turf.point([pointLon, pointLat]),
-    { units: 'kilometers' }
+    { units: "kilometers" }
   );
 
-  const hypocentralDistance = Math.sqrt(Math.pow(distance, 2) + Math.pow(depth, 2));
-  const pga = Math.exp(0.58 * magnitude - 1.83 * Math.log10(hypocentralDistance) - 0.0036 * hypocentralDistance);
+  // Calculate hypocentral distance
+  const hypocentralDistance = Math.sqrt(
+    Math.pow(distance, 2) + Math.pow(depth, 2)
+  );
 
+  // Calculate ground motion using an attenuation relationship
+  // This is a simplified version and may not be entirely accurate
+  const pga = Math.exp(
+    0.58 * magnitude -
+      1.83 * Math.log10(hypocentralDistance) -
+      0.0036 * hypocentralDistance
+  );
 
+  // Convert PGA to JMA intensity (simplified conversion)
   let intensity;
-  if (pga < 0.008) intensity = '1';
-  else if (pga < 0.025) intensity = '2';
-  else if (pga < 0.08) intensity = '3';
-  else if (pga < 0.25) intensity = '4';
-  else if (pga < 0.8) intensity = '5-';
-  else if (pga < 1.4) intensity = '5+';
-  else if (pga < 2.5) intensity = '6-';
-  else if (pga < 4.0) intensity = '6+';
-  else intensity = '7';
+  if (pga < 0.008) intensity = "1";
+  else if (pga < 0.025) intensity = "2";
+  else if (pga < 0.08) intensity = "3";
+  else if (pga < 0.25) intensity = "4";
+  else if (pga < 0.8) intensity = "5-";
+  else if (pga < 1.4) intensity = "5+";
+  else if (pga < 2.5) intensity = "6-";
+  else if (pga < 4.0) intensity = "6+";
+  else intensity = "7";
 
   return intensity;
 }
@@ -434,6 +453,15 @@ const updateMapWithData = async (earthquakeData) => {
             const centerLon = center.geometry.coordinates[0];
 
             const intensity = calculateJMAIntensity(
+              earthquakeData.earthquake.hypocenter.latitude,
+              earthquakeData.earthquake.hypocenter.longitude,
+              earthquakeData.earthquake.hypocenter.depth,
+              earthquakeData.earthquake.hypocenter.magnitude,
+              centerLat,
+              centerLon
+            );
+
+            console.log(
               earthquakeData.earthquake.hypocenter.latitude,
               earthquakeData.earthquake.hypocenter.longitude,
               earthquakeData.earthquake.hypocenter.depth,
@@ -825,7 +853,7 @@ const fetchAndUpdateData = async () => {
       "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0"; // will be init on exec since this should be the default anyway
     if (apiType === "main") {
       apiEndpoint =
-        "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
+        "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=69";
     } else if (apiType === "sandbox") {
       apiEndpoint =
         "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
