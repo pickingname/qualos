@@ -2,7 +2,7 @@ const firstRunKey = "isFirstRun";
 const apiTypeKey = "apiType";
 const themeSettingKey = "themeSetting";
 const hideLegendKey = "hideLegend";
-const canMapBeMovedKey = "canMapBeMoved";
+const canMapBeMovedKey = "movableMap";
 const geoJsonMapKey = "geoJsonMap";
 const timeConversionKey = "timeConversion";
 
