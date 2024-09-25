@@ -41,13 +41,13 @@ const leaflet = L;
 
 const newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
 const intensityReport = new Audio(
-  "https://pickingname.github.io/datastores/update.mp3"
+  "https://pickingname.github.io/datastores/update.mp3",
 );
 const distantArea = new Audio(
-  "https://pickingname.github.io/datastores/alert.mp3"
+  "https://pickingname.github.io/datastores/alert.mp3",
 );
 const tsunamiWarning = new Audio(
-  "https://pickingname.github.io/datastores/eq/E4.mp3"
+  "https://pickingname.github.io/datastores/eq/E4.mp3",
 );
 
 let previousEarthquakeData = null;
@@ -82,16 +82,18 @@ const fetchComparisonData = async (url) => {
 
 async function loadComparisonData() {
   stationComparisionData = await fetchComparisonData(
-    "https://pickingname.github.io/basemap/compare_points.csv"
+    "https://pickingname.github.io/basemap/compare_points.csv",
   );
 
   prefComparisionData = await fetchComparisonData(
-    "https://pickingname.github.io/basemap/prefs.csv"
+    "https://pickingname.github.io/basemap/prefs.csv",
   );
 }
 
 // Call the async function to load the data
-loadComparisonData().catch(error => console.error('Error loading comparison data:', error));
+loadComparisonData().catch((error) =>
+  console.error("Error loading comparison data:", error),
+);
 
 /**
  * Fetches GeoJSON data from a specified URL (https://pickingname.github.io/basemap/tsunami_areas.geojson).
@@ -125,7 +127,7 @@ if (localStorage.getItem("geoJsonMap") === "true") {
   usegeojson = false;
 } else {
   console.log(
-    `geoJsonMap is ${localStorage.getItem("geoJsonMap")}, defaulting to false`
+    `geoJsonMap is ${localStorage.getItem("geoJsonMap")}, defaulting to false`,
   );
   localStorage.setItem("geoJsonMap", "false");
 }
@@ -133,8 +135,8 @@ if (localStorage.getItem("geoJsonMap") === "true") {
 if (localStorage.getItem("theme") === null) {
   console.log(
     `localstorage theme is ${localStorage.getItem(
-      "theme"
-    )}, defaulting to system.`
+      "theme",
+    )}, defaulting to system.`,
   );
   localStorage.setItem("theme", "system");
 }
@@ -167,7 +169,7 @@ if (localStorage.getItem("movableMap") === "true") {
   mapPan = false;
 } else {
   console.log(
-    `movableMap is ${localStorage.getItem("movableMap")}, defaulting to false`
+    `movableMap is ${localStorage.getItem("movableMap")}, defaulting to false`,
   );
   localStorage.setItem("movableMap", "false");
 }
@@ -178,7 +180,7 @@ window
     userTheme = event.matches ? "dark" : "light";
     if (localStorage.getItem("theme") === "system") {
       console.log(
-        "User theme changed and the setting is system, refreshing..."
+        "User theme changed and the setting is system, refreshing...",
       );
       dimScreenAndReload("user changed system theme");
     }
@@ -355,7 +357,7 @@ const getScaleColor = (scale) => {
 const createDeflatedIcon = (scale) => {
   return leaflet.divIcon({
     html: `<div style="background-color: ${getScaleColor(
-      scale
+      scale,
     )}; width: 10px; height: 10px; border-radius: 50%;"></div>`,
     className: "deflated-marker",
     iconSize: [10, 10],
@@ -469,7 +471,7 @@ const updateMapWithData = async (earthquakeData) => {
           `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
           {
             maxZoom: 24,
-          }
+          },
         )
         .addTo(mapInstance);
     } else {
@@ -478,7 +480,7 @@ const updateMapWithData = async (earthquakeData) => {
           `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
           {
             maxZoom: 24,
-          }
+          },
         )
         .addTo(mapInstance);
     }
@@ -568,7 +570,7 @@ const updateMapWithData = async (earthquakeData) => {
           earthquakeData.earthquake.hypocenter.latitude,
           earthquakeData.earthquake.hypocenter.longitude,
         ],
-        { icon: epicenterIcon }
+        { icon: epicenterIcon },
       )
       .addTo(markersLayerGroup);
 
@@ -577,7 +579,7 @@ const updateMapWithData = async (earthquakeData) => {
     earthquakeData.points.forEach((point) => {
       const stationCoordinates = findStationCoordinates(
         comparisonData,
-        point.addr
+        point.addr,
       );
       if (stationCoordinates) {
         // tempskip
@@ -586,7 +588,7 @@ const updateMapWithData = async (earthquakeData) => {
           {
             icon: createInflatedIcon(point.scale),
             scale: point.scale,
-          }
+          },
         );
         stationMarkersGroup.addLayer(marker);
       }
@@ -599,12 +601,12 @@ const updateMapWithData = async (earthquakeData) => {
       console.log(`processing point with address: ${point.addr}`);
       const stationCoordinates = findStationCoordinates(
         comparisonData,
-        point.addr
+        point.addr,
       );
       if (stationCoordinates) {
         console.log(
           `found coordinates for ${point.addr}: `,
-          stationCoordinates
+          stationCoordinates,
         );
         // tempskip
         const marker = leaflet.marker(
@@ -612,7 +614,7 @@ const updateMapWithData = async (earthquakeData) => {
           {
             icon: createInflatedIcon(point.scale),
             scale: point.scale,
-          }
+          },
         );
         stationMarkersGroup.addLayer(marker);
       } else {
@@ -686,7 +688,7 @@ const updateTsunamiLayer = (tsunamiData, geojsonData) => {
       ...geojsonData,
       features: geojsonData.features.filter((feature) => {
         const tsunamiArea = tsunamiData.areas.find(
-          (area) => area.name === feature.properties.name
+          (area) => area.name === feature.properties.name,
         );
         return tsunamiArea?.grade;
       }),
@@ -697,7 +699,7 @@ const updateTsunamiLayer = (tsunamiData, geojsonData) => {
       .geoJSON(filteredGeojsonData, {
         style: (feature) => {
           const tsunamiArea = tsunamiData.areas.find(
-            (area) => area.name === feature.properties.name
+            (area) => area.name === feature.properties.name,
           );
           if (tsunamiArea) {
             return {
@@ -730,7 +732,7 @@ const updateTsunamiLayer = (tsunamiData, geojsonData) => {
       updateCamera(bounds);
     } else {
       console.warn(
-        "Invalid bounds after combining tsunamiGeojsonLayer with other layers"
+        "Invalid bounds after combining tsunamiGeojsonLayer with other layers",
       );
     }
   }
@@ -805,7 +807,7 @@ const fetchAndUpdateData = async () => {
         .replace(/\n|\r/g, "");
       console.log(
         "API call successful with response code:",
-        sanitizedResponseStatus
+        sanitizedResponseStatus,
       );
       isApiCallSuccessful = true;
     }
@@ -893,7 +895,7 @@ setInterval(() => {
         updateCamera(bounds);
       } else {
         console.warn(
-          "[fn setinterval, maphandler.js] No valid bounds for interval camera update"
+          "[fn setinterval, maphandler.js] No valid bounds for interval camera update",
         );
       }
     }
@@ -905,7 +907,7 @@ setInterval(() => {
         updateCamera(bounds);
       } else {
         console.warn(
-          "[fn eewcheck, maphandler.js] No valid bounds for interval camera update"
+          "[fn eewcheck, maphandler.js] No valid bounds for interval camera update",
         );
       }
     }
