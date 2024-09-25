@@ -80,13 +80,18 @@ const fetchComparisonData = async (url) => {
   }
 };
 
-stationComparisionData = await fetchComparisonData(
-  "https://pickingname.github.io/basemap/compare_points.csv"
-);
+async function loadComparisonData() {
+  stationComparisionData = await fetchComparisonData(
+    "https://pickingname.github.io/basemap/compare_points.csv"
+  );
 
-prefComparisionData = await fetchComparisonData(
-  "https://pickingname.github.io/basemap/prefs.csv"
-);
+  prefComparisionData = await fetchComparisonData(
+    "https://pickingname.github.io/basemap/prefs.csv"
+  );
+}
+
+// Call the async function to load the data
+loadComparisonData().catch(error => console.error('Error loading comparison data:', error));
 
 /**
  * Fetches GeoJSON data from a specified URL (https://pickingname.github.io/basemap/tsunami_areas.geojson).
