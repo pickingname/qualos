@@ -56,6 +56,28 @@ let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
 let usegeojson = "false"; // needs init on exec anyway and needs to be false on default
+let tsGeojsonData = null;
+
+/**
+ * Fetches GeoJSON data from a specified URL (https://pickingname.github.io/basemap/tsunami_areas.geojson).
+ * This also used in the caching part of the code.
+ *
+ * @async
+ * @function fetchGeojsonData
+ * @returns {Promise<Object|null>} A promise that resolves to the fetched GeoJSON data, or null if an error occurs.
+ * @throws {Error} If the API call fails.
+ */
+const fetchGeojsonData = async () => {
+  try {
+    const response = await axios.get(geojsonUrl);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching GeoJSON data:", error);
+    return null;
+  }
+};
+
+tsGeojsonData = fetchGeojsonData();
 
 if (!localStorage.getItem("dataCache")) {
   console.log("dataCache not found, creating new one");
@@ -618,24 +640,6 @@ const fetchTsunamiData = async () => {
 };
 
 /**
- * Fetches GeoJSON data from a specified URL (https://pickingname.github.io/basemap/tsunami_areas.geojson).
- *
- * @async
- * @function fetchGeojsonData
- * @returns {Promise<Object|null>} A promise that resolves to the fetched GeoJSON data, or null if an error occurs.
- * @throws {Error} If the API call fails.
- */
-const fetchGeojsonData = async () => {
-  try {
-    const response = await axios.get(geojsonUrl);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching GeoJSON data:", error);
-    return null;
-  }
-};
-
-/**
  * Returns the color associated with a given tsunami warning grade. Returns blue for unknown grades.
  *
  * @param {string} grade - The tsunami warning grade. Can be "Warning", "Watch", or any other string.
@@ -734,7 +738,7 @@ const updateTsunamiLayer = (tsunamiData, geojsonData) => {
 const updateMapWithTsunamiData = async () => {
   try {
     const tsunamiData = await fetchTsunamiData();
-    const geojsonData = await fetchGeojsonData();
+    const geojsonData = tsGeojsonData;
 
     if (tsunamiData || geojsonData) {
       await updateTsunamiLayer(tsunamiData, geojsonData);
