@@ -12,6 +12,3 @@ name = "javascript"
   ]
   dialect = "flow"
   style_guide = "standard"
-
-[[transformers]]
-name = "prettier"
