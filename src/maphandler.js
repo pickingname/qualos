@@ -81,7 +81,7 @@ const fetchComparisonData = async (url) => {
 };
 
 /**
- * This loads the comparision data into the cached varaibles once and then 
+ * This loads the comparision data into the cached varaibles once and then
  * the varaible will be used everytime the data is updated depending on the data type.
  */
 async function loadComparisonData() {
