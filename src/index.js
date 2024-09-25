@@ -163,22 +163,8 @@ const findEnglishName = (comparisonData, japaneseName) => {
  *
  */
 const fetchData = async () => {
-  const apiType = localStorage.getItem("apiType");
-  let apiEndpoint =
-    "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0"; //
-  if (apiType === "main") {
-    apiEndpoint =
-      "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
-  } else if (apiType === "sandbox") {
-    apiEndpoint =
-      "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
-  } else {
-    apiEndpoint =
-      "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
-  }
-  const response = await axios.get(apiEndpoint);
-  const quakeData = response.data;
-  const quakeDetails = quakeData[0];
+  const response = JSON.parse(localStorage.getItem("dataCache"));
+  const quakeDetails = response;
 
   const magnitude = parseFloat(
     quakeDetails.earthquake.hypocenter.magnitude,
@@ -320,5 +306,5 @@ function shouldIChangeTheFuckingText() {
 }
 
 setTimeout(() => {
-  setInterval(shouldIChangeTheFuckingText, 2000);
+  setInterval(shouldIChangeTheFuckingText, 1000);
 }, 2000);

@@ -57,6 +57,11 @@ let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
 let usegeojson = "false"; // needs init on exec anyway and needs to be false on default
 
+if (!localStorage.getItem("dataCache")) {
+  console.log("dataCache not found, creating new one");
+  localStorage.setItem("dataCache", JSON.stringify({}));
+}
+
 if (localStorage.getItem("geoJsonMap") === "true") {
   usegeojson = true;
 } else if (localStorage.getItem("geoJsonMap") === "false") {
@@ -792,10 +797,9 @@ const fetchAndUpdateData = async () => {
     isApiCallSuccessful = true;
     const latestEarthquakeData = response.data[0];
 
+    localStorage.setItem("dataCache", JSON.stringify(latestEarthquakeData));
     currentID = latestEarthquakeData.id;
-
     tsDepth = latestEarthquakeData.earthquake.hypocenter.depth;
-
     // skipcq: JS-A1004
     tsInt = getTrueIntensity(latestEarthquakeData.earthquake.maxScale);
     tsMag = latestEarthquakeData.earthquake.hypocenter.magnitude;
@@ -897,8 +901,6 @@ setInterval(() => {
   }
 }, 1000);
 
-setTimeout(() => {
-  setInterval(fetchAndUpdateData, 2000);
-}, 2000);
+setInterval(fetchAndUpdateData, 1500);
 
 setInterval(updateMapWithTsunamiData, 8000);
