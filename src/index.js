@@ -35,8 +35,8 @@ function convertToLocalTime(unformattedString) {
       parseInt(day),
       parseInt(hour) - 9,
       parseInt(minute),
-      parseInt(second),
-    ),
+      parseInt(second)
+    )
   );
 
   const localDate = new Date(unformattedDate.toLocaleString());
@@ -134,7 +134,7 @@ const fetchComparisonData = async () => {
   }
   try {
     const response = await axios.get(
-      "https://pickingname.github.io/basemap/compare.json",
+      "https://pickingname.github.io/basemap/compare.json"
     );
     comparisonDataCache = response.data;
     return comparisonDataCache;
@@ -163,25 +163,11 @@ const findEnglishName = (comparisonData, japaneseName) => {
  *
  */
 const fetchData = async () => {
-  const apiType = localStorage.getItem("apiType");
-  let apiEndpoint =
-    "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0"; //
-  if (apiType === "main") {
-    apiEndpoint =
-      "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
-  } else if (apiType === "sandbox") {
-    apiEndpoint =
-      "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
-  } else {
-    apiEndpoint =
-      "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
-  }
-  const response = await axios.get(apiEndpoint);
-  const quakeData = response.data;
-  const quakeDetails = quakeData[0];
+  const response = JSON.parse(localStorage.getItem("dataCache"));
+  const quakeDetails = response;
 
   const magnitude = parseFloat(
-    quakeDetails.earthquake.hypocenter.magnitude,
+    quakeDetails.earthquake.hypocenter.magnitude
   ).toFixed(1);
   const maxScale = quakeDetails.earthquake.maxScale;
   let time = quakeDetails.earthquake.time;
@@ -200,8 +186,8 @@ const fetchData = async () => {
     quakeDetails.earthquake.hypocenter.depth === -1
       ? "unknown"
       : quakeDetails.earthquake.hypocenter.depth === 0
-        ? "Very shallow"
-        : `${quakeDetails.earthquake.hypocenter.depth}km`;
+      ? "Very shallow"
+      : `${quakeDetails.earthquake.hypocenter.depth}km`;
   const locationName = quakeDetails.earthquake.hypocenter.name;
 
   /**
@@ -267,8 +253,9 @@ const fetchData = async () => {
     document.getElementById("depth").textContent = "Awaiting full report";
     document.getElementById("where").textContent =
       "Earthquake intensity report received";
-    document.getElementById("time").textContent =
-      `Time: ${quakeDetails.issue.time}`;
+    document.getElementById(
+      "time"
+    ).textContent = `Time: ${quakeDetails.issue.time}`;
   } else {
     if (quakeDetails.earthquake.hypocenter.depth === -1) {
       if (quakeDetails.issue.type === "Foreign") {
@@ -296,8 +283,9 @@ const fetchData = async () => {
       }
     } else {
       document.getElementById("intensity").textContent = intensityDescription;
-      document.getElementById("magnitude").textContent =
-        `Magnitude: ${magnitude}`;
+      document.getElementById(
+        "magnitude"
+      ).textContent = `Magnitude: ${magnitude}`;
       document.getElementById("time").textContent = `Time: ${time}`;
       document.getElementById("depth").textContent = `Depth: ${depth}`;
       document.getElementById("where").textContent = `${englishName}`;
@@ -320,5 +308,5 @@ function shouldIChangeTheFuckingText() {
 }
 
 setTimeout(() => {
-  setInterval(shouldIChangeTheFuckingText, 2000);
+  setInterval(shouldIChangeTheFuckingText, 1000);
 }, 2000);
