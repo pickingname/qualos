@@ -56,6 +56,69 @@ let markersLayerGroup = null;
 let stationMarkersGroup = null;
 let tsunamiGeojsonLayer = null;
 let usegeojson = "false"; // needs init on exec anyway and needs to be false on default
+let tsGeojsonData = null;
+let stationComparisionData = null;
+let prefComparisionData = null;
+
+/**
+ * Fetches comparison data from a specified URL and parses it using PapaParse.
+ *
+ * @async
+ * @function fetchComparisonData
+ * @param {string} url - The URL to fetch the comparison data from.
+ * @returns {Promise<Object[]>} A promise that resolves to an array of parsed data objects.
+ * @throws {Error} If the API call fails.
+ */
+const fetchComparisonData = async (url) => {
+  try {
+    const response = await axios.get(url);
+    const parsedData = Papa.parse(response.data, { header: true }).data;
+    return parsedData;
+  } catch (error) {
+    console.error("Error fetching comparison data:", error);
+    return [];
+  }
+};
+
+/**
+ * This loads the comparision data into the cached varaibles once and then
+ * the varaible will be used everytime the data is updated depending on the data type.
+ */
+async function loadComparisonData() {
+  stationComparisionData = await fetchComparisonData(
+    "https://pickingname.github.io/basemap/compare_points.csv",
+  );
+
+  prefComparisionData = await fetchComparisonData(
+    "https://pickingname.github.io/basemap/prefs.csv",
+  );
+}
+
+// Call the async function to load the data
+loadComparisonData().catch((error) =>
+  console.error("Error loading comparison data:", error),
+);
+
+/**
+ * Fetches GeoJSON data from a specified URL (https://pickingname.github.io/basemap/tsunami_areas.geojson).
+ * This also used in the caching part of the code.
+ *
+ * @async
+ * @function fetchGeojsonData
+ * @returns {Promise<Object|null>} A promise that resolves to the fetched GeoJSON data, or null if an error occurs.
+ * @throws {Error} If the API call fails.
+ */
+const fetchGeojsonData = async () => {
+  try {
+    const response = await axios.get(geojsonUrl);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching GeoJSON data:", error);
+    return null;
+  }
+};
+
+tsGeojsonData = fetchGeojsonData();
 
 if (!localStorage.getItem("dataCache")) {
   console.log("dataCache not found, creating new one");
@@ -126,26 +189,6 @@ window
       dimScreenAndReload("user changed system theme");
     }
   });
-
-/**
- * Fetches comparison data from a specified URL and parses it using PapaParse.
- *
- * @async
- * @function fetchComparisonData
- * @param {string} url - The URL to fetch the comparison data from.
- * @returns {Promise<Object[]>} A promise that resolves to an array of parsed data objects.
- * @throws {Error} If the API call fails.
- */
-const fetchComparisonData = async (url) => {
-  try {
-    const response = await axios.get(url);
-    const parsedData = Papa.parse(response.data, { header: true }).data;
-    return parsedData;
-  } catch (error) {
-    console.error("Error fetching comparison data:", error);
-    return [];
-  }
-};
 
 /**
  * Converts a given maximum seismic intensity scale to its corresponding intensity level.
@@ -381,16 +424,11 @@ const updateMapWithData = async (earthquakeData) => {
       touchZoom: mapPan,
       dragging: mapPan,
       scrollWheelZoom: mapPan,
-      // maxBoundsViscosity: 1.0,
-      // maxBounds: [
-      //   [-90, -180],
-      //   [90, 180],
-      // ],
     });
 
     if (usegeojson === true) {
-      // skipcq: JS-0125 ignore this because it is fetched from a cdn
-      omnivore
+      // skipcq: JS-0125
+      await omnivore
         .topojson("https://pickingname.github.io/basemap/subPrefsTopo.json")
         .on("ready", function () {
           this.eachLayer((layer) => {
@@ -407,34 +445,28 @@ const updateMapWithData = async (earthquakeData) => {
         .addTo(mapInstance);
 
       // world geojson
-      fetch("https://pickingname.github.io/basemap/world.geojson")
-        .then((response) => response.json())
-        .then((data) => {
-          leaflet
-            .geoJSON(data, {
-              style() {
-                return {
-                  color: userTheme === "dark" ? "#5e5e5e" : "#c2cbcc",
-                  weight: 1,
-                  smoothFactor: 0.0,
-                  fill: true,
-                  fillColor: userTheme === "dark" ? "#121212" : "#969e9e",
-                  fillOpacity: 0.5,
-                };
-              },
-            })
-            .addTo(mapInstance);
-        })
-        .catch((error) => console.error("Error loading GeoJSON:", error));
-    } else if (usegeojson === false) {
-      leaflet
-        .tileLayer(
-          `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
-          {
-            maxZoom: 24,
-          },
-        )
-        .addTo(mapInstance);
+      try {
+        const response = await fetch(
+          "https://pickingname.github.io/basemap/world.geojson",
+        );
+        const data = await response.json();
+        leaflet
+          .geoJSON(data, {
+            style() {
+              return {
+                color: userTheme === "dark" ? "#5e5e5e" : "#c2cbcc",
+                weight: 1,
+                smoothFactor: 0.0,
+                fill: true,
+                fillColor: userTheme === "dark" ? "#121212" : "#969e9e",
+                fillOpacity: 0.5,
+              };
+            },
+          })
+          .addTo(mapInstance);
+      } catch (error) {
+        console.error("Error loading GeoJSON:", error);
+      }
     } else {
       leaflet
         .tileLayer(
@@ -518,13 +550,11 @@ const updateMapWithData = async (earthquakeData) => {
 
   if (earthquakeData.issue.type !== "ScalePrompt") {
     isScalePrompt = false;
-    // tempskip
     const epicenterIcon = leaflet.icon({
       iconUrl: "https://pickingname.github.io/basemap/icons/oldEpicenter.png",
       iconSize: [30, 30],
     });
 
-    // tempskip
     leaflet
       .marker(
         [
@@ -535,9 +565,7 @@ const updateMapWithData = async (earthquakeData) => {
       )
       .addTo(markersLayerGroup);
 
-    const comparisonData = await fetchComparisonData(
-      "https://pickingname.github.io/basemap/compare_points.csv",
-    );
+    const comparisonData = stationComparisionData;
 
     earthquakeData.points.forEach((point) => {
       const stationCoordinates = findStationCoordinates(
@@ -545,7 +573,6 @@ const updateMapWithData = async (earthquakeData) => {
         point.addr,
       );
       if (stationCoordinates) {
-        // tempskip
         const marker = leaflet.marker(
           [stationCoordinates.lat, stationCoordinates.lng],
           {
@@ -558,9 +585,7 @@ const updateMapWithData = async (earthquakeData) => {
     });
   } else {
     isScalePrompt = true;
-    const comparisonData = await fetchComparisonData(
-      "https://pickingname.github.io/basemap/prefs.csv",
-    );
+    const comparisonData = prefComparisionData;
 
     earthquakeData.points.forEach((point) => {
       console.log(`processing point with address: ${point.addr}`);
@@ -573,7 +598,6 @@ const updateMapWithData = async (earthquakeData) => {
           `found coordinates for ${point.addr}: `,
           stationCoordinates,
         );
-        // tempskip
         const marker = leaflet.marker(
           [stationCoordinates.lat, stationCoordinates.lng],
           {
@@ -613,24 +637,6 @@ const fetchTsunamiData = async () => {
     return response.data[0];
   } catch (error) {
     console.error("Error fetching tsunami data:", error);
-    return null;
-  }
-};
-
-/**
- * Fetches GeoJSON data from a specified URL (https://pickingname.github.io/basemap/tsunami_areas.geojson).
- *
- * @async
- * @function fetchGeojsonData
- * @returns {Promise<Object|null>} A promise that resolves to the fetched GeoJSON data, or null if an error occurs.
- * @throws {Error} If the API call fails.
- */
-const fetchGeojsonData = async () => {
-  try {
-    const response = await axios.get(geojsonUrl);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching GeoJSON data:", error);
     return null;
   }
 };
@@ -734,7 +740,7 @@ const updateTsunamiLayer = (tsunamiData, geojsonData) => {
 const updateMapWithTsunamiData = async () => {
   try {
     const tsunamiData = await fetchTsunamiData();
-    const geojsonData = await fetchGeojsonData();
+    const geojsonData = tsGeojsonData;
 
     if (tsunamiData || geojsonData) {
       await updateTsunamiLayer(tsunamiData, geojsonData);
@@ -776,7 +782,7 @@ const fetchAndUpdateData = async () => {
         "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
     } else if (apiType === "sandbox") {
       apiEndpoint =
-        "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&codes=552&limit=1&offset=0";
+        "https://api-v2-sandbox.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
     } else {
       apiEndpoint =
         "https://api.p2pquake.net/v2/history?codes=551&limit=1&offset=0";
@@ -878,7 +884,7 @@ setInterval(() => {
         updateCamera(bounds);
       } else {
         console.warn(
-          "[fn () setinterval, maphandler.js] No valid bounds for interval camera update",
+          "[fn setinterval, maphandler.js] No valid bounds for interval camera update",
         );
       }
     }
