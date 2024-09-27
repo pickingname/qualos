@@ -35,8 +35,8 @@ function convertToLocalTime(unformattedString) {
       parseInt(day),
       parseInt(hour) - 9,
       parseInt(minute),
-      parseInt(second),
-    ),
+      parseInt(second)
+    )
   );
 
   const localDate = new Date(unformattedDate.toLocaleString());
@@ -134,7 +134,7 @@ const fetchComparisonData = async () => {
   }
   try {
     const response = await axios.get(
-      "https://pickingname.github.io/basemap/compare.json",
+      "https://pickingname.github.io/basemap/compare.json"
     );
     comparisonDataCache = response.data;
     return comparisonDataCache;
@@ -159,15 +159,19 @@ const findEnglishName = (comparisonData, japaneseName) => {
 };
 
 /**
- * Fetches the actual p2pquake data to displays on the card, not the map.
+ * Fetches the actual p2pquake data from the localstorage that is cached from the maphandler to displays on the card, not the map.
  *
  */
 const fetchData = async () => {
   const response = JSON.parse(localStorage.getItem("dataCache"));
   const quakeDetails = response;
 
+  if (!quakeDetails || quakeDetails.length === 0) {
+    return;
+  }
+
   const magnitude = parseFloat(
-    quakeDetails.earthquake.hypocenter.magnitude,
+    quakeDetails.earthquake.hypocenter.magnitude
   ).toFixed(1);
   const maxScale = quakeDetails.earthquake.maxScale;
   let time = quakeDetails.earthquake.time;
@@ -186,8 +190,8 @@ const fetchData = async () => {
     quakeDetails.earthquake.hypocenter.depth === -1
       ? "unknown"
       : quakeDetails.earthquake.hypocenter.depth === 0
-        ? "Very shallow"
-        : `${quakeDetails.earthquake.hypocenter.depth}km`;
+      ? "Very shallow"
+      : `${quakeDetails.earthquake.hypocenter.depth}km`;
   const locationName = quakeDetails.earthquake.hypocenter.name;
 
   /**
@@ -253,8 +257,9 @@ const fetchData = async () => {
     document.getElementById("depth").textContent = "Awaiting full report";
     document.getElementById("where").textContent =
       "Earthquake intensity report received";
-    document.getElementById("time").textContent =
-      `Time: ${quakeDetails.issue.time}`;
+    document.getElementById(
+      "time"
+    ).textContent = `Time: ${quakeDetails.issue.time}`;
   } else {
     if (quakeDetails.earthquake.hypocenter.depth === -1) {
       if (quakeDetails.issue.type === "Foreign") {
@@ -282,8 +287,9 @@ const fetchData = async () => {
       }
     } else {
       document.getElementById("intensity").textContent = intensityDescription;
-      document.getElementById("magnitude").textContent =
-        `Magnitude: ${magnitude}`;
+      document.getElementById(
+        "magnitude"
+      ).textContent = `Magnitude: ${magnitude}`;
       document.getElementById("time").textContent = `Time: ${time}`;
       document.getElementById("depth").textContent = `Depth: ${depth}`;
       document.getElementById("where").textContent = `${englishName}`;
@@ -291,20 +297,18 @@ const fetchData = async () => {
   }
 };
 
-shouldIChangeTheFuckingText();
-
 /**
  * This is for the EEW so that they can change the text or not, not having this will make the EEW text change flashes because both EEW report and the regular Intensity report text
  * are overriding the same card
  */
-function shouldIChangeTheFuckingText() {
+function triggerTextChange() {
   if (isEEW === true) {
     // it is now possible to change the text.
-  } else if (isEEW === false) {
+  } else if (isEEW === false || !localStorage.getItem("dataCache")) {
     fetchData();
   }
 }
 
-setTimeout(() => {
-  setInterval(shouldIChangeTheFuckingText, 1000);
-}, 2000);
+triggerTextChange()
+
+setInterval(triggerTextChange, 1000);
