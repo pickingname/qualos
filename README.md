@@ -4,6 +4,8 @@
 
 A website that shows the most recent earthquake in a map using p2pquake API.
 
+**Note:** This codebase is pretty much a mess. It’s a personal project and not intended for public use, so don’t waste your time trying to dig into it. If you have any questions or need clarification, please reach out to me directly. This app was primarily developed for my personal use to check some data quickly. It doesn’t really require any help, but any contributions are still welcome.
+
 [![CodeFactor](https://www.codefactor.io/repository/github/pickingname/qualos/badge)](https://www.codefactor.io/repository/github/pickingname/qualos)
 [![DeepSource](https://app.deepsource.com/gh/pickingname/qualos.svg/?label=active+issues&show_trend=true&token=4jDokZxN0UkI37cOA17xRYS1)](https://app.deepsource.com/gh/pickingname/qualos/)
 [![DeepSource](https://app.deepsource.com/gh/pickingname/qualos.svg/?label=resolved+issues&show_trend=true&token=4jDokZxN0UkI37cOA17xRYS1)](https://app.deepsource.com/gh/pickingname/qualos/)
