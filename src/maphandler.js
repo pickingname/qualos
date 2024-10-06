@@ -186,7 +186,7 @@ window
       console.log(
         "User theme changed and the setting is system, refreshing...",
       );
-      dimScreenAndReload("user changed system theme");
+      dimScreenAndReload();
     }
   });
 
