@@ -8,6 +8,8 @@ import {
   pCircle,
   sCircle,
 } from "./circleRenderer";
+import * as turf from "@turf/turf";
+
 let isScalePrompt = false;
 let iconPadding = 0.0;
 let currentTW = false;
@@ -41,13 +43,13 @@ const leaflet = L;
 
 const newData = new Audio("https://pickingname.github.io/datastores/yes.mp3");
 const intensityReport = new Audio(
-  "https://pickingname.github.io/datastores/update.mp3",
+  "https://pickingname.github.io/datastores/update.mp3"
 );
 const distantArea = new Audio(
-  "https://pickingname.github.io/datastores/alert.mp3",
+  "https://pickingname.github.io/datastores/alert.mp3"
 );
 const tsunamiWarning = new Audio(
-  "https://pickingname.github.io/datastores/eq/E4.mp3",
+  "https://pickingname.github.io/datastores/eq/E4.mp3"
 );
 
 let previousEarthquakeData = null;
@@ -63,7 +65,7 @@ if (localStorage.getItem("geoJsonMap") === "true") {
   usegeojson = false;
 } else {
   console.log(
-    `geoJsonMap is ${localStorage.getItem("geoJsonMap")}, defaulting to false`,
+    `geoJsonMap is ${localStorage.getItem("geoJsonMap")}, defaulting to false`
   );
   localStorage.setItem("geoJsonMap", "false");
 }
@@ -71,8 +73,8 @@ if (localStorage.getItem("geoJsonMap") === "true") {
 if (localStorage.getItem("theme") === null) {
   console.log(
     `localstorage theme is ${localStorage.getItem(
-      "theme",
-    )}, defaulting to system.`,
+      "theme"
+    )}, defaulting to system.`
   );
   localStorage.setItem("theme", "system");
 }
@@ -105,7 +107,7 @@ if (localStorage.getItem("movableMap") === "true") {
   mapPan = false;
 } else {
   console.log(
-    `movableMap is ${localStorage.getItem("movableMap")}, defaulting to false`,
+    `movableMap is ${localStorage.getItem("movableMap")}, defaulting to false`
   );
   localStorage.setItem("movableMap", "false");
 }
@@ -116,7 +118,7 @@ window
     userTheme = event.matches ? "dark" : "light";
     if (localStorage.getItem("theme") === "system") {
       console.log(
-        "User theme changed and the setting is system, refreshing...",
+        "User theme changed and the setting is system, refreshing..."
       );
       dimScreenAndReload("user changed system theme");
     }
@@ -313,7 +315,7 @@ const getScaleColor = (scale) => {
 const createDeflatedIcon = (scale) => {
   return leaflet.divIcon({
     html: `<div style="background-color: ${getScaleColor(
-      scale,
+      scale
     )}; width: 10px; height: 10px; border-radius: 50%;"></div>`,
     className: "deflated-marker",
     iconSize: [10, 10],
@@ -385,18 +387,111 @@ const updateMapWithData = async (earthquakeData) => {
 
     if (usegeojson === true) {
       // skipcq: JS-0125 ignore this because it is fetched from a cdn
+      const config = {
+        maxDepth: 700, // Maximum depth for depth factor calculation (km)
+        magnitudeScale: 0.0001, // Scaling factor for magnitude in PGA calculation
+        baseIntensity: 0.5, // Base intensity factor in PGA calculation
+        distanceDecay: 1.84, // Coefficient for distance decay in PGA calculation
+        distanceScale: 0.01, // Scaling factor for distance in PGA calculation
+        intensityThresholds: [0.008, 0.025, 0.08, 0.25, 0.5, 0.8, 1.4, 2.5], // Thresholds for JMA intensity levels
+      };
+
+      const intensityColors = {
+        1: "#ffffff",
+        2: "#b2ffff",
+        3: "#00ffff",
+        4: "#ffd700",
+        "5-": "#ffa500",
+        "5+": "#ff8c00",
+        "6-": "#ff4500",
+        "6+": "#ff0000",
+        7: "#8b0000",
+      };
+
+      // Function to calculate JMA intensity
+      function calculateJMAIntensity(
+        epicenterLat,
+        epicenterLon,
+        depth,
+        magnitude,
+        pointLat,
+        pointLon
+      ) {
+        // Calculate distance between epicenter and point
+        const distance = turf.distance(
+          turf.point([epicenterLon, epicenterLat]),
+          turf.point([pointLon, pointLat]),
+          { units: "kilometers" }
+        );
+
+        // Calculate hypocentral distance
+        const hypocentralDistance = Math.sqrt(
+          Math.pow(distance, 2) + Math.pow(depth, 2)
+        );
+
+        // Adjust magnitude based on depth
+        const depthFactor = Math.max(0, 1 - depth / config.maxDepth);
+        const adjustedMagnitude = magnitude * depthFactor;
+
+        // Calculate ground motion using an improved attenuation relationship
+        const pga = Math.exp(
+          config.magnitudeScale * adjustedMagnitude +
+            config.baseIntensity -
+            config.distanceDecay * Math.log10(hypocentralDistance) -
+            config.distanceScale * hypocentralDistance
+        );
+
+        // Convert PGA to JMA intensity
+        let intensity;
+        if (pga < config.intensityThresholds[0]) intensity = "1";
+        else if (pga < config.intensityThresholds[1]) intensity = "2";
+        else if (pga < config.intensityThresholds[2]) intensity = "3";
+        else if (pga < config.intensityThresholds[3]) intensity = "4";
+        else if (pga < config.intensityThresholds[4]) intensity = "5-";
+        else if (pga < config.intensityThresholds[5]) intensity = "5+";
+        else if (pga < config.intensityThresholds[6]) intensity = "6-";
+        else if (pga < config.intensityThresholds[7]) intensity = "6+";
+        else intensity = "7";
+
+        return intensity;
+      }
+
+      // Modified omnivore.geojson code
       omnivore
-        .topojson("https://pickingname.github.io/basemap/subPrefsTopo.json")
+        .geojson(
+          "https://raw.githubusercontent.com/Ameuma773/EarthQuicklyForWeb/main/Source/Cities.json"
+        )
         .on("ready", function () {
           this.eachLayer((layer) => {
+            // Get center point of the polygon
+            const center = turf.center(layer.toGeoJSON());
+            const centerLat = center.geometry.coordinates[1];
+            const centerLon = center.geometry.coordinates[0];
+
+            // Calculate intensity for this polygon
+            const intensity = calculateJMAIntensity(
+              earthquakeData.earthquake.hypocenter.latitude,
+              earthquakeData.earthquake.hypocenter.longitude,
+              earthquakeData.earthquake.hypocenter.depth,
+              earthquakeData.earthquake.hypocenter.magnitude,
+              centerLat,
+              centerLon
+            );
+
+            // Set polygon style based on calculated intensity
             layer.setStyle({
-              color: userTheme === "dark" ? "#bebebe" : "#969e9e",
+              color: "#000000",
               weight: 1,
               smoothFactor: 0.0,
               fill: true,
-              fillColor: userTheme === "dark" ? "#FFFFFF" : "#95999b",
-              fillOpacity: 0.1,
+              fillColor: intensityColors[intensity],
+              fillOpacity: 0.7,
             });
+
+            // Add a popup with intensity information
+            layer.bindPopup(
+              `Region: ${layer.feature.properties.regionname}<br>Intensity: ${intensity}`
+            );
           });
         })
         .addTo(mapInstance);
@@ -427,7 +522,7 @@ const updateMapWithData = async (earthquakeData) => {
           `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
           {
             maxZoom: 24,
-          },
+          }
         )
         .addTo(mapInstance);
     } else {
@@ -436,7 +531,7 @@ const updateMapWithData = async (earthquakeData) => {
           `https://{s}.basemaps.cartocdn.com/${userTheme}_all/{z}/{x}/{y}{r}.png`,
           {
             maxZoom: 24,
-          },
+          }
         )
         .addTo(mapInstance);
     }
@@ -526,18 +621,18 @@ const updateMapWithData = async (earthquakeData) => {
           earthquakeData.earthquake.hypocenter.latitude,
           earthquakeData.earthquake.hypocenter.longitude,
         ],
-        { icon: epicenterIcon },
+        { icon: epicenterIcon }
       )
       .addTo(markersLayerGroup);
 
     const comparisonData = await fetchComparisonData(
-      "https://pickingname.github.io/basemap/compare_points.csv",
+      "https://pickingname.github.io/basemap/compare_points.csv"
     );
 
     earthquakeData.points.forEach((point) => {
       const stationCoordinates = findStationCoordinates(
         comparisonData,
-        point.addr,
+        point.addr
       );
       if (stationCoordinates) {
         // tempskip
@@ -546,7 +641,7 @@ const updateMapWithData = async (earthquakeData) => {
           {
             icon: createInflatedIcon(point.scale),
             scale: point.scale,
-          },
+          }
         );
         stationMarkersGroup.addLayer(marker);
       }
@@ -554,19 +649,19 @@ const updateMapWithData = async (earthquakeData) => {
   } else {
     isScalePrompt = true;
     const comparisonData = await fetchComparisonData(
-      "https://pickingname.github.io/basemap/prefs.csv",
+      "https://pickingname.github.io/basemap/prefs.csv"
     );
 
     earthquakeData.points.forEach((point) => {
       console.log(`processing point with address: ${point.addr}`);
       const stationCoordinates = findStationCoordinates(
         comparisonData,
-        point.addr,
+        point.addr
       );
       if (stationCoordinates) {
         console.log(
           `found coordinates for ${point.addr}: `,
-          stationCoordinates,
+          stationCoordinates
         );
         // tempskip
         const marker = leaflet.marker(
@@ -574,7 +669,7 @@ const updateMapWithData = async (earthquakeData) => {
           {
             icon: createInflatedIcon(point.scale),
             scale: point.scale,
-          },
+          }
         );
         stationMarkersGroup.addLayer(marker);
       } else {
@@ -666,7 +761,7 @@ const updateTsunamiLayer = (tsunamiData, geojsonData) => {
       ...geojsonData,
       features: geojsonData.features.filter((feature) => {
         const tsunamiArea = tsunamiData.areas.find(
-          (area) => area.name === feature.properties.name,
+          (area) => area.name === feature.properties.name
         );
         return tsunamiArea?.grade;
       }),
@@ -677,7 +772,7 @@ const updateTsunamiLayer = (tsunamiData, geojsonData) => {
       .geoJSON(filteredGeojsonData, {
         style: (feature) => {
           const tsunamiArea = tsunamiData.areas.find(
-            (area) => area.name === feature.properties.name,
+            (area) => area.name === feature.properties.name
           );
           if (tsunamiArea) {
             return {
@@ -710,7 +805,7 @@ const updateTsunamiLayer = (tsunamiData, geojsonData) => {
       updateCamera(bounds);
     } else {
       console.warn(
-        "Invalid bounds after combining tsunamiGeojsonLayer with other layers",
+        "Invalid bounds after combining tsunamiGeojsonLayer with other layers"
       );
     }
   }
@@ -785,7 +880,7 @@ const fetchAndUpdateData = async () => {
         .replace(/\n|\r/g, "");
       console.log(
         "API call successful with response code:",
-        sanitizedResponseStatus,
+        sanitizedResponseStatus
       );
       isApiCallSuccessful = true;
     }
@@ -874,7 +969,7 @@ setInterval(() => {
         updateCamera(bounds);
       } else {
         console.warn(
-          "[fn () setinterval, maphandler.js] No valid bounds for interval camera update",
+          "[fn () setinterval, maphandler.js] No valid bounds for interval camera update"
         );
       }
     }
@@ -886,7 +981,7 @@ setInterval(() => {
         updateCamera(bounds);
       } else {
         console.warn(
-          "[fn eewcheck, maphandler.js] No valid bounds for interval camera update",
+          "[fn eewcheck, maphandler.js] No valid bounds for interval camera update"
         );
       }
     }

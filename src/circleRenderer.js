@@ -408,5 +408,5 @@ export const initCircleRendering = (mapInstance) => {
 
   setInterval(() => {
     updateMapWithCircleData(mapInstance);
-  }, 1000);
+  }, 1000); // might need to change this to around 1500
 };
