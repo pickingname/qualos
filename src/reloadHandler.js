@@ -5,7 +5,7 @@
  *
  * @param {String} reason Reason for the reload, will be displayed on the screen also
  */
-export function dimScreenAndReload(reason) {
+export function dimScreenAndReload() {
   setTimeout(() => {
     const overlay = document.createElement("div");
     overlay.classList.add("dim-overlay");
@@ -43,19 +43,6 @@ export function dimScreenAndReload(reason) {
     bottomText.textContent =
       "This might cause map rendering issues. For a better way, reload the website manually.";
     contentWrapper.appendChild(bottomText);
-
-    const reasonText = document.createElement("p");
-    reasonText.classList.add(
-      "text-white",
-      "mt-4",
-      "px-2",
-      "font-mono",
-      "rounded-md",
-      "bg-stone-800",
-      "reasonText",
-    );
-    reasonText.textContent = `debug reason: ${reason}`;
-    contentWrapper.appendChild(reasonText);
 
     document.body.appendChild(contentWrapper);
 

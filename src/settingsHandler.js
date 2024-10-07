@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedTheme = e.target.value;
       localStorage.setItem("theme", selectedTheme);
       console.log(`Theme set to: ${selectedTheme}`);
-      dimScreenAndReload("user changed settings theme");
+      dimScreenAndReload();
     });
 
     // fetch current hideLegend setting from localStorage and set it as the selected option
@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedMovableMap = e.target.value;
       localStorage.setItem("movableMap", selectedMovableMap);
       console.log(`Movable Map set to: ${selectedMovableMap}`);
-      dimScreenAndReload("user changed movable map setting");
+      dimScreenAndReload();
     });
 
     // fetch current geojson setting from localStorage and set it as the selected option
@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedGeoJsonMap = e.target.value;
       localStorage.setItem("geoJsonMap", selectedGeoJsonMap);
       console.log(`geoJson style set to: ${selectedGeoJsonMap}`);
-      dimScreenAndReload("user changed geojson setting");
+      dimScreenAndReload();
     });
 
     const convertTimeDropdown = modalContent.querySelector(
@@ -345,7 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("logButton").addEventListener("click", () => {
       console.log("resetting everything");
       localStorage.clear();
-      dimScreenAndReload("user resetted all settings");
+      dimScreenAndReload();
     });
 
     // close on clicking outside the modal
