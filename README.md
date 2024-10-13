@@ -4,7 +4,7 @@
 
 A website that shows the most recent earthquake in a map using p2pquake API.
 
-**Note:** This codebase is pretty much a mess. It’s a personal project and not intended for public use, so don’t waste your time trying to dig into it. If you have any questions or need clarification, please reach out to me directly. This app was primarily developed for my personal use to check some data quickly. It doesn’t really require any help, but any contributions are still welcome.
+**Note:** This codebase is pretty much a mess. It’s a personal project and not intended for public collaboration, so don’t waste your time trying to dig into it. If you have any questions or need clarification, please reach out to me directly. This app was primarily developed for my personal use to check some data quickly. It doesn’t really require any help, but any contributions are still welcome.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/pickingname/qualos/badge)](https://www.codefactor.io/repository/github/pickingname/qualos)
 [![DeepSource](https://app.deepsource.com/gh/pickingname/qualos.svg/?label=active+issues&show_trend=true&token=4jDokZxN0UkI37cOA17xRYS1)](https://app.deepsource.com/gh/pickingname/qualos/)
@@ -12,13 +12,18 @@ A website that shows the most recent earthquake in a map using p2pquake API.
 
 ##### [https://qualos.info](https://qualos.info)
 
-![banner](https://github.com/user-attachments/assets/a5c70cf9-7c08-44a3-8837-3f542c705c40)
+| Provider | URL      |
+|----------|----------|
+| Vercel    | https://qualos.info   |
+| Cloudflare Pages (Backup)    | https://qualos.pages.dev   |
+
+> *Cloudflare pages is served as a backup incase vercel is down*
 
 ---
 
 ### Inspiration
 
-This app was developed as an alternative to [quarog](https://fuku1213.github.io/quarog-site/), serving as a web-based remake of the original. We extend our gratitude to the original creator for the app's concept. Please note that this app is not affiliated with the original app's creator.
+This app was developed as an alternative to [quarog](https://fuku1213.github.io/quarog-site/), serving as a web-based remake of the original. I extend my gratitude to the original creator for the app's concept. Please note that this app is not affiliated with the original app's creator.
 
 ---
 
@@ -31,16 +36,6 @@ This app was developed as an alternative to [quarog](https://fuku1213.github.io/
 - Shows P and S wave information during an active earthquake using the Yahoo API.
 - Light / Dark theme support. (Applied automatically based on the system's theme)
 - Now displays tsunami warning (line + text)
-
----
-
-### Limitations
-
-Please note that this might be changed
-
-- Cannot display the live data from the stations
-- Cannot display the english name when the EEW is issued
-- Camera movement is not good enough
 
 ---
 
