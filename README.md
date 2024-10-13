@@ -12,12 +12,12 @@ A website that shows the most recent earthquake in a map using p2pquake API.
 
 ##### [https://qualos.info](https://qualos.info)
 
-| Provider | URL      |
-|----------|----------|
-| Vercel    | https://qualos.info   |
-| Cloudflare Pages (Backup)    | https://qualos.pages.dev   |
+| Provider                  | URL                      |
+| ------------------------- | ------------------------ |
+| Vercel                    | https://qualos.info      |
+| Cloudflare Pages (Backup) | https://qualos.pages.dev |
 
-> *Cloudflare pages is served as a backup incase vercel is down*
+> _Cloudflare pages is served as a backup incase vercel is down_
 
 ---
 
