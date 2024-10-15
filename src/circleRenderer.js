@@ -187,7 +187,7 @@ const fetchCircleData = async () => {
     ("0" + date.getDate()).slice(-2)
   }`;
 
-  const url = `https://weather-kyoshin.east.edge.storage-yahoo.jp/RealTimeData/${NowDay}/${NowTime}.json`;
+  const url = `http://localhost:6966`;
 
   try {
     const response = await axios.get(url);
@@ -213,7 +213,7 @@ export function fitCircleBounds(mapInstance, pCircle, sCircle) {
   const bounds = leaflet.latLngBounds();
   bounds.extend(pCircle.getBounds());
   bounds.extend(sCircle.getBounds());
-  mapInstance.fitBounds(bounds.pad(0.5));
+  mapInstance.fitBounds(bounds.pad(0.001));
 }
 
 /**
