@@ -187,7 +187,7 @@ const fetchCircleData = async () => {
     ("0" + date.getDate()).slice(-2)
   }`;
 
-  const url = `http://localhost:6966`;
+  const url = `https://weather-kyoshin.east.edge.storage-yahoo.jp/RealTimeData/${NowDay}/${NowTime}.json`;
 
   try {
     const response = await axios.get(url);
